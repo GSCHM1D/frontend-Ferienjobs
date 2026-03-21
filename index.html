@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferienjob Plattform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>Ferienjob Plattform</h1>
+
+    <div class="page-intro">
+        <p>Hier können Unternehmen Ferienjobs veröffentlichen und Jugendliche passende Jobs in ihrer Umgebung finden.</p>
+    </div>
+
+    <!-- ========================= -->
+    <!-- FORMULAR: JOB ERSTELLEN -->
+    <!-- ========================= -->
+    <section>
+        <h2>Ferienjob posten</h2>
+
+        <form id="job-form">
+            <input type="text" id="company" placeholder="Firma" required>
+            <input type="text" id="title" placeholder="Jobtitel" required>
+            <input type="text" id="location" placeholder="Ort / PLZ" required>
+            <input type="text" id="contact" placeholder="Kontakt (E-Mail oder Telefon)" required>
+            
+            <textarea id="description" placeholder="Beschreibung" required></textarea>
+
+            <button type="submit">Job posten</button>
+        </form>
+    </section>
+
+    <!-- ========================= -->
+    <!-- JOB LISTE -->
+    <!-- ========================= -->
+    <section>
+        <h2>Alle Ferienjobs</h2>
+
+        <div id="job-list">
+            <!-- Hier werden später die Jobs angezeigt -->
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- SUCHE -->
+    <!-- ========================= -->
+    <section>
+        <h2>Suche nach Ort</h2>
+    
+        <div class="search-row">
+            <input type="text" id="search" placeholder="Ort eingeben...">
+        </div>
+    
+        <p class="notice">Sobald gesucht wird, werden nur verifizierte Jobs angezeigt.</p>
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- SCRIPT -->
+    <!-- ========================= -->
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>

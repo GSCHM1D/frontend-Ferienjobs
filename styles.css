@@ -1,0 +1,293 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+    background: #f4f7fb;
+    color: #1f2937;
+}
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    color: #0f172a;
+}
+
+h2 {
+    font-size: 22px;
+    margin-bottom: 14px;
+    color: #111827;
+}
+
+h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: #0f172a;
+}
+
+p {
+    margin: 6px 0;
+    line-height: 1.5;
+}
+
+section {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.page-intro {
+    margin-bottom: 24px;
+}
+
+.page-intro p {
+    margin: 0;
+    color: #475569;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+form textarea,
+form button {
+    grid-column: 1 / -1;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background: #f9fafb;
+    color: #111827;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+button {
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.24);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button.delete-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 8px 18px rgba(239, 68, 68, 0.18);
+}
+
+button.delete-btn:hover {
+    box-shadow: 0 10px 22px rgba(239, 68, 68, 0.24);
+}
+
+button.verify-btn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 8px 18px rgba(16, 185, 129, 0.18);
+}
+
+button.verify-btn:hover {
+    box-shadow: 0 10px 22px rgba(16, 185, 129, 0.24);
+}
+
+.search-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search-row input {
+    flex: 1;
+}
+
+.notice {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 10px;
+}
+
+#job-list,
+#admin-job-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.job-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 250px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    overflow-wrap: break-word;
+}
+
+.job-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.1);
+}
+
+.job-card p {
+    font-size: 14px;
+    color: #334155;
+}
+
+.job-card strong {
+    color: #111827;
+}
+
+.job-unverified {
+    border-top: 5px solid #3b82f6;
+    background: linear-gradient(to bottom, rgba(59, 130, 246, 0.08), #ffffff 24%);
+}
+
+.job-verified {
+    border-top: 5px solid #10b981;
+    background: linear-gradient(to bottom, rgba(16, 185, 129, 0.08), #ffffff 24%);
+}
+
+.status-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-unverified {
+    background: rgba(59, 130, 246, 0.12);
+    color: #1d4ed8;
+}
+
+.status-verified {
+    background: rgba(16, 185, 129, 0.14);
+    color: #047857;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.admin-actions button {
+    flex: 1;
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+    body {
+        padding: 24px 16px 40px;
+    }
+
+    #job-list,
+    #admin-job-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Handy */
+@media (max-width: 700px) {
+    body {
+        padding: 16px 12px 28px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    section {
+        padding: 16px;
+        border-radius: 14px;
+        margin-bottom: 16px;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    input,
+    textarea,
+    button {
+        font-size: 16px;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px 16px;
+    }
+
+    .search-row,
+    .admin-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #job-list,
+    #admin-job-list {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .job-card {
+        min-height: auto;
+        padding: 16px;
+    }
+
+    .job-card:hover {
+        transform: none;
+    }
+
+    .status-badge {
+        margin-top: 12px;
+    }
+}

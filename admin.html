@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Admin – Ferienjob Plattform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>Admin-Bereich</h1>
+
+    <div class="page-intro">
+        <p>Hier könnt ihr Jobs prüfen, verifizieren und bei Bedarf löschen.</p>
+    </div>
+
+    <!-- ========================= -->
+    <!-- ADMIN LOGIN -->
+    <!-- ========================= -->
+    <section>
+        <h2>Admin-Schlüssel</h2>
+
+        <input type="password" id="admin-key" placeholder="Admin-Schlüssel eingeben">
+        <button id="load-admin-jobs">Jobs laden</button>
+    </section>
+
+    <!-- ========================= -->
+    <!-- HINWEIS -->
+    <!-- ========================= -->
+    <section>
+        <p>
+            Hier könnt ihr Jobs verifizieren oder löschen.
+        </p>
+    </section>
+
+    <!-- ========================= -->
+    <!-- JOB LISTE -->
+    <!-- ========================= -->
+    <section>
+        <h2>Alle Jobs</h2>
+
+        <div id="admin-job-list">
+            <!-- Hier werden später alle Jobs für Admins angezeigt -->
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- SCRIPT -->
+    <!-- ========================= -->
+    <script src="api.js"></script>
+    <script src="admin.js"></script>
+
+</body>
+</html>
