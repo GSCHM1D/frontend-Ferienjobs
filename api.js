@@ -24,8 +24,7 @@ async function createJob(jobData) {
         })
     });
 
-    const data = await response.json();
-    return data;
+    return await response.json();
 }
 
 /* =========================
@@ -44,8 +43,7 @@ async function verifyJob(id, adminKey) {
         })
     });
 
-    const data = await response.json();
-    return data;
+    return await response.json();
 }
 
 /* =========================
@@ -64,6 +62,5 @@ async function deleteJob(id, adminKey) {
         })
     });
 
-    const data = await response.json();
-    return data;
+    return await response.json();
 }
