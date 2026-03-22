@@ -71,7 +71,13 @@ function addAdminButtonEvents() {
                 return;
             }
 
-            await verifyJob(id, adminKey);
+            const result = await verifyJob(id, adminKey);
+
+            if (!result.success) {
+                alert(result.message || "Verifizieren fehlgeschlagen.");
+                return;
+            }
+
             await loadAdminJobs();
         });
     });
@@ -86,7 +92,16 @@ function addAdminButtonEvents() {
                 return;
             }
 
-            await deleteJob(id, adminKey);
+            const confirmed = confirm("Diesen Job wirklich löschen?");
+            if (!confirmed) return;
+
+            const result = await deleteJob(id, adminKey);
+
+            if (!result.success) {
+                alert(result.message || "Löschen fehlgeschlagen.");
+                return;
+            }
+
             await loadAdminJobs();
         });
     });
