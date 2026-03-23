@@ -1,8 +1,26 @@
 const adminKeyInput = document.getElementById("admin-key");
 const loadAdminJobsButton = document.getElementById("load-admin-jobs");
 const adminJobList = document.getElementById("admin-job-list");
+const adminLoadingOverlay = document.getElementById("admin-loading-overlay");
 
 let adminJobs = [];
+let isAdminActionRunning = false;
+
+function showAdminLoading(message = "Aktion wird ausgeführt...") {
+    adminLoadingOverlay.querySelector("p").textContent = message;
+    adminLoadingOverlay.classList.remove("hidden");
+}
+
+function hideAdminLoading() {
+    adminLoadingOverlay.classList.add("hidden");
+}
+
+function setAdminPageDisabled(disabled) {
+    const elements = document.querySelectorAll("button, input");
+    elements.forEach(element => {
+        element.disabled = disabled;
+    });
+}
 
 /* =========================
    JOBS LADEN
@@ -43,7 +61,9 @@ function renderAdminJobs() {
                 ${job.status === "verified" ? "Verifiziert" : "Nicht verifiziert"}
             </span>
             <div class="admin-actions">
-                <button class="verify-btn" data-id="${job.id}">Verifizieren</button>
+                <button class="verify-btn" data-id="${job.id}" ${job.status === "verified" ? "disabled" : ""}>
+                    ${job.status === "verified" ? "Verifiziert" : "Verifizieren"}
+                </button>
                 <button class="delete-btn" data-id="${job.id}">Löschen</button>
             </div>
         `;
@@ -63,6 +83,10 @@ function addAdminButtonEvents() {
 
     verifyButtons.forEach(button => {
         button.addEventListener("click", async function() {
+            if (isAdminActionRunning || button.disabled) {
+                return;
+            }
+
             const id = button.dataset.id;
             const adminKey = adminKeyInput.value.trim();
 
@@ -71,19 +95,36 @@ function addAdminButtonEvents() {
                 return;
             }
 
-            const result = await verifyJob(id, adminKey);
+            isAdminActionRunning = true;
+            setAdminPageDisabled(true);
+            showAdminLoading("Job wird verifiziert...");
 
-            if (!result.success) {
-                alert(result.message || "Verifizieren fehlgeschlagen.");
-                return;
+            try {
+                const result = await verifyJob(id, adminKey);
+
+                if (!result.success) {
+                    alert(result.message || "Verifizieren fehlgeschlagen.");
+                    return;
+                }
+
+                await loadAdminJobs();
+            } catch (error) {
+                alert("Beim Verifizieren ist ein Fehler aufgetreten.");
+                console.error(error);
+            } finally {
+                hideAdminLoading();
+                setAdminPageDisabled(false);
+                isAdminActionRunning = false;
             }
-
-            await loadAdminJobs();
         });
     });
 
     deleteButtons.forEach(button => {
         button.addEventListener("click", async function() {
+            if (isAdminActionRunning) {
+                return;
+            }
+
             const id = button.dataset.id;
             const adminKey = adminKeyInput.value.trim();
 
@@ -93,16 +134,31 @@ function addAdminButtonEvents() {
             }
 
             const confirmed = confirm("Diesen Job wirklich löschen?");
-            if (!confirmed) return;
-
-            const result = await deleteJob(id, adminKey);
-
-            if (!result.success) {
-                alert(result.message || "Löschen fehlgeschlagen.");
+            if (!confirmed) {
                 return;
             }
 
-            await loadAdminJobs();
+            isAdminActionRunning = true;
+            setAdminPageDisabled(true);
+            showAdminLoading("Job wird gelöscht...");
+
+            try {
+                const result = await deleteJob(id, adminKey);
+
+                if (!result.success) {
+                    alert(result.message || "Löschen fehlgeschlagen.");
+                    return;
+                }
+
+                await loadAdminJobs();
+            } catch (error) {
+                alert("Beim Löschen ist ein Fehler aufgetreten.");
+                console.error(error);
+            } finally {
+                hideAdminLoading();
+                setAdminPageDisabled(false);
+                isAdminActionRunning = false;
+            }
         });
     });
 }
@@ -111,5 +167,22 @@ function addAdminButtonEvents() {
    JOBS LADEN BUTTON
 ========================= */
 loadAdminJobsButton.addEventListener("click", async function() {
-    await loadAdminJobs();
+    if (isAdminActionRunning) {
+        return;
+    }
+
+    isAdminActionRunning = true;
+    setAdminPageDisabled(true);
+    showAdminLoading("Jobs werden geladen...");
+
+    try {
+        await loadAdminJobs();
+    } catch (error) {
+        alert("Jobs konnten nicht geladen werden.");
+        console.error(error);
+    } finally {
+        hideAdminLoading();
+        setAdminPageDisabled(false);
+        isAdminActionRunning = false;
+    }
 });
