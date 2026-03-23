@@ -180,8 +180,8 @@ button.verify-btn:hover {
 }
 
 .job-unverified {
-    border-top: 5px solid #3b82f6;
-    background: linear-gradient(to bottom, rgba(59, 130, 246, 0.08), #ffffff 24%);
+    border-top: 5px solid #ef4444;
+    background: linear-gradient(to bottom, rgba(239, 68, 68, 0.08), #ffffff 24%);
 }
 
 .job-verified {
@@ -199,8 +199,8 @@ button.verify-btn:hover {
 }
 
 .status-unverified {
-    background: rgba(59, 130, 246, 0.12);
-    color: #1d4ed8;
+    background: rgba(239, 68, 68, 0.12);
+    color: #b91c1c;
 }
 
 .status-verified {
