@@ -1,8 +1,26 @@
 const jobForm = document.getElementById("job-form");
 const searchInput = document.getElementById("search");
 const jobList = document.getElementById("job-list");
+const loadingOverlay = document.getElementById("loading-overlay");
 
 let allJobs = [];
+let isSubmittingJob = false;
+
+function showLoading(message = "Job wird veröffentlicht...") {
+    loadingOverlay.querySelector("p").textContent = message;
+    loadingOverlay.classList.remove("hidden");
+}
+
+function hideLoading() {
+    loadingOverlay.classList.add("hidden");
+}
+
+function setFormDisabled(disabled) {
+    const elements = jobForm.querySelectorAll("input, textarea, button");
+    elements.forEach(element => {
+        element.disabled = disabled;
+    });
+}
 
 /* =========================
    JOBS LADEN UND ANZEIGEN
@@ -25,7 +43,7 @@ function renderJobs() {
             const locationText = String(job.location || "").toLowerCase();
             const matchesLocation = locationText.includes(searchText);
             const isVerified = job.status === "verified";
-    
+
             return matchesLocation && isVerified;
         });
     }
@@ -68,18 +86,40 @@ function renderJobs() {
 jobForm.addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    const newJob = {
-        company: document.getElementById("company").value.trim(),
-        title: document.getElementById("title").value.trim(),
-        location: document.getElementById("location").value.trim(),
-        contact: document.getElementById("contact").value.trim(),
-        description: document.getElementById("description").value.trim()
-    };
+    if (isSubmittingJob) {
+        return;
+    }
 
-    await createJob(newJob);
+    isSubmittingJob = true;
+    setFormDisabled(true);
+    showLoading("Job wird veröffentlicht...");
 
-    jobForm.reset();
-    await loadJobs();
+    try {
+        const newJob = {
+            company: document.getElementById("company").value.trim(),
+            title: document.getElementById("title").value.trim(),
+            location: document.getElementById("location").value.trim(),
+            contact: document.getElementById("contact").value.trim(),
+            description: document.getElementById("description").value.trim()
+        };
+
+        const result = await createJob(newJob);
+
+        if (!result.success) {
+            alert(result.message || "Job konnte nicht erstellt werden.");
+            return;
+        }
+
+        jobForm.reset();
+        await loadJobs();
+    } catch (error) {
+        alert("Beim Veröffentlichen ist ein Fehler aufgetreten.");
+        console.error(error);
+    } finally {
+        hideLoading();
+        setFormDisabled(false);
+        isSubmittingJob = false;
+    }
 });
 
 /* =========================
