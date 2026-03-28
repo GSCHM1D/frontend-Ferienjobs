@@ -68,8 +68,11 @@ function renderJobs() {
         card.innerHTML = `
             <h3>${job.title}</h3>
             <p><strong>Firma:</strong> ${job.company}</p>
+            <p><strong>Kategorie:</strong> ${job.category}</p>
             <p><strong>Ort:</strong> ${job.location}</p>
             <p><strong>Kontakt:</strong> ${job.contact}</p>
+            <p><strong>Lohn:</strong> ${job.salary}</p>
+            <p><strong>Voraussetungen:</strong> ${job.requirements}</p>
             <p><strong>Beschreibung:</strong> ${job.description}</p>
             <span class="status-badge ${job.status === "verified" ? "status-verified" : "status-unverified"}">
                 ${job.status === "verified" ? "Verifiziert" : "Nicht verifiziert"}
@@ -98,8 +101,11 @@ jobForm.addEventListener("submit", async function(event) {
         const newJob = {
             company: document.getElementById("company").value.trim(),
             title: document.getElementById("title").value.trim(),
+            category: document.getElementById("category").value,
             location: document.getElementById("location").value.trim(),
             contact: document.getElementById("contact").value.trim(),
+            salary: document.getElementById("salary").value.trim(),
+            requirements: document.getElementById("requirements").value.trim(),
             description: document.getElementById("description").value.trim()
         };
 

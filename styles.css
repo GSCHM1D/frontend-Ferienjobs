@@ -346,3 +346,12 @@ button:disabled {
         transform: rotate(360deg);
     }
 }
+
+select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background: #f9fafb;
+}

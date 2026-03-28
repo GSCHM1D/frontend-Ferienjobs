@@ -23,8 +23,20 @@
         <form id="job-form">
             <input type="text" id="company" placeholder="Firma" required>
             <input type="text" id="title" placeholder="Jobtitel" required>
+            <select id="category">
+                <option value="">Kategorie auswählen</option>
+                <option value="Gastronomie">Gastronomie</option>
+                <option value="Büro">Büro</option>
+                <option value="Bau">Bau</option>
+                <option value="Verkauf">Verkauf</option>
+                <option value="Gartenarbeit">Gartenarbeit</option>
+                <option value="Pflege">Pflege</option>
+                <option value="Sonstiges">Sonstiges</option>
+            </select>
             <input type="text" id="location" placeholder="Ort / PLZ" required>
             <input type="text" id="contact" placeholder="Kontakt (E-Mail oder Telefon)" required>
+            <input type="text" id="salary" placeholder="Lohn" required>
+            <input type="text" id="requirements" placeholder="Voraussetzungen (bspw. Mindestalter)">
             
             <textarea id="description" placeholder="Beschreibung" required></textarea>
 

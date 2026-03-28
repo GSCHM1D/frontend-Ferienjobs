@@ -54,8 +54,11 @@ function renderAdminJobs() {
         card.innerHTML = `
             <h3>${job.title}</h3>
             <p><strong>Firma:</strong> ${job.company}</p>
+            <p><strong>Kategorie:</strong> ${job.category}</p>
             <p><strong>Ort:</strong> ${job.location}</p>
             <p><strong>Kontakt:</strong> ${job.contact}</p>
+            <p><strong>Lohn:</strong> ${job.salary}</p>
+            <p><strong>Voraussetungen:</strong> ${job.requirements}</p>
             <p><strong>Beschreibung:</strong> ${job.description}</p>
             <span class="status-badge ${job.status === "verified" ? "status-verified" : "status-unverified"}">
                 ${job.status === "verified" ? "Verifiziert" : "Nicht verifiziert"}
