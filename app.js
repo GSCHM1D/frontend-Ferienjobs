@@ -5,6 +5,8 @@ const loadingOverlay = document.getElementById("loading-overlay");
 
 let allJobs = [];
 let isSubmittingJob = false;
+let lastSubmitTime = 0;
+const SUBMIT_COOLDOWN_MS = 15000;
 
 function showLoading(message = "Job wird veröffentlicht...") {
     loadingOverlay.querySelector("p").textContent = message;
@@ -89,7 +91,14 @@ function renderJobs() {
 jobForm.addEventListener("submit", async function(event) {
     event.preventDefault();
 
+    const now = Date.now();
+
     if (isSubmittingJob) {
+        return;
+    }
+
+    if (now - lastSubmitTime < SUBMIT_COOLDOWN_MS) {
+        alert("Bitte kurz warten, bevor du erneut einen Job veröffentlichst.");
         return;
     }
 
@@ -106,7 +115,8 @@ jobForm.addEventListener("submit", async function(event) {
             contact: document.getElementById("contact").value.trim(),
             salary: document.getElementById("salary").value.trim(),
             requirements: document.getElementById("requirements").value.trim(),
-            description: document.getElementById("description").value.trim()
+            description: document.getElementById("description").value.trim(),
+            website: document.getElementById("website").value.trim()
         };
 
         const result = await createJob(newJob);
@@ -116,8 +126,11 @@ jobForm.addEventListener("submit", async function(event) {
             return;
         }
 
+        lastSubmitTime = Date.now();
+
         jobForm.reset();
         await loadJobs();
+        alert("Job erfolgreich veröffentlicht.");
     } catch (error) {
         alert("Beim Veröffentlichen ist ein Fehler aufgetreten.");
         console.error(error);
