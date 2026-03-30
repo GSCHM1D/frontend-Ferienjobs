@@ -448,3 +448,139 @@ button:disabled {
         width: 100%;
     }
 }
+
+.logo-top-right {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+
+  transform: scale(0.4);
+  transform-origin: top right;
+
+  z-index: 9999;
+}
+
+.hj-logo {
+  position: relative;
+  width: 500px;
+  height: 300px;
+}
+
+/* ORBIT */
+.orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 420px;
+  height: 180px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+}
+
+.orbit-line {
+  border: 6px solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    conic-gradient(
+      from 205deg,
+      transparent 0deg 20deg,
+      #ff9e1f 30deg,
+      #ffd43a 60deg,
+      #74ef55 100deg,
+      #27f0d8 140deg,
+      #16d9ff 170deg,
+      #1277ff 200deg,
+      transparent 230deg 360deg
+    ) border-box;
+}
+
+.orbit-glow {
+  border: 10px solid transparent;
+  background:
+    linear-gradient(transparent, transparent) padding-box,
+    conic-gradient(
+      from 205deg,
+      transparent 0deg 20deg,
+      rgba(255,158,31,0.5) 30deg,
+      rgba(255,212,58,0.5) 60deg,
+      rgba(116,239,85,0.5) 100deg,
+      rgba(39,240,216,0.5) 140deg,
+      rgba(22,217,255,0.5) 170deg,
+      rgba(18,119,255,0.5) 200deg,
+      transparent 230deg 360deg
+    ) border-box;
+  filter: blur(10px);
+}
+
+/* TEXT */
+.text {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: Inter, sans-serif;
+  font-weight: 900;
+}
+
+/* HOLIDAY */
+.holiday {
+  top: 70px;
+  font-size: 48px;
+
+  color: #0b1220;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.35),
+    rgba(255,255,255,0.12),
+    rgba(0,0,0,0.15)
+  );
+
+  -webkit-background-clip: text;
+  color: transparent;
+
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.3),
+    0 0 0.5px rgba(0,0,0,0.6),
+    0 6px 14px rgba(0,0,0,0.15);
+}
+
+/* JOB */
+.job {
+  top: 140px;
+  font-size: 64px;
+
+  background: linear-gradient(
+    180deg,
+    #a6ef66,
+    #4de5c4,
+    #1ed4ff,
+    #156fff
+  );
+
+  -webkit-background-clip: text;
+  color: transparent;
+
+  text-shadow:
+    0 0 12px rgba(61,255,217,0.2),
+    0 0 30px rgba(22,180,255,0.15);
+}
+
+/* BALKEN */
+.connector {
+  position: absolute;
+  top: 125px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 6px;
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    #ff9e1f,
+    #ffd43a,
+    #74ef55,
+    #27f0d8,
+    #1277ff
+  );
+}
