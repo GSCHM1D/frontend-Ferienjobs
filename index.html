@@ -51,24 +51,20 @@
             <input type="text" id="salary" placeholder="Lohn" required>
 
             
-            <select id="periodType">
+            <select id="periodMode">
                 <option value="">Zeitraum auswählen</option>
-                <option value="flexible">Flexibler Zeitraum</option>
-                <option value="fixed">Fester Zeitraum</option>
-                <option value="single">Einzelner Einsatztag</option>
+                <option value="day">Konkrete Daten</option>
+                <option value="month">Monate / Saison</option>
             </select>
             
-            <div id="period-flexible-group" class="period-group hidden">
-                <input type="text" id="periodText" placeholder="z. B. Mai – Juni oder 2.8. bis 22.10.">
+            <div id="period-day-group" class="period-group hidden">
+                <input type="date" id="periodStartDay">
+                <input type="date" id="periodEndDay">
             </div>
             
-            <div id="period-fixed-group" class="period-group hidden">
-                <input type="date" id="periodStart">
-                <input type="date" id="periodEnd">
-            </div>
-            
-            <div id="period-single-group" class="period-group hidden">
-                <input type="date" id="periodSingleDate">
+            <div id="period-month-group" class="period-group hidden">
+                <input type="month" id="periodStartMonth">
+                <input type="month" id="periodEndMonth">
             </div>
 
             
