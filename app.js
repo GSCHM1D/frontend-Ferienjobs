@@ -61,12 +61,6 @@ function renderJobs() {
         const card = document.createElement("div");
         card.classList.add("job-card");
 
-        if (job.status === "verified") {
-            card.classList.add("job-verified");
-        } else {
-            card.classList.add("job-unverified");
-        }
-
         card.innerHTML = `
             <h3>${job.title}</h3>
             <p><strong>Firma:</strong> ${job.company}</p>
@@ -76,8 +70,6 @@ function renderJobs() {
             <p><strong>Lohn:</strong> ${job.salary}</p>
             <p><strong>Voraussetungen:</strong> ${job.requirements}</p>
             <p><strong>Beschreibung:</strong> ${job.description}</p>
-            <span class="status-badge ${job.status === "verified" ? "status-verified" : "status-unverified"}">
-                ${job.status === "verified" ? "Verifiziert" : "Nicht verifiziert"}
             </span>
         `;
 
