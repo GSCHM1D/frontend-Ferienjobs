@@ -472,26 +472,17 @@ button:disabled {
 
 /* 📱 Mobile */
 @media (max-width: 768px) {
-  .hj-logo {
-    position: fixed;
+  .logo-top-right {
     top: 10px;
     right: 10px;
-    width: 70px;
-    z-index: 1000;
-  }
-}
-
-@media (max-width: 768px) {
-  body {
-    padding-top: 60px;
-    padding-right: 80px;
+    transform: scale(0.28);
   }
 }
 
 .hj-logo {
   position: relative;
-  width: 180px;
-  height: auto;
+  width: 500px;
+  height: 300px;
 }
 
 /* ORBIT */
