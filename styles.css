@@ -657,12 +657,8 @@ button:disabled {
     display: none;
 }
 
-#period-flexible-group,
-#period-single-group {
-    grid-column: 1 / -1;
-}
-
-#period-fixed-group {
+#period-day-group,
+#period-month-group {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -700,7 +696,8 @@ button:disabled {
 }
 
 @media (max-width: 720px) {
-    #period-fixed-group {
+    #period-day-group,
+    #period-month-group {
         grid-template-columns: 1fr;
     }
 }
