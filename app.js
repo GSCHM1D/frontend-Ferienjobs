@@ -62,16 +62,46 @@ function renderJobs() {
         card.classList.add("job-card");
 
         card.innerHTML = `
-            <h3>${job.title}</h3>
-            <p><strong>Firma:</strong> ${job.company}</p>
-            <p><strong>Kategorie:</strong> ${job.category}</p>
-            <p><strong>Ort:</strong> ${job.location}</p>
-            <p><strong>Kontakt:</strong> ${job.contact}</p>
-            <p><strong>Lohn:</strong> ${job.salary}</p>
-            <p><strong>Voraussetzungen:</strong> ${job.requirements}</p>
-            <p><strong>Beschreibung:</strong> ${job.description}</p>
-            </span>
-        `;
+    <div class="job-card-top">
+        ${job.category ? `<span class="job-category-badge">${job.category}</span>` : ""}
+        <h3 class="job-title">${job.title}</h3>
+        <p class="job-company">${job.company}</p>
+    </div>
+
+    <div class="job-card-body">
+        <div class="job-meta-list">
+            <div class="job-meta-item">
+                <span class="job-meta-label">Ort</span>
+                <span class="job-meta-value">${job.location}</span>
+            </div>
+
+            ${job.salary ? `
+                <div class="job-meta-item job-meta-highlight">
+                    <span class="job-meta-label">Lohn</span>
+                    <span class="job-meta-value">${job.salary}</span>
+                </div>
+            ` : ""}
+
+            ${job.requirements ? `
+                <div class="job-meta-item">
+                    <span class="job-meta-label">Voraussetzungen</span>
+                    <span class="job-meta-value">${job.requirements}</span>
+                </div>
+            ` : ""}
+        </div>
+
+        ${job.description ? `
+            <div class="job-description-block">
+                <p class="job-description">${job.description}</p>
+            </div>
+        ` : ""}
+    </div>
+
+    <div class="job-card-footer">
+        <span class="job-contact-label">Kontakt</span>
+        <span class="job-contact-value">${job.contact}</span>
+    </div>
+`;
 
         jobList.appendChild(card);
     });
