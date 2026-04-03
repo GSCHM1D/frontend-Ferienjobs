@@ -49,7 +49,30 @@
             <input type="text" id="location" placeholder="Ort / PLZ" required>
             <input type="text" id="contact" placeholder="Kontakt (E-Mail oder Telefon)" required>
             <input type="text" id="salary" placeholder="Lohn" required>
-            <input type="text" id="requirements" placeholder="Voraussetzungen (bspw. Mindestalter)">
+
+            
+            <select id="periodType">
+                <option value="">Zeitraum auswählen</option>
+                <option value="flexible">Flexibler Zeitraum</option>
+                <option value="fixed">Fester Zeitraum</option>
+                <option value="single">Einzelner Einsatztag</option>
+            </select>
+            
+            <div id="period-flexible-group" class="period-group hidden">
+                <input type="text" id="periodText" placeholder="z. B. Mai – Juni oder 2.8. bis 22.10.">
+            </div>
+            
+            <div id="period-fixed-group" class="period-group hidden">
+                <input type="date" id="periodStart">
+                <input type="date" id="periodEnd">
+            </div>
+            
+            <div id="period-single-group" class="period-group hidden">
+                <input type="date" id="periodSingleDate">
+            </div>
+
+            
+            <input type="text" id="requirements" placeholder="Voraussetzungen (bspw. Mindestalter)" required> 
            
             <textarea id="description" placeholder="Beschreibung" required></textarea>
 
