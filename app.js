@@ -59,7 +59,7 @@ function renderJobs() {
 
     visibleJobs.forEach(job => {
         const card = document.createElement("div");
-        card.classList.add("job-card");
+        card.classList.add("job-card", "public-job-card");
 
         card.innerHTML = `
     <div class="job-card-top">
