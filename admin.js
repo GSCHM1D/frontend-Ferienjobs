@@ -6,8 +6,14 @@ const adminLoadingOverlay = document.getElementById("admin-loading-overlay");
 let adminJobs = [];
 let isAdminActionRunning = false;
 
+/* =========================
+   LOADING
+========================= */
 function showAdminLoading(message = "Aktion wird ausgeführt...") {
-    adminLoadingOverlay.querySelector("p").textContent = message;
+    const text = adminLoadingOverlay.querySelector("p");
+    if (text) {
+        text.textContent = message;
+    }
     adminLoadingOverlay.classList.remove("hidden");
 }
 
@@ -16,7 +22,7 @@ function hideAdminLoading() {
 }
 
 function setAdminPageDisabled(disabled) {
-    const elements = document.querySelectorAll("button, input");
+    const elements = document.querySelectorAll("#admin-key, #load-admin-jobs, .verify-btn, .delete-btn");
     elements.forEach(element => {
         element.disabled = disabled;
     });
@@ -26,7 +32,17 @@ function setAdminPageDisabled(disabled) {
    JOBS LADEN
 ========================= */
 async function loadAdminJobs() {
-    adminJobs = await getJobs();
+    const result = await getJobs();
+
+    if (!Array.isArray(result)) {
+        alert("Jobs konnten nicht geladen werden.");
+        console.error("Unerwartete Antwort beim Laden:", result);
+        adminJobs = [];
+        renderAdminJobs();
+        return;
+    }
+
+    adminJobs = result;
     renderAdminJobs();
 }
 
@@ -43,7 +59,7 @@ function renderAdminJobs() {
 
     adminJobs.forEach(job => {
         const card = document.createElement("div");
-        card.classList.add("job-card");
+        card.classList.add("job-card", "admin-job-card");
 
         if (job.status === "verified") {
             card.classList.add("job-verified");
@@ -53,21 +69,31 @@ function renderAdminJobs() {
 
         card.innerHTML = `
             <h3>${job.title}</h3>
+
             <p><strong>Firma:</strong> ${job.company}</p>
-            <p><strong>Kategorie:</strong> ${job.category}</p>
+            ${job.category ? `<p><strong>Kategorie:</strong> ${job.category}</p>` : ""}
             <p><strong>Ort:</strong> ${job.location}</p>
             <p><strong>Kontakt:</strong> ${job.contact}</p>
-            <p><strong>Lohn:</strong> ${job.salary}</p>
-            <p><strong>Voraussetungen:</strong> ${job.requirements}</p>
-            <p><strong>Beschreibung:</strong> ${job.description}</p>
+            ${job.salary ? `<p><strong>Lohn:</strong> ${job.salary}</p>` : ""}
+            ${job.requirements ? `<p><strong>Voraussetzungen:</strong> ${job.requirements}</p>` : ""}
+            ${job.description ? `<p><strong>Beschreibung:</strong> ${job.description}</p>` : ""}
+
             <span class="status-badge ${job.status === "verified" ? "status-verified" : "status-unverified"}">
                 ${job.status === "verified" ? "Verifiziert" : "Nicht verifiziert"}
             </span>
+
             <div class="admin-actions">
-                <button class="verify-btn" data-id="${job.id}" ${job.status === "verified" ? "disabled" : ""}>
-                    ${job.status === "verified" ? "Verifiziert" : "Verifizieren"}
+                <button 
+                    class="verify-btn" 
+                    data-id="${job.id}" 
+                    ${job.status === "verified" ? "disabled" : ""}
+                >
+                    ${job.status === "verified" ? "Bereits verifiziert" : "Verifizieren"}
                 </button>
-                <button class="delete-btn" data-id="${job.id}">Löschen</button>
+
+                <button class="delete-btn" data-id="${job.id}">
+                    Löschen
+                </button>
             </div>
         `;
 
@@ -85,7 +111,7 @@ function addAdminButtonEvents() {
     const deleteButtons = document.querySelectorAll(".delete-btn");
 
     verifyButtons.forEach(button => {
-        button.addEventListener("click", async function() {
+        button.addEventListener("click", async function () {
             if (isAdminActionRunning || button.disabled) {
                 return;
             }
@@ -105,6 +131,8 @@ function addAdminButtonEvents() {
             try {
                 const result = await verifyJob(id, adminKey);
 
+                console.log("VERIFY RESULT:", result);
+
                 if (!result.success) {
                     alert(result.message || "Verifizieren fehlgeschlagen.");
                     return;
@@ -112,8 +140,8 @@ function addAdminButtonEvents() {
 
                 await loadAdminJobs();
             } catch (error) {
+                console.error("VERIFY ERROR:", error);
                 alert("Beim Verifizieren ist ein Fehler aufgetreten.");
-                console.error(error);
             } finally {
                 hideAdminLoading();
                 setAdminPageDisabled(false);
@@ -123,7 +151,7 @@ function addAdminButtonEvents() {
     });
 
     deleteButtons.forEach(button => {
-        button.addEventListener("click", async function() {
+        button.addEventListener("click", async function () {
             if (isAdminActionRunning) {
                 return;
             }
@@ -148,6 +176,8 @@ function addAdminButtonEvents() {
             try {
                 const result = await deleteJob(id, adminKey);
 
+                console.log("DELETE RESULT:", result);
+
                 if (!result.success) {
                     alert(result.message || "Löschen fehlgeschlagen.");
                     return;
@@ -155,8 +185,8 @@ function addAdminButtonEvents() {
 
                 await loadAdminJobs();
             } catch (error) {
+                console.error("DELETE ERROR:", error);
                 alert("Beim Löschen ist ein Fehler aufgetreten.");
-                console.error(error);
             } finally {
                 hideAdminLoading();
                 setAdminPageDisabled(false);
@@ -169,7 +199,7 @@ function addAdminButtonEvents() {
 /* =========================
    JOBS LADEN BUTTON
 ========================= */
-loadAdminJobsButton.addEventListener("click", async function() {
+loadAdminJobsButton.addEventListener("click", async function () {
     if (isAdminActionRunning) {
         return;
     }
@@ -181,8 +211,8 @@ loadAdminJobsButton.addEventListener("click", async function() {
     try {
         await loadAdminJobs();
     } catch (error) {
+        console.error("LOAD ERROR:", error);
         alert("Jobs konnten nicht geladen werden.");
-        console.error(error);
     } finally {
         hideAdminLoading();
         setAdminPageDisabled(false);
