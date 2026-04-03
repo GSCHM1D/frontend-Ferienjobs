@@ -68,7 +68,7 @@ function renderJobs() {
             <p><strong>Ort:</strong> ${job.location}</p>
             <p><strong>Kontakt:</strong> ${job.contact}</p>
             <p><strong>Lohn:</strong> ${job.salary}</p>
-            <p><strong>Voraussetungen:</strong> ${job.requirements}</p>
+            <p><strong>Voraussetzungen:</strong> ${job.requirements}</p>
             <p><strong>Beschreibung:</strong> ${job.description}</p>
             </span>
         `;
