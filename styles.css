@@ -472,10 +472,8 @@ button:disabled {
 
 /* 📱 Mobile */
 @media (max-width: 768px) {
-  .logo-top-right {
-    top: 10px;
-    right: 10px;
-    transform: scale(0.28);
+  .hj-logo {
+    display: none;
   }
 }
 
