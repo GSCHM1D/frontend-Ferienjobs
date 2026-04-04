@@ -2,11 +2,40 @@ const jobForm = document.getElementById("job-form");
 const searchInput = document.getElementById("search");
 const jobList = document.getElementById("job-list");
 const loadingOverlay = document.getElementById("loading-overlay");
+const fixedStartInput = document.getElementById("fixedStart");
+const fixedEndInput = document.getElementById("fixedEnd");
+const singleDayInput = document.getElementById("singleDay");
+const flexStartInput = document.getElementById("flexStart");
+const flexEndInput = document.getElementById("flexEnd");
+const timeInfoPopup = document.getElementById("time-info-popup");
 
 let allJobs = [];
 let isSubmittingJob = false;
 let lastSubmitTime = 0;
 const SUBMIT_COOLDOWN_MS = 15000;
+
+document.querySelectorAll(".info-btn").forEach(button => {
+    button.addEventListener("click", function () {
+        const type = button.dataset.info;
+
+        let text = "";
+
+        if (type === "fixe dauer") {
+            text = "Für einen klaren Einsatz mit Start- und Enddatum.";
+        }
+
+        if (type === "einsatztag") {
+            text = "Für einen einzelnen Arbeitstag oder einen einmaligen Einsatz.";
+        }
+
+        if (type === "flexibel") {
+            text = "Für saisonale oder wiederkehrende Einsätze über einen längeren Zeitraum.";
+        }
+
+        timeInfoPopup.textContent = text;
+        timeInfoPopup.classList.remove("hidden");
+    });
+});
 
 function showLoading(message = "Job wird veröffentlicht...") {
     loadingOverlay.querySelector("p").textContent = message;
@@ -32,6 +61,30 @@ async function loadJobs() {
     renderJobs();
 }
 
+function getPeriodDisplay(job) {
+    if (job.singleDay) {
+        return {
+            value: job.singleDay,
+            className: "job-period-single"
+        };
+    }
+
+    if (job.fixedStart && job.fixedEnd) {
+        return {
+            value: `${job.fixedStart} – ${job.fixedEnd}`,
+            className: "job-period-fixed"
+        };
+    }
+
+    if (job.flexStart && job.flexEnd) {
+        return {
+            value: `${job.flexStart} – ${job.flexEnd}`,
+            className: "job-period-flexible"
+        };
+    }
+
+    return null;
+}
 /* =========================
    JOBS RENDERN
 ========================= */
@@ -59,6 +112,7 @@ function renderJobs() {
 
     visibleJobs.forEach(job => {
         const card = document.createElement("div");
+        const period = getPeriodDisplay(job);
         card.classList.add("job-card", "public-job-card");
 
         card.innerHTML = `
@@ -82,6 +136,13 @@ function renderJobs() {
                 </div>
             ` : ""}
 
+            ${period ? `
+                <div class="job-meta-item ${period.className}">
+                    <span class="job-meta-label">Zeitdauer</span>
+                    <span class="job-meta-value">${period.value}</span>
+                </div>
+            ` : ""}
+
             ${job.requirements ? `
                 <div class="job-meta-item">
                     <span class="job-meta-label">Voraussetzungen</span>
@@ -90,12 +151,12 @@ function renderJobs() {
             ` : ""}
         </div>
 
-        ${job.description ? `
-            <div class="job-description-block">
-                <p class="job-description">${job.description}</p>
-            </div>
-        ` : ""}
-    </div>
+            ${job.description ? `
+                <div class="job-description-block">
+                    <p class="job-description">${job.description}</p>
+                </div>
+            ` : ""}
+        </div>
 
     <div class="job-card-footer">
         <span class="job-contact-label">Kontakt</span>
@@ -136,6 +197,11 @@ jobForm.addEventListener("submit", async function(event) {
             location: document.getElementById("location").value.trim(),
             contact: document.getElementById("contact").value.trim(),
             salary: document.getElementById("salary").value.trim(),
+            fixedStart: fixedStartInput.value,
+            fixedEnd: fixedEndInput.value,
+            singleDay: singleDayInput.value,
+            flexStart: flexStartInput.value,
+            flexEnd: flexEndInput.value,
             requirements: document.getElementById("requirements").value.trim(),
             description: document.getElementById("description").value.trim(),
             website: document.getElementById("website").value.trim()
