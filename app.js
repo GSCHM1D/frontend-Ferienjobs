@@ -103,11 +103,6 @@ function renderJobs() {
             </div>
         ` : ""}
 
-        ${job.duration ? `
-            <div class="job-duration-block">
-                <p class="job-duration">${job.duration}</p>
-            </div>
-        ` : ""}
     </div>
 
     <div class="job-card-footer">
