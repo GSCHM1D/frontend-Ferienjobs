@@ -2,9 +2,6 @@ const jobForm = document.getElementById("job-form");
 const searchInput = document.getElementById("search");
 const jobList = document.getElementById("job-list");
 const loadingOverlay = document.getElementById("loading-overlay");
-const periodModeSelect = document.getElementById("periodMode");
-const periodDayGroup = document.getElementById("period-day-group");
-const periodMonthGroup = document.getElementById("period-month-group");
 
 let allJobs = [];
 let isSubmittingJob = false;
@@ -35,49 +32,6 @@ async function loadJobs() {
     renderJobs();
 }
 
-function updatePeriodFields() {
-    const mode = periodModeSelect.value;
-
-    periodDayGroup.classList.add("hidden");
-    periodMonthGroup.classList.add("hidden");
-
-    if (mode === "day") {
-        periodDayGroup.classList.remove("hidden");
-    }
-
-    if (mode === "month") {
-        periodMonthGroup.classList.remove("hidden");
-    }
-}
-
-function getPeriodDisplay(job) {
-    if (job.periodMode === "month" && job.periodStartMonth && job.periodEndMonth) {
-        return {
-            label: "Zeitraum",
-            value: `${job.periodStartMonth} – ${job.periodEndMonth}`,
-            className: "job-period-flexible"
-        };
-    }
-
-    if (job.periodMode === "day" && job.periodStartDay && job.periodEndDay) {
-        if (job.periodStartDay === job.periodEndDay) {
-            return {
-                label: "Zeitraum",
-                value: job.periodStartDay,
-                className: "job-period-single"
-            };
-        }
-
-        return {
-            label: "Zeitraum",
-            value: `${job.periodStartDay} – ${job.periodEndDay}`,
-            className: "job-period-fixed"
-        };
-    }
-
-    return null;
-}
-
 /* =========================
    JOBS RENDERN
 ========================= */
@@ -105,60 +59,49 @@ function renderJobs() {
 
     visibleJobs.forEach(job => {
         const card = document.createElement("div");
-        const period = getPeriodDisplay(job);
-
         card.classList.add("job-card", "public-job-card");
 
         card.innerHTML = `
-            <div class="job-card-top">
-                ${job.category ? `<span class="job-category-badge">${job.category}</span>` : ""}
-                <h3 class="job-title">${job.title}</h3>
-                <p class="job-company">${job.company}</p>
+    <div class="job-card-top">
+        ${job.category ? `<span class="job-category-badge">${job.category}</span>` : ""}
+        <h3 class="job-title">${job.title}</h3>
+        <p class="job-company">${job.company}</p>
+    </div>
+
+    <div class="job-card-body">
+        <div class="job-meta-list">
+            <div class="job-meta-item">
+                <span class="job-meta-label">Ort</span>
+                <span class="job-meta-value">${job.location}</span>
             </div>
 
-            <div class="job-card-body">
-                <div class="job-meta-list">
-                    <div class="job-meta-item">
-                        <span class="job-meta-label">Ort</span>
-                        <span class="job-meta-value">${job.location}</span>
-                    </div>
-
-                    ${job.salary ? `
-                        <div class="job-meta-item job-meta-highlight">
-                            <span class="job-meta-label">Lohn</span>
-                            <span class="job-meta-value">${job.salary}</span>
-                        </div>
-                    ` : ""}
-
-                    ${period ? `
-                        <div class="job-meta-item ${period.className}">
-                            <span class="job-meta-label">${period.label}</span>
-                            <span class="job-meta-value">${period.value}</span>
-                        </div>
-                    ` : ""}
-
-                    ${job.requirements ? `
-                        <div class="job-meta-item">
-                            <span class="job-meta-label">Voraussetzungen</span>
-                            <span class="job-meta-value">${job.requirements}</span>
-                        </div>
-                    ` : ""}
-                </div>
-
-                ${job.description ? `
-                    <div class="job-description-block">
-                        <p class="job-description">${job.description}</p>
-                    </div>
-                ` : ""}
-            </div>
-
-            ${job.contact ? `
-                <div class="job-card-footer">
-                    <span class="job-contact-label">Kontakt</span>
-                    <span class="job-contact-value">${job.contact}</span>
+            ${job.salary ? `
+                <div class="job-meta-item job-meta-highlight">
+                    <span class="job-meta-label">Lohn</span>
+                    <span class="job-meta-value">${job.salary}</span>
                 </div>
             ` : ""}
-        `;
+
+            ${job.requirements ? `
+                <div class="job-meta-item">
+                    <span class="job-meta-label">Voraussetzungen</span>
+                    <span class="job-meta-value">${job.requirements}</span>
+                </div>
+            ` : ""}
+        </div>
+
+        ${job.description ? `
+            <div class="job-description-block">
+                <p class="job-description">${job.description}</p>
+            </div>
+        ` : ""}
+    </div>
+
+    <div class="job-card-footer">
+        <span class="job-contact-label">Kontakt</span>
+        <span class="job-contact-value">${job.contact}</span>
+    </div>
+`;
 
         jobList.appendChild(card);
     });
@@ -193,11 +136,6 @@ jobForm.addEventListener("submit", async function(event) {
             location: document.getElementById("location").value.trim(),
             contact: document.getElementById("contact").value.trim(),
             salary: document.getElementById("salary").value.trim(),
-            periodMode: document.getElementById("periodMode").value,
-            periodStartDay: document.getElementById("periodStartDay").value,
-            periodEndDay: document.getElementById("periodEndDay").value,
-            periodStartMonth: document.getElementById("periodStartMonth").value,
-            periodEndMonth: document.getElementById("periodEndMonth").value,
             requirements: document.getElementById("requirements").value.trim(),
             description: document.getElementById("description").value.trim(),
             website: document.getElementById("website").value.trim()
@@ -231,9 +169,6 @@ jobForm.addEventListener("submit", async function(event) {
 searchInput.addEventListener("input", function() {
     renderJobs();
 });
-
-periodModeSelect.addEventListener("change", updatePeriodFields);
-updatePeriodFields();
 
 /* =========================
    START
