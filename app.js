@@ -88,6 +88,12 @@ function renderJobs() {
                     <span class="job-meta-value">${job.requirements}</span>
                 </div>
             ` : ""}
+
+            ${job.duration ? `
+                <div class="job-duration-block">
+                    <p class="job-duration">${job.duration}</p>
+                </div>
+            ` : ""}
         </div>
 
         ${job.description ? `
