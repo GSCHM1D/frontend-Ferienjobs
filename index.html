@@ -50,7 +50,63 @@
             <input type="text" id="contact" placeholder="Kontakt (E-Mail oder Telefon)" required>
             <input type="text" id="salary" placeholder="Lohn" required>
             <input type="text" id="requirements" placeholder="Voraussetzungen (bspw. Mindestalter)">
-           
+
+            <div class="time-duration-field">
+                <div class="time-duration-header">
+                    <span>Zeitdauer</span>
+                </div>
+            
+                <div class="time-duration-grid">
+                    <div class="time-option-box">
+                        <div class="time-option-title-row">
+                            <span>Feste Zeitdauer</span>
+                            <button type="button" class="info-btn" data-info="fixe dauer">i</button>
+                        </div>
+            
+                        <div class="time-input-row">
+                            <label for="fixedStart">Von</label>
+                            <input type="date" id="fixedStart">
+                        </div>
+            
+                        <div class="time-input-row">
+                            <label for="fixedEnd">Bis</label>
+                            <input type="date" id="fixedEnd">
+                        </div>
+                    </div>
+            
+                    <div class="time-option-box">
+                        <div class="time-option-title-row">
+                            <span>Einsatztag</span>
+                            <button type="button" class="info-btn" data-info="einsatztag">i</button>
+                        </div>
+            
+                        <div class="time-input-row single-day-row">
+                            <label for="singleDay">Tag</label>
+                            <input type="date" id="singleDay">
+                        </div>
+                    </div>
+            
+                    <div class="time-option-box">
+                        <div class="time-option-title-row">
+                            <span>Flexibler Zeitraum</span>
+                            <button type="button" class="info-btn" data-info="flexibel">i</button>
+                        </div>
+            
+                        <div class="time-input-row">
+                            <label for="flexStart">Von</label>
+                            <input type="month" id="flexStart">
+                        </div>
+            
+                        <div class="time-input-row">
+                            <label for="flexEnd">Bis</label>
+                            <input type="month" id="flexEnd">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="time-info-popup" class="time-info-popup hidden"></div>
+            
             <textarea id="description" placeholder="Beschreibung" required></textarea>
 
             <input type="text" id="website" class="honeypot-field" tabindex="-1" autocomplete="off">
