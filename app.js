@@ -90,8 +90,9 @@ function renderJobs() {
             ` : ""}
 
             ${job.duration ? `
-                <div class="job-duration-block">
-                    <p class="job-duration">${job.duration}</p>
+                <div class="job-meta-item">
+                    <span class="job-meta-label">Zeitdauer</span>
+                    <span class="job-meta-value">${job.duration}</span>
                 </div>
             ` : ""}
         </div>
