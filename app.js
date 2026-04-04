@@ -95,6 +95,12 @@ function renderJobs() {
                 <p class="job-description">${job.description}</p>
             </div>
         ` : ""}
+
+        ${job.duration ? `
+            <div class="job-duration-block">
+                <p class="job-duration">${job.duration}</p>
+            </div>
+        ` : ""}
     </div>
 
     <div class="job-card-footer">
@@ -137,6 +143,7 @@ jobForm.addEventListener("submit", async function(event) {
             contact: document.getElementById("contact").value.trim(),
             salary: document.getElementById("salary").value.trim(),
             requirements: document.getElementById("requirements").value.trim(),
+            duration: document.getElementById("duration").value.trim(),
             description: document.getElementById("description").value.trim(),
             website: document.getElementById("website").value.trim()
         };
