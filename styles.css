@@ -653,55 +653,6 @@ button:disabled {
   font-weight: 900;
 }
 
-.period-group.hidden {
-    display: none;
-}
-
-#period-day-group,
-#period-month-group {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-}
-
-.job-period-flexible {
-    background: rgba(234, 179, 8, 0.10);
-    border: 1px solid rgba(234, 179, 8, 0.22);
-}
-
-.job-period-flexible .job-meta-label,
-.job-period-flexible .job-meta-value {
-    color: #a16207;
-}
-
-.job-period-fixed {
-    background: rgba(37, 99, 235, 0.10);
-    border: 1px solid rgba(37, 99, 235, 0.20);
-}
-
-.job-period-fixed .job-meta-label,
-.job-period-fixed .job-meta-value {
-    color: #1d4ed8;
-}
-
-.job-period-single {
-    background: rgba(168, 85, 247, 0.10);
-    border: 1px solid rgba(168, 85, 247, 0.20);
-}
-
-.job-period-single .job-meta-label,
-.job-period-single .job-meta-value {
-    color: #7e22ce;
-}
-
-@media (max-width: 720px) {
-    #period-day-group,
-    #period-month-group {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* HOLIDAY */
 .holiday {
   top: 70px;
