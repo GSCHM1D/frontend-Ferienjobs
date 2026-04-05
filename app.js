@@ -54,7 +54,6 @@ function renderJobs() {
             const isVerified = job.status === "verified";
 
             return (
-                isVerified &&
                 matchesLocation(job, locationValue) &&
                 matchesMinSalary(job, minSalaryValue) &&
                 matchesCategory(job, categoryValue) &&
