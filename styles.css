@@ -729,3 +729,26 @@ button:disabled {
         grid-template-columns: 1fr; /* untereinander */
     }
 }
+
+/* Anwenden / Zurücksetzen */
+
+.search-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.secondary-button {
+    background: linear-gradient(135deg, #64748b, #475569);
+    box-shadow: 0 10px 20px rgba(100, 116, 139, 0.18);
+}
+
+.secondary-button:hover {
+    box-shadow: 0 14px 28px rgba(100, 116, 139, 0.24);
+}
+
+@media (max-width: 720px) {
+    .search-actions {
+        flex-direction: column;
+    }
+}
