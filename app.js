@@ -1,8 +1,13 @@
 const jobForm = document.getElementById("job-form");
 const jobList = document.getElementById("job-list");
 const loadingOverlay = document.getElementById("loading-overlay");
+/* Filter anwenden / zurücksetzen */
 const applyFiltersButton = document.getElementById("apply-filters");
 const resetFiltersButton = document.getElementById("reset-filters");
+/* Dynamischer Titel Bar für Job Form */
+const jobFormToggle = document.getElementById("job-form-toggle");
+const jobFormWrapper = document.getElementById("job-form-wrapper");
+const jobFormToggleIcon = document.getElementById("job-form-toggle-icon");
 
 let allJobs = [];
 let isSubmittingJob = false;
@@ -318,7 +323,7 @@ function matchesDuration(job, searchDurationValue) {
     );
 }
 
-/* Filter Buttons; Anwenden / Zurücksetzen */
+/* Filter Buttons; Anwenden / Zurücksetzen - eventListener */
 
 applyFiltersButton.addEventListener("click", function () {
     activeFilters = {
@@ -345,6 +350,22 @@ resetFiltersButton.addEventListener("click", function () {
     };
 
     renderJobs();
+});
+
+/* eventListener für Toggle Bar */
+
+jobFormToggle.addEventListener("click", function () {
+    const isOpen = jobFormWrapper.classList.contains("open");
+
+    if (isOpen) {
+        jobFormWrapper.classList.remove("open");
+        jobFormToggle.classList.remove("active");
+        jobFormToggleIcon.textContent = "+";
+    } else {
+        jobFormWrapper.classList.add("open");
+        jobFormToggle.classList.add("active");
+        jobFormToggleIcon.textContent = "+";
+    }
 });
 
 /* =========================
