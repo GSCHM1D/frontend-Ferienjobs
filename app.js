@@ -8,6 +8,9 @@ const resetFiltersButton = document.getElementById("reset-filters");
 const jobFormToggle = document.getElementById("job-form-toggle");
 const jobFormWrapper = document.getElementById("job-form-wrapper");
 const jobFormToggleIcon = document.getElementById("job-form-toggle-icon");
+/* Dynamische Filter Bar */
+const filterToggle = document.getElementById("filter-toggle");
+const filterWrapper = document.getElementById("filter-wrapper");
 
 let allJobs = [];
 let isSubmittingJob = false;
@@ -352,7 +355,7 @@ resetFiltersButton.addEventListener("click", function () {
     renderJobs();
 });
 
-/* eventListener für Toggle Bar */
+/* eventListener für Toggle Job posten Bar */
 
 jobFormToggle.addEventListener("click", function () {
     const isOpen = jobFormWrapper.classList.contains("open");
@@ -365,6 +368,17 @@ jobFormToggle.addEventListener("click", function () {
         jobFormWrapper.classList.add("open");
         jobFormToggle.classList.add("active");
         jobFormToggleIcon.textContent = "+";
+    }
+});
+
+/* evenListener für Toggle Filter */
+filterToggle.addEventListener("click", function () {
+    const isOpen = filterWrapper.classList.contains("open");
+
+    if (isOpen) {
+        filterWrapper.classList.remove("open");
+    } else {
+        filterWrapper.classList.add("open");
     }
 });
 
