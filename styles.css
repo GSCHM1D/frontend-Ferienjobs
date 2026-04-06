@@ -752,3 +752,62 @@ button:disabled {
         flex-direction: column;
     }
 }
+
+/* Dynamische Titel Bar */
+
+.post-job-section {
+    overflow: hidden;
+}
+
+.job-form-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid rgba(219, 226, 234, 0.9);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.job-form-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-hover);
+}
+
+.job-form-toggle-icon {
+    font-size: 24px;
+    line-height: 1;
+    color: #2563eb;
+    transition: transform 0.25s ease;
+}
+
+.job-form-toggle.active .job-form-toggle-icon {
+    transform: rotate(45deg);
+}
+
+.job-form-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+        max-height 0.4s ease,
+        opacity 0.25s ease,
+        transform 0.25s ease,
+        margin-top 0.25s ease;
+    margin-top: 0;
+}
+
+.job-form-wrapper.open {
+    max-height: 1400px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 14px;
+}
