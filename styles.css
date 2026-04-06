@@ -811,3 +811,54 @@ button:disabled {
     transform: translateY(0);
     margin-top: 14px;
 }
+
+/* Toggle Filter Bar */
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    background: #ffffff;
+    border: 1px solid rgba(219, 226, 234, 0.9);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.filter-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-hover);
+}
+
+.filter-icon {
+    font-size: 18px;
+}
+
+.filter-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+        max-height 0.35s ease,
+        opacity 0.25s ease,
+        transform 0.25s ease,
+        margin-top 0.25s ease;
+    margin-top: 0;
+}
+
+.filter-wrapper.open {
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 12px;
+}
