@@ -30,34 +30,39 @@
     <!-- ========================= -->
     <!-- FORMULAR: JOB ERSTELLEN -->
     <!-- ========================= -->
-    <section>
-        <h2>Ferienjob posten</h2>
-
-        <form id="job-form">
-            <input type="text" id="company" placeholder="Firma" required>
-            <input type="text" id="title" placeholder="Jobtitel" required>
-            <select id="category">
-                <option value="">Kategorie auswählen</option>
-                <option value="Gastronomie">Gastronomie</option>
-                <option value="Büro">Büro</option>
-                <option value="Bau">Bau</option>
-                <option value="Verkauf">Verkauf</option>
-                <option value="Gartenarbeit">Gartenarbeit</option>
-                <option value="Pflege">Pflege</option>
-                <option value="Sonstiges">Sonstiges</option>
-            </select>
-            <input type="text" id="location" placeholder="Ort / PLZ" required>
-            <input type="text" id="contact" placeholder="Kontakt (E-Mail oder Telefon)" required>
-            <input type="text" id="salary" placeholder="Lohn" required>
-            <input type="text" id="requirements" placeholder="Voraussetzungen (bspw. Mindestalter)">
-            <input type="text" id="duration" placeholder="Zeitdauer (Format: tt.mm.jj - tt.mm.jj)" required>
-           
-            <textarea id="description" placeholder="Beschreibung" required></textarea>
-
-            <input type="text" id="website" class="honeypot-field" tabindex="-1" autocomplete="off">
-
-            <button type="submit">Job posten</button>
-        </form>
+    <section class="post-job-section">
+        <button type="button" id="job-form-toggle" class="job-form-toggle">
+            <span>Ferienjob posten</span>
+            <span id="job-form-toggle-icon" class="job-form-toggle-icon">+</span>
+        </button>
+    
+        <div id="job-form-wrapper" class="job-form-wrapper">
+            <form id="job-form">
+                <input type="text" id="company" placeholder="Firma" required>
+                <input type="text" id="title" placeholder="Jobtitel" required>
+    
+                <select id="category">
+                    <option value="">Kategorie auswählen</option>
+                    <option value="Gastronomie">Gastronomie</option>
+                    <option value="Büro">Büro</option>
+                    <option value="Bau">Bau</option>
+                    <option value="Verkauf">Verkauf</option>
+                    <option value="Sonstiges">Sonstiges</option>
+                </select>
+    
+                <input type="text" id="location" placeholder="Ort / PLZ" required>
+                <input type="text" id="contact" placeholder="Kontakt" required>
+                <input type="text" id="salary" placeholder="Lohn (optional)">
+                <input type="text" id="requirements" placeholder="Anforderungen (optional)">
+                <input type="text" id="duration" placeholder="Zeitdauer">
+    
+                <textarea id="description" placeholder="Beschreibung" required></textarea>
+    
+                <input type="text" id="website" class="honeypot-field" tabindex="-1" autocomplete="off">
+    
+                <button type="submit">Job veröffentlichen</button>
+            </form>
+        </div>
     </section>
 
     <!-- ========================= -->
