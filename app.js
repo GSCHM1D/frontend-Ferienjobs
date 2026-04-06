@@ -1,5 +1,4 @@
 const jobForm = document.getElementById("job-form");
-const searchInput = document.getElementById("search");
 const jobList = document.getElementById("job-list");
 const loadingOverlay = document.getElementById("loading-overlay");
 
