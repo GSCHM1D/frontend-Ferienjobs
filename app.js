@@ -296,6 +296,21 @@ function parseJobDuration(durationText) {
     return { start, end };
 }
 
+function matchesDuration(job, searchDurationValue) {
+    if (!searchDurationValue) return true;
+
+    const searchRange = parseSearchDuration(searchDurationValue);
+    if (!searchRange) return true;
+
+    const jobRange = parseJobDuration(job.duration);
+    if (!jobRange) return false;
+
+    return (
+        jobRange.start >= searchRange.start &&
+        jobRange.end <= searchRange.end
+    );
+}
+
 /* evenListener */
 
 searchLocationInput.addEventListener("input", renderJobs);
