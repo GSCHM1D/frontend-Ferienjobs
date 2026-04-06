@@ -1,11 +1,19 @@
 const jobForm = document.getElementById("job-form");
 const jobList = document.getElementById("job-list");
 const loadingOverlay = document.getElementById("loading-overlay");
+const applyFiltersButton = document.getElementById("apply-filters");
+const resetFiltersButton = document.getElementById("reset-filters");
 
 let allJobs = [];
 let isSubmittingJob = false;
 let lastSubmitTime = 0;
 const SUBMIT_COOLDOWN_MS = 15000;
+let activeFilters = {
+    location: "",
+    minSalary: "",
+    category: "",
+    duration: ""
+};
 
 function showLoading(message = "Job wird veröffentlicht...") {
     loadingOverlay.querySelector("p").textContent = message;
@@ -35,10 +43,10 @@ async function loadJobs() {
    JOBS RENDERN
 ========================= */
 function renderJobs() {
-    const locationValue = searchLocationInput.value.trim();
-    const minSalaryValue = searchMinSalaryInput.value.trim();
-    const categoryValue = searchCategoryInput.value;
-    const durationValue = searchDurationInput.value.trim();
+    const locationValue = activeFilters.location;
+    const minSalaryValue = activeFilters.minSalary;
+    const categoryValue = activeFilters.category;
+    const durationValue = activeFilters.duration;
 
     const isSearching =
         locationValue !== "" ||
@@ -310,12 +318,34 @@ function matchesDuration(job, searchDurationValue) {
     );
 }
 
-/* evenListener */
+/* Filter Buttons; Anwenden / Zurücksetzen */
 
-searchLocationInput.addEventListener("input", renderJobs);
-searchMinSalaryInput.addEventListener("input", renderJobs);
-searchCategoryInput.addEventListener("change", renderJobs);
-searchDurationInput.addEventListener("input", renderJobs);
+applyFiltersButton.addEventListener("click", function () {
+    activeFilters = {
+        location: searchLocationInput.value.trim(),
+        minSalary: searchMinSalaryInput.value.trim(),
+        category: searchCategoryInput.value,
+        duration: searchDurationInput.value.trim()
+    };
+
+    renderJobs();
+});
+
+resetFiltersButton.addEventListener("click", function () {
+    searchLocationInput.value = "";
+    searchMinSalaryInput.value = "";
+    searchCategoryInput.value = "";
+    searchDurationInput.value = "";
+
+    activeFilters = {
+        location: "",
+        minSalary: "",
+        category: "",
+        duration: ""
+    };
+
+    renderJobs();
+});
 
 /* =========================
    START
