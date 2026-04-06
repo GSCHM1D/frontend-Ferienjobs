@@ -51,8 +51,6 @@ function renderJobs() {
 
     if (isSearching) {
         visibleJobs = allJobs.filter(job => {
-            const isVerified = job.status === "verified";
-
             return (
                 matchesLocation(job, locationValue) &&
                 matchesMinSalary(job, minSalaryValue) &&
