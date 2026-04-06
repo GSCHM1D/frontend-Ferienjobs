@@ -61,6 +61,40 @@
     </section>
 
     <!-- ========================= -->
+    <!-- SUCHE -->
+    <!-- ========================= -->
+    <section>
+        <h2>Jobs suchen</h2>
+    
+        <div class="search-filters">
+            <input type="text" id="search-location" placeholder="Ort / PLZ">
+            <input type="number" id="search-min-salary" placeholder="Mindestlohn">
+            
+            <select id="search-category">
+                <option value="">Alle Kategorien</option>
+                <option value="Gastronomie">Gastronomie</option>
+                <option value="Büro">Büro</option>
+                <option value="Bau">Bau</option>
+                <option value="Verkauf">Verkauf</option>
+                <option value="Gartenarbeit">Gartenarbeit</option>
+                <option value="Pflege">Pflege</option>
+                <option value="Sonstiges">Sonstiges</option>
+            </select>
+    
+            <input type="text" id="search-duration" placeholder="Zeitraum, bspw. 01.06.2026 - 30.06.2026">
+        </div>
+    
+        <div class="search-actions">
+            <button type="button" id="apply-filters">Filter anwenden</button>
+            <button type="button" id="reset-filters" class="secondary-button">Filter zurücksetzen</button>
+        </div>
+    
+        <p class="notice">
+            Finde deinen perfekten Ferienjob.
+        </p>
+    </section>
+    
+    <!-- ========================= -->
     <!-- JOB LISTE -->
     <!-- ========================= -->
     <section>
@@ -70,39 +104,6 @@
             <!-- Hier werden später die Jobs angezeigt -->
         </div>
     </section>
-
-    <!-- ========================= -->
-    <!-- SUCHE -->
-    <!-- ========================= -->
-    <section>
-    <h2>Jobs suchen</h2>
-
-    <div class="search-filters">
-        <input type="text" id="search-location" placeholder="Ort oder Umgebung">
-        <input type="number" id="search-min-salary" placeholder="Mindestlohn">
-        
-        <select id="search-category">
-            <option value="">Alle Kategorien</option>
-            <option value="Gastronomie">Gastronomie</option>
-            <option value="Büro">Büro</option>
-            <option value="Bau">Bau</option>
-            <option value="Verkauf">Verkauf</option>
-            <option value="Sonstiges">Sonstiges</option>
-        </select>
-
-        <input type="text" id="search-duration" placeholder="Zeitraum, z. B. 01.06.2026 - 30.06.2026">
-    </div>
-
-    <div class="search-actions">
-        <button type="button" id="apply-filters">Filter anwenden</button>
-        <button type="button" id="reset-filters" class="secondary-button">Filter zurücksetzen</button>
-    </div>
-
-    <p class="notice">
-        Finde deinen perfekten Ferienjob.
-    </p>
-</section>
-
 
     <!-- ========================= -->
     <!-- SCRIPT UND DIV FÜR AUSBLENDEN -->
