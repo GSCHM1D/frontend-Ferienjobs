@@ -863,3 +863,41 @@ button:disabled {
     transform: translateY(0);
     margin-top: 12px;
 }
+
+/* Alert Meldungen ersetzt */
+
+.message-box {
+    display: none;
+    padding: 12px 14px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    border: 1px solid transparent;
+}
+
+.message-box.show {
+    display: block;
+}
+
+.message-success {
+    background: rgba(16, 185, 129, 0.10);
+    color: #047857;
+    border-color: rgba(16, 185, 129, 0.18);
+}
+
+.message-error {
+    background: rgba(239, 68, 68, 0.10);
+    color: #b91c1c;
+    border-color: rgba(239, 68, 68, 0.18);
+}
+
+.message-info {
+    background: rgba(37, 99, 235, 0.08);
+    color: #1d4ed8;
+    border-color: rgba(37, 99, 235, 0.16);
+}
+
+.hidden {
+    display: none;
+}
