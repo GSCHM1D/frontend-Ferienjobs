@@ -11,6 +11,8 @@ const jobFormToggleIcon = document.getElementById("job-form-toggle-icon");
 /* Dynamische Filter Bar */
 const filterToggle = document.getElementById("filter-toggle");
 const filterWrapper = document.getElementById("filter-wrapper");
+/* Alerts ersetzen durch klare Meldungen */
+const jobMessage = document.getElementById("job-message");
 
 let allJobs = [];
 let isSubmittingJob = false;
@@ -37,6 +39,26 @@ function setFormDisabled(disabled) {
     elements.forEach(element => {
         element.disabled = disabled;
     });
+}
+
+/* Hilfsfunktionen von Meldungen, die Alerts ersetzen */
+
+function showJobMessage(text, type = "info") {
+    jobMessage.textContent = text;
+    jobMessage.className = "message-box show";
+
+    if (type === "success") {
+        jobMessage.classList.add("message-success");
+    } else if (type === "error") {
+        jobMessage.classList.add("message-error");
+    } else {
+        jobMessage.classList.add("message-info");
+    }
+}
+
+function hideJobMessage() {
+    jobMessage.textContent = "";
+    jobMessage.className = "message-box hidden";
 }
 
 /* =========================
@@ -146,6 +168,7 @@ function renderJobs() {
 ========================= */
 jobForm.addEventListener("submit", async function(event) {
     event.preventDefault();
+    hideJobMessage();
 
     const now = Date.now();
 
@@ -154,7 +177,7 @@ jobForm.addEventListener("submit", async function(event) {
     }
 
     if (now - lastSubmitTime < SUBMIT_COOLDOWN_MS) {
-        alert("Bitte kurz warten, bevor du erneut einen Job veröffentlichst.");
+        showJobMessage("Bitte kurz warten, bevor du erneut einen Job veröffentlichst.");
         return;
     }
 
@@ -179,7 +202,7 @@ jobForm.addEventListener("submit", async function(event) {
         const result = await createJob(newJob);
 
         if (!result.success) {
-            alert(result.message || "Job konnte nicht erstellt werden.");
+            showJobMessage(result.message || "Job konnte nicht erstellt werden.");
             return;
         }
 
@@ -187,9 +210,9 @@ jobForm.addEventListener("submit", async function(event) {
 
         jobForm.reset();
         await loadJobs();
-        alert("Job erfolgreich veröffentlicht.");
+        showJobMessage("Job erfolgreich veröffentlicht.");
     } catch (error) {
-        alert("Beim Veröffentlichen ist ein Fehler aufgetreten.");
+        showJobMessage("Beim Veröffentlichen ist ein Fehler aufgetreten.");
         console.error(error);
     } finally {
         hideLoading();
