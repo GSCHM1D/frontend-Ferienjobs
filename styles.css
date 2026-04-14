@@ -105,7 +105,7 @@ form button {
 
 input,
 textarea,
-input[type="date"]
+input[type="date"],
 select {
     width: 100%;
     font: inherit;
