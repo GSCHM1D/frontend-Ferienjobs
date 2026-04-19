@@ -57,8 +57,8 @@
                 <input type="text" id="requirements" placeholder="Anforderungen (optional)">
 
                 <div class="date-row">
-                    <input type="date" id="form_date" placeholder="Von">
-                    <input type="date" id="until_date" placeholder="Bis">
+                    <input type="date" id="date_from" placeholder="Von">
+                    <input type="date" id="date_to" placeholder="Bis">
                     <select id"specific_or_not">
                         <option value="">Einmalig/Dauerhaft Aushilfe gesucht?</option>
                         <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
@@ -98,7 +98,10 @@
                     <option value="Sonstiges">Sonstiges</option>
                 </select>
     
-                <input type="text" id="search-duration" placeholder="Zeitraum (TT.MM.JJJJ - TT.MM.JJJJ)">
+                 <div class="search-date-group">
+                    <input type="date" id="search-date-from">
+                    <input type="date" id="search-date-to">
+                </div>
             </div>
     
             <div class="search-actions">
