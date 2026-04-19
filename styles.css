@@ -104,6 +104,7 @@ form button {
 }
 
 input,
+input[type="date"],
 textarea,
 select {
     width: 100%;
