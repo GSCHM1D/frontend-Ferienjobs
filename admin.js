@@ -76,7 +76,10 @@ function renderAdminJobs() {
             <p><strong>Kontakt:</strong> ${job.contact}</p>
             ${job.salary ? `<p><strong>Lohn:</strong> ${job.salary}</p>` : ""}
             ${job.requirements ? `<p><strong>Voraussetzungen:</strong> ${job.requirements}</p>` : ""}
-            ${job.duration ? `<p><strong>Zeitraum:</strong> ${job.duration}</p>` : ""}
+            ${job.specific_or_not === "Dauerhaft"
+                ? `<p><strong>Zeitraum:</strong> Dauerhaft</p>`
+                : `<p><strong>Zeitraum:</strong> ${job.date_from || ""} - ${job.date_to || ""}</p>`
+            }
             ${job.description ? `<p><strong>Beschreibung:</strong> ${job.description}</p>` : ""}
 
             <span class="status-badge ${job.status === "verified" ? "status-verified" : "status-unverified"}">
