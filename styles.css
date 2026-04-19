@@ -121,7 +121,7 @@ select {
 }
 
 input[type="date"] {
-    width: 50%;
+    width: 40%;
 }
 
 input::placeholder,
