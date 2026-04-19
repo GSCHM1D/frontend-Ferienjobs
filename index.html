@@ -57,13 +57,24 @@
                 <input type="text" id="requirements" placeholder="Anforderungen (optional)">
 
                 <div class="date-row">
-                    <input type="date" id="date_from" placeholder="Von">
-                    <input type="date" id="date_to" placeholder="Bis">
-                    <select id"specific_or_not">
-                        <option value="">Einmalig/Dauerhaft gesucht?</option>
-                        <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
-                        <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
-                    </select>
+                    <div class="date-field">
+                        <label for="date_from">Von</label>
+                        <input type="date" id="date_from">
+                    </div>
+                
+                    <div class="date-field">
+                        <label for="date_to">Bis</label>
+                        <input type="date" id="date_to">
+                    </div>
+                
+                    <div class="select-field">
+                        <label for="specific_or_not">Art</label>
+                        <select id="specific_or_not">
+                            <option value="">Einmalig / dauerhaft?</option>
+                            <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
+                            <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <textarea id="description" placeholder="Beschreibung" required></textarea>
@@ -99,9 +110,17 @@
                 </select>
     
                  <div class="search-date-group">
-                    <input type="date" id="search-date-from">
-                    <input type="date" id="search-date-to">
+                    <div class="date-field">
+                        <label>Von</label>
+                        <input type="date" id="search-date-from">
+                    </div>
+                     
+                    <div class="date-field">
+                        <label>Bis</label>
+                        <input type="date" id="search-date-to">
+                    </div>
                 </div>
+                
             </div>
     
             <div class="search-actions">
