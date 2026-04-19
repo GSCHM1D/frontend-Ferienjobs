@@ -120,8 +120,13 @@ select {
         transform 0.15s ease;
 }
 
-input[type="date"] {
-    width: 40%;
+.date-row {
+    display: flex;
+    gap: 12px; /* Abstand zwischen den Feldern */
+}
+
+.date-row input {
+    flex: 1; /* beide gleich breit */
 }
 
 input::placeholder,
