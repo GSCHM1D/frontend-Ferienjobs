@@ -72,17 +72,55 @@ async function loadJobs() {
 /* =========================
    JOBS RENDERN
 ========================= */
+
+/* Zuerst Hilfsfunktionen */
+
+function formatDate(dateString) {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "";
+
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${day}.${month}.${year}`;
+}
+
+function getDurationDisplay(job) {
+    if (job.specific_or_not === "Dauerhaft") {
+        return {
+            text: "Dauerhaft Aushilfe gesucht",
+            className: "job-duration-item"
+        };
+    }
+
+    if (job.specific_or_not === "Spezifisch" && job.date_from && job.date_to) {
+        return {
+            text: `${formatDate(job.date_from)} - ${formatDate(job.date_to)}`,
+            className: "job-duration-item"
+        };
+    }
+
+    return null;
+}
+
+/* ----------------------- */
+
 function renderJobs() {
     const locationValue = activeFilters.location;
     const minSalaryValue = activeFilters.minSalary;
     const categoryValue = activeFilters.category;
-    const durationValue = activeFilters.duration;
+    const searchDateFromValue = document.getElementById("search-date-from").value;
+    const searchDateToValue = document.getElementById("search-date-to").value;
 
     const isSearching =
         locationValue !== "" ||
         minSalaryValue !== "" ||
         categoryValue !== "" ||
-        durationValue !== "";
+        searchDateFromValue !== "" ||
+        searchDateToValue !== "";
 
     let visibleJobs = allJobs;
 
@@ -106,6 +144,7 @@ function renderJobs() {
 
     visibleJobs.forEach(job => {
         const card = document.createElement("div");
+        const durationDisplay = getDurationDisplay(job);
         card.classList.add("job-card", "public-job-card");
 
         card.innerHTML = `
@@ -136,10 +175,10 @@ function renderJobs() {
                         </div>
                     ` : ""}
 
-                    ${job.duration ? `
-                        <div class="job-meta-item job-duration-item">
+                    ${durationDisplay ? `
+                        <div class="job-meta-item ${durationDisplay.className}">
                             <span class="job-meta-label">Zeitdauer</span>
-                            <span class="job-meta-value">${job.duration}</span>
+                            <span class="job-meta-value">${durationDisplay.text}</span>
                         </div>
                     ` : ""}
                 </div>
@@ -194,7 +233,9 @@ jobForm.addEventListener("submit", async function(event) {
             contact: document.getElementById("contact").value.trim(),
             salary: document.getElementById("salary").value.trim(),
             requirements: document.getElementById("requirements").value.trim(),
-            duration: document.getElementById("duration").value.trim(),
+            date_from: document.getElementById("date_from").value,
+            date_to: document.getElementById("date_to").value,
+            specific_or_not: document.getElementById("specific_or_not").value,
             description: document.getElementById("description").value.trim(),
             website: document.getElementById("website").value.trim()
         };
@@ -277,76 +318,54 @@ function matchesCategory(job, selectedCategory) {
 
 /* Zeitraum finden */
 
-function parseGermanDate(dateString) {
-    if (!dateString) return null;
+function matchesDuration(job, searchDateFromValue, searchDateToValue) {
+    if (!searchDateFromValue && !searchDateToValue) return true;
 
-    const parts = dateString.split(".");
-    if (parts.length !== 3) return null;
-
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year = parseInt(parts[2], 10);
-
-    const date = new Date(year, month, day);
-
-    if (
-        date.getFullYear() !== year ||
-        date.getMonth() !== month ||
-        date.getDate() !== day
-    ) {
-        return null;
+    if (job.specific_or_not === "Dauerhaft") {
+        return true;
     }
 
-    return date;
-}
-
-function parseSearchDuration(input) {
-    if (!input) return null;
-
-    const parts = input.split("-").map(part => part.trim());
-    if (parts.length !== 2) return null;
-
-    const start = parseGermanDate(parts[0]);
-    const end = parseGermanDate(parts[1]);
-
-    if (!start || !end) return null;
-
-    return { start, end };
-}
-
-function parseJobDuration(durationText) {
-    if (!durationText) return null;
-
-    const parts = durationText.split("-").map(part => part.trim());
-    if (parts.length === 1) {
-        const single = parseGermanDate(parts[0]);
-        if (!single) return null;
-        return { start: single, end: single };
+    if (job.specific_or_not !== "Spezifisch") {
+        return false;
     }
 
-    if (parts.length !== 2) return null;
+    if (!job.date_from || !job.date_to) {
+        return false;
+    }
 
-    const start = parseGermanDate(parts[0]);
-    const end = parseGermanDate(parts[1]);
+    const jobStart = new Date(job.date_from);
+    const jobEnd = new Date(job.date_to);
 
-    if (!start || !end) return null;
+    if (isNaN(jobStart.getTime()) || isNaN(jobEnd.getTime())) {
+        return false;
+    }
 
-    return { start, end };
-}
+    let searchStart = null;
+    let searchEnd = null;
 
-function matchesDuration(job, searchDurationValue) {
-    if (!searchDurationValue) return true;
+    if (searchDateFromValue) {
+        searchStart = new Date(searchDateFromValue);
+        if (isNaN(searchStart.getTime())) return true;
+    }
 
-    const searchRange = parseSearchDuration(searchDurationValue);
-    if (!searchRange) return true;
+    if (searchDateToValue) {
+        searchEnd = new Date(searchDateToValue);
+        if (isNaN(searchEnd.getTime())) return true;
+    }
 
-    const jobRange = parseJobDuration(job.duration);
-    if (!jobRange) return false;
+    if (searchStart && searchEnd) {
+        return jobStart >= searchStart && jobEnd <= searchEnd;
+    }
 
-    return (
-        jobRange.start >= searchRange.start &&
-        jobRange.end <= searchRange.end
-    );
+    if (searchStart && !searchEnd) {
+        return jobStart >= searchStart;
+    }
+
+    if (!searchStart && searchEnd) {
+        return jobEnd <= searchEnd;
+    }
+
+    return true;
 }
 
 /* Filter Buttons; Anwenden / Zurücksetzen - eventListener */
