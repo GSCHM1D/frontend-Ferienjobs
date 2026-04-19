@@ -732,18 +732,31 @@ button:disabled {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 14px;
+    align-items: stretch;
+}
+
+.search-filters > input,
+.search-filters > select,
+.search-filters > .search-date-group {
+    width: 100%;
+    min-width: 0;
 }
 
 .search-date-group {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
+    width: 100%;
+    min-width: 0;
 }
 
 .search-date-group input[type="date"] {
-    width: 100%;
+    width: 100% !important;
     min-width: 0;
+    max-width: 100%;
     box-sizing: border-box;
+    margin: 0;
+    padding: 12px 14px;
 }
 
 @media (max-width: 720px) {
@@ -752,7 +765,7 @@ button:disabled {
     }
 
     .search-date-group {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
     }
 }
 
