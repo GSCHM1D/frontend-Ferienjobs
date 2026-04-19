@@ -104,7 +104,6 @@ form button {
 }
 
 input,
-input[type="date"],
 textarea,
 select {
     width: 100%;
@@ -122,26 +121,12 @@ select {
 }
 
 .date-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    grid-column: 1 / -1;
-    align-items: end;
-}
-
-.date-field,
-.select-field {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 0;
+    gap: 12px; /* Abstand zwischen den Feldern */
 }
 
-.date-field input,
-.select-field select {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
+.date-row input {
+    flex: 1; /* beide gleich breit */
 }
 
 input::placeholder,
@@ -181,15 +166,6 @@ label {
     font-size: 14px;
     font-weight: 700;
     color: #334155;
-}
-
-.date-field label,
-.select-field label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #64748b;
-    margin-bottom: 2px;
-    letter-spacing: 0.5px;
 }
 
 /* Buttons */
@@ -247,7 +223,18 @@ button:disabled {
     box-shadow: 0 14px 28px rgba(239, 68, 68, 0.28);
 }
 
-/* Search - auch Z. 120+ */
+/* Search */
+
+.search-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search-row input,
+.search-row select {
+    flex: 1;
+}
 
 .notice {
     margin-top: 12px;
@@ -742,55 +729,13 @@ button:disabled {
 /* Suche */
 .search-filters {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 14px;
-    align-items: end;
-}
-
-.search-filters > input,
-.search-filters > select,
-.search-filters > .search-date-group {
-    width: 100%;
-    min-width: 0;
-}
-
-.search-date-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    width: 100%;
-    min-width: 0;
-}
-
-.search-date-group .date-field {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 0;
-}
-
-.search-date-group .date-field input[type="date"] {
-    width: 100% !important;
-    min-width: 0;
-    max-width: 100%;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 13px 14px;
 }
 
 @media (max-width: 720px) {
     .search-filters {
-        grid-template-columns: 1fr;
-    }
-
-    .search-date-group {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (max-width: 720px) {
-    .date-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* untereinander */
     }
 }
 
