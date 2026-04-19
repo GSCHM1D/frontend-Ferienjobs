@@ -731,17 +731,18 @@ button:disabled {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 14px;
-    align-items: end;
 }
 
 .search-date-group {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
 }
 
-.search-date-group input {
+.search-date-group input[type="date"] {
     width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 @media (max-width: 720px) {
