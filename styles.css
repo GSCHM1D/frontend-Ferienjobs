@@ -122,12 +122,26 @@ select {
 }
 
 .date-row {
-    display: flex;
-    gap: 12px; /* Abstand zwischen den Feldern */
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    grid-column: 1 / -1;
+    align-items: end;
 }
 
-.date-row input {
-    flex: 1; /* beide gleich breit */
+.date-field,
+.select-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.date-field input,
+.select-field select {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 input::placeholder,
@@ -233,18 +247,7 @@ button:disabled {
     box-shadow: 0 14px 28px rgba(239, 68, 68, 0.28);
 }
 
-/* Search */
-
-.search-row {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.search-row input,
-.search-row select {
-    flex: 1;
-}
+/* Search - auch Z. 120+ */
 
 .notice {
     margin-top: 12px;
@@ -741,7 +744,7 @@ button:disabled {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 14px;
-    align-items: stretch;
+    align-items: end;
 }
 
 .search-filters > input,
@@ -759,13 +762,20 @@ button:disabled {
     min-width: 0;
 }
 
-.search-date-group input[type="date"] {
+.search-date-group .date-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.search-date-group .date-field input[type="date"] {
     width: 100% !important;
     min-width: 0;
     max-width: 100%;
     box-sizing: border-box;
     margin: 0;
-    padding: 12px 14px;
+    padding: 13px 14px;
 }
 
 @media (max-width: 720px) {
@@ -775,6 +785,12 @@ button:disabled {
 
     .search-date-group {
         grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .date-row {
+        grid-template-columns: 1fr;
     }
 }
 
