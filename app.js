@@ -13,10 +13,7 @@ const filterToggle = document.getElementById("filter-toggle");
 const filterWrapper = document.getElementById("filter-wrapper");
 /* Alerts ersetzen durch klare Meldungen */
 const jobMessage = document.getElementById("job-message");
-/* Logik für neue Datumsfelder */
-const dateFromInput = document.getElementById("date_from");
-const dateToInput = document.getElementById("date_to");
-const specificOrNotSelect = document.getElementById("specific_or_not");
+
 
 let allJobs = [];
 let isSubmittingJob = false;
@@ -26,7 +23,8 @@ let activeFilters = {
     location: "",
     minSalary: "",
     category: "",
-    duration: ""
+    dateFrom: "",
+    dateTo: ""
 };
 
 /* Datumsfelder */ 
@@ -60,7 +58,7 @@ function hideLoading() {
 }
 
 function setFormDisabled(disabled) {
-    const elements = jobForm.querySelectorAll("input, textarea, button");
+    const elements = jobForm.querySelectorAll("input, textarea, button, select");
     elements.forEach(element => {
         element.disabled = disabled;
     });
@@ -115,14 +113,20 @@ function formatDate(dateString) {
 
 function getDurationDisplay(job) {
     if (job.specific_or_not === "Dauerhaft") {
-        return "Dauerhaft Aushilfe gesucht";
+        return {
+            text: "Dauerhaft Aushilfe gesucht",
+            className: "job-duration-item"
+        };
     }
 
     if (job.specific_or_not === "Spezifisch" && job.date_from && job.date_to) {
-        return `${formatDate(job.date_from)} - ${formatDate(job.date_to)}`;
+        return {
+            text: `${formatDate(job.date_from)} - ${formatDate(job.date_to)}`,
+            className: "job-duration-item"
+        };
     }
 
-    return "";
+    return null;
 }
 
 /* ----------------------- */
@@ -131,9 +135,9 @@ function renderJobs() {
     const locationValue = activeFilters.location;
     const minSalaryValue = activeFilters.minSalary;
     const categoryValue = activeFilters.category;
-    const searchDateFromValue = document.getElementById("search-date-from").value;
-    const searchDateToValue = document.getElementById("search-date-to").value;
-
+    const searchDateFromValue = activeFilters.dateFrom;
+    const searchDateToValue = activeFilters.dateTo;
+    
     const isSearching =
         locationValue !== "" ||
         minSalaryValue !== "" ||
@@ -306,7 +310,10 @@ jobForm.addEventListener("submit", async function(event) {
 const searchLocationInput = document.getElementById("search-location");
 const searchMinSalaryInput = document.getElementById("search-min-salary");
 const searchCategoryInput = document.getElementById("search-category");
-const searchDurationInput = document.getElementById("search-duration");
+/* Logik für neue Datumsfelder */
+const dateFromInput = document.getElementById("date_from");
+const dateToInput = document.getElementById("date_to");
+const specificOrNotSelect = document.getElementById("specific_or_not");
 
 /* Orte filtern*/
 
@@ -410,7 +417,8 @@ applyFiltersButton.addEventListener("click", function () {
         location: searchLocationInput.value.trim(),
         minSalary: searchMinSalaryInput.value.trim(),
         category: searchCategoryInput.value,
-        duration: searchDurationInput.value.trim()
+        dateFrom: document.getElementById("search-date-from").value,
+        dateTo: document.getElementById("search-date-to").value
     };
 
     renderJobs();
@@ -420,18 +428,19 @@ resetFiltersButton.addEventListener("click", function () {
     searchLocationInput.value = "";
     searchMinSalaryInput.value = "";
     searchCategoryInput.value = "";
-    searchDurationInput.value = "";
+    document.getElementById("search-date-from").value = "";
+    document.getElementById("search-date-to").value = "";
 
     activeFilters = {
         location: "",
         minSalary: "",
         category: "",
-        duration: ""
+        dateFrom: "",
+        dateTo: ""
     };
 
     renderJobs();
 });
-
 /* eventListener für Toggle Job posten Bar */
 
 jobFormToggle.addEventListener("click", function () {
