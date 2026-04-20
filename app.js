@@ -265,6 +265,22 @@ jobForm.addEventListener("submit", async function(event) {
             website: document.getElementById("website").value.trim()
         };
 
+        if (!newJob.specific_or_not) {
+            showJobMessage("Bitte wähle aus, ob die Aushilfe dauerhaft oder in einem spezifischen Zeitraum gesucht wird.", "error");
+            hideLoading();
+            setFormDisabled(false);
+            isSubmittingJob = false;
+            return;
+        }
+        
+        if (newJob.specific_or_not === "Spezifisch" && (!newJob.date_from || !newJob.date_to)) {
+            showJobMessage("Bitte wähle bei spezifischer Zeitdauer ein Von- und Bis-Datum.", "error");
+            hideLoading();
+            setFormDisabled(false);
+            isSubmittingJob = false;
+            return;
+        }
+
         const result = await createJob(newJob);
 
         if (!result.success) {
