@@ -98,7 +98,7 @@ async function loadJobs() {
    JOBS RENDERN
 ========================= */
 
-/* Zuerst Hilfsfunktionen */
+/* Zuerst Hilfsfunktionen Datumsfelder */
 
 function formatDate(dateString) {
     if (!dateString) return "";
@@ -115,20 +115,14 @@ function formatDate(dateString) {
 
 function getDurationDisplay(job) {
     if (job.specific_or_not === "Dauerhaft") {
-        return {
-            text: "Dauerhaft Aushilfe gesucht",
-            className: "job-duration-item"
-        };
+        return "Dauerhaft Aushilfe gesucht";
     }
 
     if (job.specific_or_not === "Spezifisch" && job.date_from && job.date_to) {
-        return {
-            text: `${formatDate(job.date_from)} - ${formatDate(job.date_to)}`,
-            className: "job-duration-item"
-        };
+        return `${formatDate(job.date_from)} - ${formatDate(job.date_to)}`;
     }
 
-    return null;
+    return "";
 }
 
 /* ----------------------- */
@@ -155,7 +149,7 @@ function renderJobs() {
                 matchesLocation(job, locationValue) &&
                 matchesMinSalary(job, minSalaryValue) &&
                 matchesCategory(job, categoryValue) &&
-                matchesDuration(job, durationValue)
+                matchesDuration(job, searchDateFromValue, searchDateToValue)
             );
         });
     }
