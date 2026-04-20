@@ -13,6 +13,10 @@ const filterToggle = document.getElementById("filter-toggle");
 const filterWrapper = document.getElementById("filter-wrapper");
 /* Alerts ersetzen durch klare Meldungen */
 const jobMessage = document.getElementById("job-message");
+/* Logik für neue Datumsfelder */
+const dateFromInput = document.getElementById("date_from");
+const dateToInput = document.getElementById("date_to");
+const specificOrNotSelect = document.getElementById("specific_or_not");
 
 let allJobs = [];
 let isSubmittingJob = false;
@@ -25,6 +29,27 @@ let activeFilters = {
     duration: ""
 };
 
+/* Datumsfelder */ 
+
+function updateDurationInputs() {
+    const mode = specificOrNotSelect.value;
+
+    if (mode === "Dauerhaft") {
+        dateFromInput.value = "";
+        dateToInput.value = "";
+
+        dateFromInput.disabled = true;
+        dateToInput.disabled = true;
+    } else {
+        dateFromInput.disabled = false;
+        dateToInput.disabled = false;
+    }
+}
+
+specificOrNotSelect.addEventListener("change", updateDurationInputs);
+updateDurationInputs();
+
+/* ---------------------- */
 function showLoading(message = "Job wird veröffentlicht...") {
     loadingOverlay.querySelector("p").textContent = message;
     loadingOverlay.classList.remove("hidden");
