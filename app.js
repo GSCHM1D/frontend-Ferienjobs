@@ -13,6 +13,11 @@ const filterToggle = document.getElementById("filter-toggle");
 const filterWrapper = document.getElementById("filter-wrapper");
 /* Alerts ersetzen durch klare Meldungen */
 const jobMessage = document.getElementById("job-message");
+/* Logik für neue Datumsfelder */
+const dateFromInput = document.getElementById("date_from");
+const dateToInput = document.getElementById("date_to");
+const specificOrNotSelect = document.getElementById("specific_or_not");
+
 
 
 let allJobs = [];
@@ -310,10 +315,6 @@ jobForm.addEventListener("submit", async function(event) {
 const searchLocationInput = document.getElementById("search-location");
 const searchMinSalaryInput = document.getElementById("search-min-salary");
 const searchCategoryInput = document.getElementById("search-category");
-/* Logik für neue Datumsfelder */
-const dateFromInput = document.getElementById("date_from");
-const dateToInput = document.getElementById("date_to");
-const specificOrNotSelect = document.getElementById("specific_or_not");
 
 /* Orte filtern*/
 
