@@ -295,6 +295,7 @@ jobForm.addEventListener("submit", async function(event) {
 
         jobForm.reset();
         await loadJobs();
+        updateDurationInputs();
         showJobMessage("Job erfolgreich veröffentlicht.");
     } catch (error) {
         showJobMessage("Beim Veröffentlichen ist ein Fehler aufgetreten.");
