@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbyk-AGYM9radSOLYGqcIRpT2K7I5fWRgtzun68WtH2O/dev";
+const API_URL = "https://script.google.com/macros/s/AKfycbxsh5hGxHyU_i-EK01nk2_VYV8ZiRXltKSPB25-WEpBx3rvGULqDZEdHYQtNc1cRnmRFg/exec";
 
 /* =========================
    ALLE JOBS LADEN
