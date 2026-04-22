@@ -921,3 +921,52 @@ button:disabled {
 .hidden {
     display: none;
 }
+
+.disclaimer-gate {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(6px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.disclaimer-gate.hidden {
+    display: none;
+}
+
+.disclaimer-gate-card {
+    width: 100%;
+    max-width: 920px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(219, 226, 234, 0.9);
+    border-radius: 22px;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+    padding: 28px;
+}
+
+.disclaimer-gate-card h2 {
+    margin-top: 0;
+    margin-bottom: 14px;
+    font-size: 24px;
+    color: #0f172a;
+}
+
+.disclaimer-gate-card p {
+    color: #475569;
+    margin-bottom: 12px;
+}
+
+.disclaimer-gate-card a {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+body.disclaimer-open {
+    overflow: hidden;
+}
