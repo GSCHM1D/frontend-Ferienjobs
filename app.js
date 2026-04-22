@@ -95,18 +95,26 @@ function hideJobMessage() {
 /* Hilfsfunktion Disclaimer */
 
 function initDisclaimerGate() {
-    const accepted = localStorage.getItem("holidayjobDisclaimerAccepted");
+    const stored = localStorage.getItem("holidayjobDisclaimerAccepted");
+    const now = Date.now();
 
-    if (accepted === "true") {
-        disclaimerGate.classList.add("hidden");
-        document.body.classList.remove("disclaimer-open");
-        return;
+    if (stored) {
+        const parsed = JSON.parse(stored);
+
+        // 24 Stunden = 86400000 ms
+        if (now - parsed.time < 86400000) {
+            disclaimerGate.classList.add("hidden");
+            return;
+        }
     }
 
     document.body.classList.add("disclaimer-open");
 
     acceptDisclaimerBtn.addEventListener("click", function () {
-        localStorage.setItem("holidayjobDisclaimerAccepted", "true");
+        localStorage.setItem("holidayjobDisclaimerAccepted", JSON.stringify({
+            time: Date.now()
+        }));
+
         disclaimerGate.classList.add("hidden");
         document.body.classList.remove("disclaimer-open");
     });
