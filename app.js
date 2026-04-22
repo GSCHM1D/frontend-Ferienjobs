@@ -17,6 +17,9 @@ const jobMessage = document.getElementById("job-message");
 const dateFromInput = document.getElementById("date_from");
 const dateToInput = document.getElementById("date_to");
 const specificOrNotSelect = document.getElementById("specific_or_not");
+/* Disclaimer Logik */
+const disclaimerGate = document.getElementById("disclaimer-gate");
+const acceptDisclaimerBtn = document.getElementById("accept-disclaimer-btn");
 
 
 
@@ -87,6 +90,26 @@ function showJobMessage(text, type = "info") {
 function hideJobMessage() {
     jobMessage.textContent = "";
     jobMessage.className = "message-box hidden";
+}
+
+/* Hilfsfunktion Disclaimer */
+
+function initDisclaimerGate() {
+    const accepted = localStorage.getItem("holidayjobDisclaimerAccepted");
+
+    if (accepted === "true") {
+        disclaimerGate.classList.add("hidden");
+        document.body.classList.remove("disclaimer-open");
+        return;
+    }
+
+    document.body.classList.add("disclaimer-open");
+
+    acceptDisclaimerBtn.addEventListener("click", function () {
+        localStorage.setItem("holidayjobDisclaimerAccepted", "true");
+        disclaimerGate.classList.add("hidden");
+        document.body.classList.remove("disclaimer-open");
+    });
 }
 
 /* =========================
@@ -473,4 +496,6 @@ filterToggle.addEventListener("click", function () {
 /* =========================
    START
 ========================= */
+
+initDisclaimerGate();
 loadJobs();
