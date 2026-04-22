@@ -922,6 +922,8 @@ button:disabled {
     display: none;
 }
 
+/* Discalimer Style */
+
 .disclaimer-gate {
     position: fixed;
     inset: 0;
@@ -969,4 +971,46 @@ button:disabled {
 
 body.disclaimer-open {
     overflow: hidden;
+}
+
+/* Footer Style */
+
+.site-footer,
+#site-impressum {
+    margin-top: 48px;
+    padding: 28px 20px 40px;
+    border-top: 1px solid rgba(219, 226, 234, 0.9);
+    background: rgba(248, 250, 252, 0.9);
+    color: #64748b;
+    border-radius: 18px;
+}
+
+.site-footer p,
+#site-impressum p {
+    max-width: 980px;
+    margin: 0 auto 0.75rem auto;
+    font-size: 0.96rem;
+    line-height: 1.6;
+}
+
+.site-footer p:last-child,
+#site-impressum p:last-child {
+    margin-bottom: 0;
+}
+
+.site-footer strong,
+#site-impressum strong {
+    color: #1e293b;
+}
+
+.site-footer a,
+#site-impressum a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.site-footer a:hover,
+#site-impressum a:hover {
+    text-decoration: underline;
 }
