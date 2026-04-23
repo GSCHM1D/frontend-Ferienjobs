@@ -167,13 +167,30 @@ function getDurationDisplay(job) {
 
 /* ----------------------- */
 
+/* Sichere DOM-Hilfsfunktionen (verhindern XSS, weil textContent statt innerHTML) */
+
+function el(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text != null) element.textContent = text;
+    return element;
+}
+
+function metaItem(label, value, extraClass) {
+    const item = el("div", "job-meta-item");
+    if (extraClass) item.classList.add(extraClass);
+    item.appendChild(el("span", "job-meta-label", label));
+    item.appendChild(el("span", "job-meta-value", value == null ? "" : String(value)));
+    return item;
+}
+
 function renderJobs() {
     const locationValue = activeFilters.location;
     const minSalaryValue = activeFilters.minSalary;
     const categoryValue = activeFilters.category;
     const searchDateFromValue = activeFilters.dateFrom;
     const searchDateToValue = activeFilters.dateTo;
-    
+
     const isSearching =
         locationValue !== "" ||
         minSalaryValue !== "" ||
@@ -181,10 +198,12 @@ function renderJobs() {
         searchDateFromValue !== "" ||
         searchDateToValue !== "";
 
-    let visibleJobs = allJobs;
+    // Öffentliche Liste zeigt nur verifizierte Jobs (Defense-in-depth gegen Leaks vom Server)
+    const verifiedJobs = allJobs.filter(job => job && job.status === "verified");
+    let visibleJobs = verifiedJobs;
 
     if (isSearching) {
-        visibleJobs = allJobs.filter(job => {
+        visibleJobs = verifiedJobs.filter(job => {
             return (
                 matchesLocation(job, locationValue) &&
                 matchesMinSalary(job, minSalaryValue) &&
@@ -197,65 +216,41 @@ function renderJobs() {
     jobList.innerHTML = "";
 
     if (visibleJobs.length === 0) {
-        jobList.innerHTML = "<p>Keine Jobs gefunden.</p>";
+        jobList.appendChild(el("p", null, "Keine Jobs gefunden."));
         return;
     }
 
     visibleJobs.forEach(job => {
-        const card = document.createElement("div");
         const durationDisplay = getDurationDisplay(job);
-        card.classList.add("job-card", "public-job-card");
+        const card = el("div", "job-card public-job-card");
 
-        card.innerHTML = `
-            <div class="job-card-top">
-                ${job.category ? `<span class="job-category-badge">${job.category}</span>` : ""}
-                <h3 class="job-title">${job.title}</h3>
-                <p class="job-company">${job.company}</p>
-            </div>
+        const top = el("div", "job-card-top");
+        if (job.category) top.appendChild(el("span", "job-category-badge", job.category));
+        top.appendChild(el("h3", "job-title", job.title));
+        top.appendChild(el("p", "job-company", job.company));
+        card.appendChild(top);
 
-            <div class="job-card-body">
-                <div class="job-meta-list">
-                    <div class="job-meta-item">
-                        <span class="job-meta-label">Ort</span>
-                        <span class="job-meta-value">${job.location}</span>
-                    </div>
+        const body = el("div", "job-card-body");
+        const list = el("div", "job-meta-list");
+        list.appendChild(metaItem("Ort", job.location, null));
+        if (job.salary) list.appendChild(metaItem("Lohn", job.salary, "job-meta-highlight"));
+        if (job.requirements) list.appendChild(metaItem("Voraussetzungen", job.requirements, null));
+        if (durationDisplay) list.appendChild(metaItem("Zeitdauer", durationDisplay.text, durationDisplay.className));
+        body.appendChild(list);
 
-                    ${job.salary ? `
-                        <div class="job-meta-item job-meta-highlight">
-                            <span class="job-meta-label">Lohn</span>
-                            <span class="job-meta-value">${job.salary}</span>
-                        </div>
-                    ` : ""}
+        if (job.description) {
+            const block = el("div", "job-description-block");
+            block.appendChild(el("p", "job-description", job.description));
+            body.appendChild(block);
+        }
+        card.appendChild(body);
 
-                    ${job.requirements ? `
-                        <div class="job-meta-item">
-                            <span class="job-meta-label">Voraussetzungen</span>
-                            <span class="job-meta-value">${job.requirements}</span>
-                        </div>
-                    ` : ""}
-
-                    ${durationDisplay ? `
-                        <div class="job-meta-item ${durationDisplay.className}">
-                            <span class="job-meta-label">Zeitdauer</span>
-                            <span class="job-meta-value">${durationDisplay.text}</span>
-                        </div>
-                    ` : ""}
-                </div>
-
-                ${job.description ? `
-                    <div class="job-description-block">
-                        <p class="job-description">${job.description}</p>
-                    </div>
-                ` : ""}
-            </div>
-
-            ${job.contact ? `
-                <div class="job-card-footer">
-                    <span class="job-contact-label">Kontakt</span>
-                    <span class="job-contact-value">${job.contact}</span>
-                </div>
-            ` : ""}
-        `;
+        if (job.contact) {
+            const footer = el("div", "job-card-footer");
+            footer.appendChild(el("span", "job-contact-label", "Kontakt"));
+            footer.appendChild(el("span", "job-contact-value", job.contact));
+            card.appendChild(footer);
+        }
 
         jobList.appendChild(card);
     });

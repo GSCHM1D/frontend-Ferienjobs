@@ -49,58 +49,78 @@ async function loadAdminJobs() {
 /* =========================
    JOBS ANZEIGEN
 ========================= */
+
+/* Sichere DOM-Hilfsfunktion (verhindert XSS, weil textContent statt innerHTML) */
+function adminEl(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text != null) element.textContent = text;
+    return element;
+}
+
+function adminLabeledRow(label, value) {
+    const p = document.createElement("p");
+    const strong = document.createElement("strong");
+    strong.textContent = label + ":";
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(" " + (value == null ? "" : String(value))));
+    return p;
+}
+
 function renderAdminJobs() {
     adminJobList.innerHTML = "";
 
     if (adminJobs.length === 0) {
-        adminJobList.innerHTML = "<p>Keine Jobs vorhanden.</p>";
+        adminJobList.appendChild(adminEl("p", null, "Keine Jobs vorhanden."));
         return;
     }
 
     adminJobs.forEach(job => {
-        const card = document.createElement("div");
-        card.classList.add("job-card", "admin-job-card");
+        const isVerified = job.status === "verified";
+        const card = adminEl("div", "job-card admin-job-card");
+        card.classList.add(isVerified ? "job-verified" : "job-unverified");
 
-        if (job.status === "verified") {
-            card.classList.add("job-verified");
+        card.appendChild(adminEl("h3", null, job.title));
+        card.appendChild(adminLabeledRow("Firma", job.company));
+        if (job.category) card.appendChild(adminLabeledRow("Kategorie", job.category));
+        card.appendChild(adminLabeledRow("Ort", job.location));
+        card.appendChild(adminLabeledRow("Kontakt", job.contact));
+        if (job.salary) card.appendChild(adminLabeledRow("Lohn", job.salary));
+        if (job.requirements) card.appendChild(adminLabeledRow("Voraussetzungen", job.requirements));
+
+        if (job.specific_or_not === "Dauerhaft") {
+            card.appendChild(adminLabeledRow("Zeitraum", "Dauerhaft"));
         } else {
-            card.classList.add("job-unverified");
+            const from = job.date_from || "";
+            const to = job.date_to || "";
+            card.appendChild(adminLabeledRow("Zeitraum", from + " - " + to));
         }
 
-        card.innerHTML = `
-            <h3>${job.title}</h3>
+        if (job.description) card.appendChild(adminLabeledRow("Beschreibung", job.description));
 
-            <p><strong>Firma:</strong> ${job.company}</p>
-            ${job.category ? `<p><strong>Kategorie:</strong> ${job.category}</p>` : ""}
-            <p><strong>Ort:</strong> ${job.location}</p>
-            <p><strong>Kontakt:</strong> ${job.contact}</p>
-            ${job.salary ? `<p><strong>Lohn:</strong> ${job.salary}</p>` : ""}
-            ${job.requirements ? `<p><strong>Voraussetzungen:</strong> ${job.requirements}</p>` : ""}
-            ${job.specific_or_not === "Dauerhaft"
-                ? `<p><strong>Zeitraum:</strong> Dauerhaft</p>`
-                : `<p><strong>Zeitraum:</strong> ${job.date_from || ""} - ${job.date_to || ""}</p>`
-            }
-            ${job.description ? `<p><strong>Beschreibung:</strong> ${job.description}</p>` : ""}
+        const statusBadge = adminEl(
+            "span",
+            "status-badge " + (isVerified ? "status-verified" : "status-unverified"),
+            isVerified ? "Verifiziert" : "Nicht verifiziert"
+        );
+        card.appendChild(statusBadge);
 
-            <span class="status-badge ${job.status === "verified" ? "status-verified" : "status-unverified"}">
-                ${job.status === "verified" ? "Verifiziert" : "Nicht verifiziert"}
-            </span>
+        const actions = adminEl("div", "admin-actions");
 
-            <div class="admin-actions">
-                <button 
-                    class="verify-btn" 
-                    data-id="${job.id}" 
-                    ${job.status === "verified" ? "disabled" : ""}
-                >
-                    ${job.status === "verified" ? "Bereits verifiziert" : "Verifizieren"}
-                </button>
+        const verifyBtn = adminEl(
+            "button",
+            "verify-btn",
+            isVerified ? "Bereits verifiziert" : "Verifizieren"
+        );
+        verifyBtn.dataset.id = job.id == null ? "" : String(job.id);
+        if (isVerified) verifyBtn.disabled = true;
+        actions.appendChild(verifyBtn);
 
-                <button class="delete-btn" data-id="${job.id}">
-                    Löschen
-                </button>
-            </div>
-        `;
+        const deleteBtn = adminEl("button", "delete-btn", "Löschen");
+        deleteBtn.dataset.id = job.id == null ? "" : String(job.id);
+        actions.appendChild(deleteBtn);
 
+        card.appendChild(actions);
         adminJobList.appendChild(card);
     });
 
