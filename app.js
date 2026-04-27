@@ -198,12 +198,11 @@ function renderJobs() {
         searchDateFromValue !== "" ||
         searchDateToValue !== "";
 
-    // Öffentliche Liste zeigt nur verifizierte Jobs (Defense-in-depth gegen Leaks vom Server)
-    const verifiedJobs = allJobs.filter(job => job && job.status === "verified");
-    let visibleJobs = verifiedJobs;
+    // Öffentliche Liste zeigt alle Jobs (~Defense-in-depth gegen Leaks vom Server)
+    let visibleJobs = allJobs;
 
     if (isSearching) {
-        visibleJobs = verifiedJobs.filter(job => {
+        visibleJobs = allJobs.filter(job => {
             return (
                 matchesLocation(job, locationValue) &&
                 matchesMinSalary(job, minSalaryValue) &&
