@@ -21,8 +21,11 @@ const specificOrNotSelect = document.getElementById("specific_or_not");
 const disclaimerGate = document.getElementById("disclaimer-gate");
 const acceptDisclaimerBtn = document.getElementById("accept-disclaimer-btn");
 /* Cookie Banner constants */
-
-
+const cookieBanner = document.getElementById("cookie-banner");
+const acceptNecessaryCookiesButton = document.getElementById("accept-necessary-cookies");
+const acceptAnalyticsCookiesButton = document.getElementById("accept-analytics-cookies");
+/* Cookie Einstellungen ändern */
+const changeCookieSettingsLink = document.getElementById("change-cookie-settings");
 
 
 let allJobs = [];
@@ -165,6 +168,16 @@ function initCookieBanner() {
         });
 
         cookieBanner.classList.add("hidden");
+    });
+}
+
+/* Banner erneut aufrufen, Änderungen Cookie Einstellungen */
+
+if (changeCookieSettingsLink) {
+    changeCookieSettingsLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        localStorage.removeItem("holidayjobCookieChoice");
+        cookieBanner.classList.remove("hidden");
     });
 }
 
