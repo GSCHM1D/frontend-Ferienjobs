@@ -20,6 +20,8 @@ const specificOrNotSelect = document.getElementById("specific_or_not");
 /* Disclaimer Logik */
 const disclaimerGate = document.getElementById("disclaimer-gate");
 const acceptDisclaimerBtn = document.getElementById("accept-disclaimer-btn");
+/* Cookie Banner constants */
+
 
 
 
@@ -117,6 +119,52 @@ function initDisclaimerGate() {
 
         disclaimerGate.classList.add("hidden");
         document.body.classList.remove("disclaimer-open");
+    });
+}
+
+/* Hilfsfunktion Cookie Banner */
+
+function initCookieBanner() {
+    const cookieChoice = localStorage.getItem("holidayjobCookieChoice");
+
+    if (cookieChoice === "analytics") {
+        gtag('consent', 'update', {
+            'analytics_storage': 'granted'
+        });
+
+        cookieBanner.classList.add("hidden");
+        return;
+    }
+
+    if (cookieChoice === "necessary") {
+        gtag('consent', 'update', {
+            'analytics_storage': 'denied'
+        });
+
+        cookieBanner.classList.add("hidden");
+        return;
+    }
+
+    cookieBanner.classList.remove("hidden");
+
+    acceptNecessaryCookiesButton.addEventListener("click", function () {
+        localStorage.setItem("holidayjobCookieChoice", "necessary");
+
+        gtag('consent', 'update', {
+            'analytics_storage': 'denied'
+        });
+
+        cookieBanner.classList.add("hidden");
+    });
+
+    acceptAnalyticsCookiesButton.addEventListener("click", function () {
+        localStorage.setItem("holidayjobCookieChoice", "analytics");
+
+        gtag('consent', 'update', {
+            'analytics_storage': 'granted'
+        });
+
+        cookieBanner.classList.add("hidden");
     });
 }
 
@@ -500,4 +548,5 @@ filterToggle.addEventListener("click", function () {
 ========================= */
 
 initDisclaimerGate();
+initCookieBanner();
 loadJobs();
