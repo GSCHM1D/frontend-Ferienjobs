@@ -14,6 +14,14 @@
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
     <link rel="manifest" href="icons/site.webmanifest">
     <meta name="theme-color" content="#0b1220">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RDJXNN60R9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RDJXNN60R9');
+    </script>
 </head>
 <body>
 
@@ -211,6 +219,29 @@
     <a href="/legal/agb.html">AGB</a>
   </p>
 </footer>
+
+<div id="cookie-banner" class="cookie-banner hidden">
+  <div class="cookie-banner-text">
+    <strong>Cookies & Analyse</strong>
+    <p>
+      Wir verwenden notwendige technische Funktionen sowie optional Google Analytics,
+      um die Nutzung der Website besser zu verstehen. Du kannst selbst entscheiden.
+    </p>
+    <p>
+      Mehr dazu in der
+      <a href="/legal/datenschutz.html">Datenschutzerklärung</a>.
+    </p>
+  </div>
+
+  <div class="cookie-banner-actions">
+    <button type="button" id="accept-necessary-cookies" class="secondary-button">
+      Nur notwendige
+    </button>
+    <button type="button" id="accept-analytics-cookies">
+      Akzeptieren
+    </button>
+  </div>
+</div>
     
 <script src="api.js"></script>
 <script src="app.js"></script>
