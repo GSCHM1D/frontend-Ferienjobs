@@ -502,6 +502,9 @@ function matchesDuration(job, searchDateFromValue, searchDateToValue) {
 
 applyFiltersButton.addEventListener("click", function () {
     activeFilters = {
+        if (typeof gtag === "function") {
+            gtag("event", "apply_filters_used");
+        }
         location: searchLocationInput.value.trim(),
         minSalary: searchMinSalaryInput.value.trim(),
         category: searchCategoryInput.value,
@@ -532,6 +535,9 @@ resetFiltersButton.addEventListener("click", function () {
 /* eventListener für Toggle Job posten Bar */
 
 jobFormToggle.addEventListener("click", function () {
+    if (typeof gtag === "function") {
+        gtag("event", "job_form_opened");
+    }
     const isOpen = jobFormWrapper.classList.contains("open");
 
     if (isOpen) {
