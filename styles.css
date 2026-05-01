@@ -503,6 +503,12 @@ button:disabled {
     }
 }
 
+.jobs-loading-text {
+    color: #64748b;
+    font-size: 15px;
+    margin: 0;
+}
+
 /* Small helper blocks */
 
 .message-box {
