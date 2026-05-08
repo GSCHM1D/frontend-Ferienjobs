@@ -1085,34 +1085,33 @@ body.disclaimer-open {
 
 .footer-social {
     max-width: 980px;
-    margin: 22px auto 0;
+    margin: 26px auto 0;
     padding-top: 18px;
     border-top: 1px solid rgba(219, 226, 234, 0.9);
+
     display: flex;
     justify-content: flex-start;
+    align-items: center;
 }
 
-.footer-social a {
+.instagram-link {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+
     color: #2563eb;
-    font-weight: 700;
     text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
 }
 
-.footer-social a:hover {
-    text-decoration: underline;
+.instagram-link:hover {
+    opacity: 0.8;
 }
 
-.instagram-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 999px;
-    border: 2px solid #2563eb;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    line-height: 1;
+.instagram-link svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+    flex-shrink: 0;
 }
