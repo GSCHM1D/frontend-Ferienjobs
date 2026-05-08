@@ -1,5 +1,5 @@
 Dateien:
-- disclaimer-snippet.html -> ganz oben auf der Startseite einbauen
+- disclaimer-snippet.html -> ganz oben in index.html
 - agb.html -> als eigene Seite verlinken
 - datenschutz.html -> als eigene Seite verlinken
 - impressum.html -> als eigene Seite verlinken
@@ -13,4 +13,3 @@ Impressumsstruktur:
 
 Hinweis:
 Alle internen Links zeigen auf /agb.html, /datenschutz.html und /impressum.html.
-Wenn deine Seiten in einem Unterordner liegen, musst du die Pfade anpassen.
