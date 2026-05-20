@@ -189,6 +189,19 @@ if (changeCookieSettingsLink) {
     });
 }
 
+/* Testemonials vorbereiten */
+
+const testimonials = [
+    {
+        company: "Muster AG",
+        logo: "logo",
+        person: "Max Muster",
+        role: "Geschäftsführer",
+        quote: "Sehr professionelle Zusammenarbeit.",
+        url: "https://musterag.ch"
+    }
+];
+
 /* =========================
    JOBS LADEN UND ANZEIGEN
 ========================= */
@@ -235,6 +248,72 @@ function getDurationDisplay(job) {
 }
 
 /* ----------------------- */
+
+/* Testimonials laden */
+
+function renderTestimonials() {
+    const logoList = document.getElementById("customer-logo-list");
+    const testimonialList = document.getElementById("testimonial-list");
+
+    if (!logoList || !testimonialList) return;
+
+    logoList.innerHTML = "";
+    testimonialList.innerHTML = "";
+
+    testimonials.forEach((item, index) => {
+        const testimonialId = `testimonial-${index}`;
+
+        const logoButton = el("button", "customer-logo-button");
+        logoButton.type = "button";
+
+        const logoImg = document.createElement("img");
+        logoImg.src = item.logo;
+        logoImg.alt = item.company;
+
+        logoButton.appendChild(logoImg);
+
+        logoButton.addEventListener("click", function () {
+            document.getElementById(testimonialId).scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        });
+
+        logoList.appendChild(logoButton);
+
+        const card = el("article", "testimonial-card");
+        card.id = testimonialId;
+
+        const top = el("div", "testimonial-top");
+
+        const img = document.createElement("img");
+        img.src = item.logo;
+        img.alt = item.company;
+        img.className = "testimonial-logo";
+
+        const info = el("div", "testimonial-info");
+        info.appendChild(el("h3", null, item.company));
+        info.appendChild(el("p", null, `${item.person} · ${item.role}`));
+
+        top.appendChild(img);
+        top.appendChild(info);
+
+        card.appendChild(top);
+        card.appendChild(el("p", "testimonial-quote", `„${item.quote}“`));
+
+        if (item.url) {
+            const link = el("a", "testimonial-link", "Website besuchen");
+            link.href = item.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            card.appendChild(link);
+        }
+
+        testimonialList.appendChild(card);
+    });
+}
+
+/* ------------------ */
 
 /* Sichere DOM-Hilfsfunktionen (verhindern XSS, weil textContent statt innerHTML) */
 
@@ -572,4 +651,5 @@ filterToggle.addEventListener("click", function () {
 
 initDisclaimerGate();
 initCookieBanner();
+renderTestimonials()
 loadJobs();
