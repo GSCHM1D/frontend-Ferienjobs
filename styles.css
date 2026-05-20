@@ -979,6 +979,115 @@ body.disclaimer-open {
     overflow: hidden;
 }
 
+/* Testimonials Style */
+
+.customer-logo-section,
+.testimonials-section {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(219, 226, 234, 0.8);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.customer-logo-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+}
+
+.customer-logo-button {
+    width: 72px;
+    height: 72px;
+    padding: 14px;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid rgba(219, 226, 234, 0.9);
+    box-shadow: none;
+}
+
+.customer-logo-button img {
+    max-width: 100%;
+    max-height: 42px;
+    object-fit: contain;
+}
+
+.testimonial-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.testimonial-card {
+    padding: 20px;
+    border-radius: 18px;
+    background: rgba(248, 250, 252, 0.95);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.testimonial-top {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.testimonial-logo {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 8px;
+    border: 1px solid rgba(219, 226, 234, 0.9);
+}
+
+.testimonial-info h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.testimonial-info p {
+    margin: 2px 0 0;
+    font-size: 13px;
+}
+
+.testimonial-quote {
+    font-size: 15px;
+    color: #475569;
+}
+
+.testimonial-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #2563eb;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.testimonial-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+    .testimonial-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .testimonial-list {
+        grid-template-columns: 1fr;
+    }
+
+    .customer-logo-button {
+        width: calc(50% - 7px);
+    }
+}
+
 /* Footer Style */
 
 .site-footer,
