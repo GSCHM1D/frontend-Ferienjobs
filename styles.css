@@ -1084,7 +1084,7 @@ body.disclaimer-open {
     }
 
     .customer-logo-button {
-        width: calc(50% - 7px);
+        width: calc(100% - 14px);
     }
 }
 
