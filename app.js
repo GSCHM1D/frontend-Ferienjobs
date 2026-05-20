@@ -193,12 +193,12 @@ if (changeCookieSettingsLink) {
 
 const testimonials = [
     {
-        company: "Muster AG",
+        company: "Aargauhotels AG",
         logo: "logo",
-        person: "Max Muster",
-        role: "Geschäftsführer",
-        quote: "Sehr professionelle Zusammenarbeit.",
-        url: "https://musterag.ch"
+        person: "Sabrina Schaffner",
+        role: "HR",
+        quote: "Für uns bedeutete die Plattform eine spürbare Entlastung im Rekrutierungsprozess.",
+        url: "https://www.aargauhotels.ch"
     }
 ];
 
