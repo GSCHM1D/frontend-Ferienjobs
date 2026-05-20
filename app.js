@@ -194,7 +194,7 @@ if (changeCookieSettingsLink) {
 const testimonials = [
     {
         company: "Aargauhotels AG",
-        logo: "logo",
+        logo: "logos_firmen/Aargauhotels_logo_transparent",
         person: "Sabrina Schaffner",
         role: "HR",
         quote: "Für uns bedeutete die Plattform eine spürbare Entlastung im Rekrutierungsprozess.",
