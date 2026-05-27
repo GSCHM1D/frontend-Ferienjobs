@@ -613,7 +613,7 @@ button:disabled {
 
 .logo-top-right {
   transform: scale(0.45);
-  transform-origin: top right;
+  transform-origin: top left;
   z-index: 9999;
   pointer-events: none;
 }
