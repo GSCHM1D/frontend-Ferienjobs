@@ -614,7 +614,7 @@ button:disabled {
 .logo-top-right {
   transform: scale(0.45);
   transform-origin: top left;
-  margin-right: -275px;
+  margin-right: -275px; /* 275 = 500 * (1-0.45) */
   pointer-events: none;
 }
 
