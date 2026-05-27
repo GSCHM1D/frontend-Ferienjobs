@@ -599,10 +599,12 @@ button:disabled {
     }
 }
 
+/* Logo */
+
 .logo-top-right {
-  position: fixed !important;
-  top: 20px !important;
-  right: 30px !important;
+  position: absolute;
+  top: 20px;
+  right: 30px;
 
   transform: scale(0.45);
   transform-origin: top right;
