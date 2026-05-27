@@ -604,7 +604,7 @@ button:disabled {
 .logo-top-right {
   position: absolute;
   top: 20px;
-  right: -180px;
+  right: -180px !important;
 
   transform: scale(0.45);
   transform-origin: top right;
