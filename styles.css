@@ -601,14 +601,16 @@ button:disabled {
 
 /* Logo */
 
-.logo-top-right {
-  position: absolute;
+.logo-wrapper {
+    position: absolute;
   top: 20px;
-  right: -180px !important;
+  right: 30px;
+}
 
+
+.logo-top-right {
   transform: scale(0.45);
   transform-origin: top right;
-
   z-index: 9999;
   pointer-events: none;
 }
