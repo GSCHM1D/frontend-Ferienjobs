@@ -603,8 +603,11 @@ button:disabled {
 
 .logo-wrapper {
     position: absolute;
-  top: 20px;
-  right: 30px;
+    top: 20px;
+    right: 30px;
+    width: 225px; /* 500 * 0.45 (scale) */
+    height: 135px; /* "" */
+    overflow: hidden;
 }
 
 
