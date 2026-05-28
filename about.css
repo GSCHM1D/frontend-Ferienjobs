@@ -98,8 +98,10 @@ body {
   width: 100vw;
   max-width: 100vw;
   display: block;
-  filter: drop-shadow(0 0 60px rgba(39,240,216,0.15)) brightness(0.6) saturate(0.4);
-  mix-blend-mode: screen;
+  opacity: 0.15;
+  filter: drop-shadow(0 0 60px rgba(39,240,216,0.15));
+}
+
 
 @keyframes logoPulse {
   0%, 100% { transform: scale(1); filter: drop-shadow(0 0 60px rgba(39,240,216,0.15)); }
