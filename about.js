@@ -138,6 +138,9 @@ function initHeroScrollTransition() {
     const zone = heroH * 0.6;
     const progress = Math.min(scrollY / zone, 1);
     overlay.style.opacity = String(1 - progress);
+    /* Logo normal beim scrollen */
+    const logoImg = document.getElementById('logo-img');
+    if (logoImg) logoImg.style.opacity = String(0.15 + progress * 0.85);
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
