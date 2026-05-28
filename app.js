@@ -199,6 +199,14 @@ const testimonials = [
         role: "HR",
         quote: "Für uns bedeutete die Plattform eine spürbare Entlastung im Rekrutierungsprozess.",
         url: "https://www.aargauhotels.ch"
+    },
+    {
+        company: "AZ-Vertriebs AG",
+        logo: "logos_firmen/AZVertrieb_logo.PNG",
+        person: "Ramon Aeberhard",
+        role: "Teamleiter Vertrieb",
+        quote: "Die Plattform leistet uns grosse Unterstützung, um unsere Kunden in der Ferienzeit zu bedienen, da diese Ferienjobs eine echte Hilfe sind.",
+        url: "https://www.azvertrieb.ch"
     }
 ];
 
