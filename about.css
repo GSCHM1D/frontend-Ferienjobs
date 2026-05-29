@@ -217,7 +217,7 @@ body {
 .fade-left,
 .fade-right {
   opacity: 0;
-  transition: opacity 3.0s ease, transform 3.0s ease;
+  transition: opacity 10.0s ease, transform 10.0s ease;
   will-change: opacity, transform;
 }
 
