@@ -829,56 +829,145 @@ button:disabled {
     margin-top: 14px;
 }
 
-/* Toggle Filter Bar */
+/* ══════════════════════════════════════════
+   JOBS SECTION HEADER + FILTER POPUP
+══════════════════════════════════════════ */
 
-.filter-section {
+.jobs-section {
+    overflow: visible; /* popup darf nach aussen ragen */
+}
+
+.jobs-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
     margin-bottom: 20px;
 }
 
-.filter-toggle {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+.jobs-section-header h2 {
+    margin: 0;
+}
+
+/* Filter-Button */
+.filter-popup-btn {
+    display: inline-flex;
     align-items: center;
-    padding: 16px 18px;
-    background: #ffffff;
-    color: #0f172a;
-    border: 1px solid rgba(219, 226, 234, 0.9);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
+    gap: 7px;
+    font-size: 13px;
     font-weight: 600;
-    font-size: 18px;
+    color: var(--primary);
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.22);
+    border-radius: 999px;
+    padding: 8px 16px;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: none;
+    white-space: nowrap;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
-.filter-toggle:hover {
+.filter-popup-btn:hover {
+    background: rgba(37, 99, 235, 0.14);
+    border-color: rgba(37, 99, 235, 0.40);
     transform: translateY(-1px);
-    box-shadow: var(--shadow-hover);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
 }
 
-.filter-icon {
-    font-size: 18px;
+/* Anchor für Floating Panel */
+.filter-popup-anchor {
+    position: relative;
 }
 
-.filter-wrapper {
-    max-height: 0;
-    overflow: hidden;
+/* Floating Filter Panel */
+.filter-popup {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 300px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 20px 48px rgba(15, 23, 42, 0.13), 0 4px 14px rgba(15, 23, 42, 0.07);
+    padding: 18px 20px 20px;
+    z-index: 400;
+
     opacity: 0;
-    transform: translateY(-8px);
+    visibility: hidden;
+    transform: translateY(-6px) scale(0.98);
+    transform-origin: top right;
     transition:
-        max-height 0.35s ease,
-        opacity 0.25s ease,
-        transform 0.25s ease,
-        margin-top 0.25s ease;
-    margin-top: 0;
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0s linear 0.2s;
 }
 
-.filter-wrapper.open {
-    max-height: 500px;
+.filter-popup.open {
     opacity: 1;
-    transform: translateY(0);
-    margin-top: 12px;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0s;
+}
+
+/* Popup Header */
+.filter-popup-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.filter-popup-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+}
+
+.filter-popup-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    background: rgba(100, 116, 139, 0.1);
+    border: none;
+    border-radius: 999px;
+    color: var(--text-soft);
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.filter-popup-close:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Filter fields inside popup */
+.filter-popup .search-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filter-popup .search-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.filter-popup .search-actions button {
+    flex: 1;
+    font-size: 13px;
+    padding: 10px 12px;
 }
 
 /* Alert Meldungen ersetzt */

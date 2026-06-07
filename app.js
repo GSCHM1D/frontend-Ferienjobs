@@ -8,9 +8,10 @@ const resetFiltersButton = document.getElementById("reset-filters");
 const jobFormToggle = document.getElementById("job-form-toggle");
 const jobFormWrapper = document.getElementById("job-form-wrapper");
 const jobFormToggleIcon = document.getElementById("job-form-toggle-icon");
-/* Dynamische Filter Bar */
+/* Filter Popup */
 const filterToggle = document.getElementById("filter-toggle");
-const filterWrapper = document.getElementById("filter-wrapper");
+const filterPopup = document.getElementById("filter-popup");
+const filterPopupClose = document.getElementById("filter-popup-close");
 /* Alerts ersetzen durch klare Meldungen */
 const jobMessage = document.getElementById("job-message");
 /* Logik für neue Datumsfelder */
@@ -596,7 +597,7 @@ function matchesDuration(job, searchDateFromValue, searchDateToValue) {
 /* Filter Buttons; Anwenden / Zurücksetzen - eventListener */
 
 applyFiltersButton.addEventListener("click", function () {
-    trackEvent("applied_filters")
+    trackEvent("applied_filters");
     activeFilters = {
         location: searchLocationInput.value.trim(),
         minSalary: searchMinSalaryInput.value.trim(),
@@ -606,6 +607,7 @@ applyFiltersButton.addEventListener("click", function () {
     };
 
     renderJobs();
+    closeFilterPopup();
 });
 
 resetFiltersButton.addEventListener("click", function () {
@@ -624,6 +626,7 @@ resetFiltersButton.addEventListener("click", function () {
     };
 
     renderJobs();
+    closeFilterPopup();
 });
 /* eventListener für Toggle Job posten Bar */
 
@@ -642,15 +645,36 @@ jobFormToggle.addEventListener("click", function () {
     }
 });
 
-/* evenListener für Toggle Filter */
-filterToggle.addEventListener("click", function () {
-    const isOpen = filterWrapper.classList.contains("open");
+/* Filter Popup öffnen / schliessen */
 
-    if (isOpen) {
-        filterWrapper.classList.remove("open");
-    } else {
-        filterWrapper.classList.add("open");
+function openFilterPopup() {
+    filterPopup.classList.add("open");
+    filterToggle.setAttribute("aria-expanded", "true");
+}
+
+function closeFilterPopup() {
+    filterPopup.classList.remove("open");
+    filterToggle.setAttribute("aria-expanded", "false");
+}
+
+filterToggle.addEventListener("click", function (e) {
+    e.stopPropagation();
+    filterPopup.classList.contains("open") ? closeFilterPopup() : openFilterPopup();
+});
+
+filterPopupClose.addEventListener("click", closeFilterPopup);
+
+document.addEventListener("click", function (e) {
+    if (filterPopup.classList.contains("open") &&
+        !filterPopup.contains(e.target) &&
+        e.target !== filterToggle &&
+        !filterToggle.contains(e.target)) {
+        closeFilterPopup();
     }
+});
+
+document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeFilterPopup();
 });
 
 /* =========================
