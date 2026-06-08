@@ -194,10 +194,33 @@ body {
   font-family: 'Syne', sans-serif;
   font-size: clamp(42px, 6vw, 80px);
   font-weight: 800;
-  color: #0f172a;
   letter-spacing: -0.03em;
   line-height: 1.05;
   margin-bottom: 36px;
+  background: linear-gradient(
+    90deg,
+    #0f172a 0%,
+    #0f172a 20%,
+    #1e40af 45%,
+    #2563eb 55%,
+    #0f172a 80%,
+    #0f172a 100%
+  );
+  background-size: 300% auto;
+  background-position: 100% center;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.fade-up.visible .about-title {
+  animation: titleSweep 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.25s;
+}
+
+@keyframes titleSweep {
+  from { background-position: 100% center; }
+  to   { background-position: 0% center; }
 }
 
 .about-description {
@@ -217,13 +240,13 @@ body {
 .fade-left,
 .fade-right {
   opacity: 0;
-  transition: opacity 2.0s ease, transform 2.0s ease;
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
-.fade-up    { transform: translateY(36px); }
-.fade-left  { transform: translateX(-48px); }
-.fade-right { transform: translateX(48px); }
+.fade-up    { transform: translateY(32px); }
+.fade-left  { transform: translateX(-44px); }
+.fade-right { transform: translateX(44px); }
 
 .fade-up.visible,
 .fade-left.visible,
@@ -232,9 +255,9 @@ body {
   transform: translate(0);
 }
 
-.delay-1 { transition-delay: 0.15s; }
-.delay-2 { transition-delay: 0.30s; }
-.delay-3 { transition-delay: 0.45s; }
+.delay-1 { transition-delay: 0.12s; }
+.delay-2 { transition-delay: 0.24s; }
+.delay-3 { transition-delay: 0.36s; }
 
 /* ═══════════════════════════════════════════════
    ARTICLES
@@ -244,6 +267,7 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 28px;
   margin-top: 36px;
+  perspective: 1000px;
 }
 
 .article-card {
@@ -257,6 +281,8 @@ body {
   border: 1px solid var(--border);
   transition: transform 0.35s ease, box-shadow 0.35s ease;
   position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .article-card::before {
@@ -705,4 +731,123 @@ body {
 @media (max-width: 480px) {
   #logo-img { width: 300px; }
   .insta-handle { font-size: 16px; }
+}
+
+/* ═══════════════════════════════════════════════
+   HERO PARTICLES
+════════════════════════════════════════════════ */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: particleRise linear infinite;
+}
+
+@keyframes particleRise {
+  0%   { transform: translateY(0) scale(1);   opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 0.55; }
+  100% { transform: translateY(-100vh) scale(0.3); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════
+   HERO TAGLINE
+════════════════════════════════════════════════ */
+#hero-tagline {
+  position: absolute;
+  bottom: 88px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  animation: taglineFade 1.8s ease forwards 1.2s;
+}
+
+.hero-tagline-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin: 0;
+}
+
+@keyframes taglineFade {
+  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════
+   ARTICLE CARD – enhanced hover glow
+════════════════════════════════════════════════ */
+.article-card:hover {
+  box-shadow:
+    var(--shadow-hover),
+    0 0 0 1px rgba(37,99,235,0.15),
+    0 0 40px rgba(37,99,235,0.08);
+}
+
+/* ═══════════════════════════════════════════════
+   INSTAGRAM – animated shimmer border
+════════════════════════════════════════════════ */
+.insta-link {
+  background: transparent;
+}
+
+.insta-link::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(90deg,
+    var(--c1), var(--c2), var(--c3), var(--c4), var(--c5), var(--c6), var(--c1)
+  );
+  background-size: 300% auto;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+  animation: borderShimmer 4s linear infinite;
+}
+
+.insta-link:hover::after { opacity: 0.45; }
+
+@keyframes borderShimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 300% center; }
+}
+
+/* ═══════════════════════════════════════════════
+   TESTIMONIAL CARDS – glass highlight on hover
+════════════════════════════════════════════════ */
+.testimonial-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.testimonial-card {
+  position: relative;
+}
+
+.testimonial-card:hover::before { opacity: 1; }
+
+.testimonial-card:hover {
+  box-shadow:
+    var(--shadow-hover),
+    0 0 0 1px rgba(37,99,235,0.12);
 }

@@ -38,25 +38,117 @@ function buildCarousel() {
     const card = document.createElement('div');
     card.className = 'testimonial-card';
 
-    const logoHTML = t.logo
-      ? `<img src="${t.logo}" alt="${t.company}" class="testimonial-logo" />`
-      : `<span class="testimonial-logo-text">${t.company}</span>`;
+    // Logo wrap – DOM methods prevent XSS
+    const logoWrap = document.createElement('div');
+    logoWrap.className = 'testimonial-logo-wrap';
+    if (t.logo) {
+      const img = document.createElement('img');
+      img.src = t.logo;
+      img.alt = t.company;
+      img.className = 'testimonial-logo';
+      logoWrap.appendChild(img);
+    } else {
+      const span = document.createElement('span');
+      span.className = 'testimonial-logo-text';
+      span.textContent = t.company;
+      logoWrap.appendChild(span);
+    }
+    card.appendChild(logoWrap);
 
-    card.innerHTML = `
-      <div class="testimonial-logo-wrap">${logoHTML}</div>
-      <p class="testimonial-quote">${t.quote}</p>
-      <div class="testimonial-person">
-        <span class="testimonial-name">${t.person}</span>
-        <span class="testimonial-role">${t.role} · ${t.company}</span>
-        <a href="${t.url}" target="_blank" rel="noopener" class="testimonial-url">${t.url.replace(/^https?:\/\//, '')}</a>
-      </div>
-    `;
+    // Quote
+    const quote = document.createElement('p');
+    quote.className = 'testimonial-quote';
+    quote.textContent = t.quote;
+    card.appendChild(quote);
+
+    // Person block
+    const personDiv = document.createElement('div');
+    personDiv.className = 'testimonial-person';
+
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'testimonial-name';
+    nameSpan.textContent = t.person;
+    personDiv.appendChild(nameSpan);
+
+    const roleSpan = document.createElement('span');
+    roleSpan.className = 'testimonial-role';
+    roleSpan.textContent = `${t.role} · ${t.company}`;
+    personDiv.appendChild(roleSpan);
+
+    const link = document.createElement('a');
+    link.href = t.url;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.className = 'testimonial-url';
+    link.textContent = t.url.replace(/^https?:\/\//, '');
+    personDiv.appendChild(link);
+
+    card.appendChild(personDiv);
     track.appendChild(card);
   });
 
   // Adjust animation duration based on count
   const duration = Math.max(18, testimonials.length * 8);
   track.style.animationDuration = duration + 's';
+}
+
+
+/* ═══════════════════════════════════════════════
+   HERO PARTICLES
+════════════════════════════════════════════════ */
+function initHeroParticles() {
+  const hero = document.getElementById('hero');
+  if (!hero) return;
+
+  const container = document.createElement('div');
+  container.className = 'hero-particles';
+  hero.appendChild(container);
+
+  const colors = ['#ff9e1f', '#ffd43a', '#74ef55', '#27f0d8', '#16d9ff', '#1277ff'];
+
+  for (let i = 0; i < 38; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'hero-particle';
+    const size = Math.random() * 2.5 + 1;
+    dot.style.cssText = [
+      `left:${Math.random() * 100}%`,
+      `top:${Math.random() * 100}%`,
+      `width:${size}px`,
+      `height:${size}px`,
+      `background:${colors[Math.floor(Math.random() * colors.length)]}`,
+      `animation-delay:${(Math.random() * 10).toFixed(2)}s`,
+      `animation-duration:${(Math.random() * 8 + 7).toFixed(2)}s`
+    ].join(';');
+    container.appendChild(dot);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════
+   3D CARD TILT (article cards)
+════════════════════════════════════════════════ */
+function initCardTilt() {
+  const cards = document.querySelectorAll('.article-card');
+
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'transform 0.08s ease, box-shadow 0.35s ease';
+    });
+
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
+      card.style.transform = `translateY(-8px) rotateX(${(-dy * 6).toFixed(2)}deg) rotateY(${(dx * 6).toFixed(2)}deg)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.35s ease';
+      card.style.transform = '';
+    });
+  });
 }
 
 
@@ -171,8 +263,10 @@ function initFooterLink() {
 ════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   buildCarousel();
+  initHeroParticles();
   initStickyLogo();
   initFadeIns();
+  initCardTilt();
   initInstaShimmer();
   initHeroScrollTransition();
   initFooterLink();

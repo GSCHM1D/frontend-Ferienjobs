@@ -28,13 +28,13 @@
     <div id="disclaimer-gate" class="disclaimer-gate">
       <div class="disclaimer-gate-card">
         <h2>Rechtlicher Hinweis</h2>
-    
+
         <p>
           holidayjob.ch ist eine Online-Plattform zur Veröffentlichung und Auffindbarkeit
           von Inseraten für temporäre Einsätze, insbesondere Ferienjobs, Aushilfejobs,
           Tageseinsätze und vergleichbare kurzfristige Tätigkeiten in der Schweiz.
         </p>
-    
+
         <p>
           holidayjob.ch stellt ausschliesslich die technische Möglichkeit bereit, Inserate
           zu veröffentlichen und Kontaktangaben zugänglich zu machen. holidayjob.ch ist
@@ -42,79 +42,132 @@
           Arbeits-, Praktikums-, Auftrags-, Einsatz- oder sonstigen Vertragsverhältnisses
           zwischen Inserierenden und Interessierten.
         </p>
-    
+
         <p>
           Die Kontaktaufnahme erfolgt direkt zwischen den im Inserat genannten Parteien.
           Ab dem Zeitpunkt der direkten Kontaktaufnahme ist holidayjob.ch nicht mehr Teil
           des weiteren Vermittlungs-, Bewerbungs-, Vertrags- oder Einsatzprozesses.
         </p>
-    
+
         <p>
           holidayjob.ch prüft Inserate und Angaben nicht generell vorab oder fortlaufend
           und übernimmt keine Gewähr für Richtigkeit, Vollständigkeit, Aktualität,
           Rechtmässigkeit oder Seriosität der veröffentlichten Inhalte.
         </p>
-    
+
         <p>
           Soweit gesetzlich zulässig, ist die Haftung von holidayjob.ch ausgeschlossen
           oder beschränkt. Zwingende gesetzliche Ansprüche bleiben vorbehalten.
         </p>
-    
+
         <p>
           Weitere Informationen finden sich in den
           <a href="/legal/agb.html">AGB</a>,
           in der <a href="/legal/datenschutz.html">Datenschutzerklärung</a>
           und im <a href="/legal/impressum.html">Impressum</a>.
         </p>
-    
+
         <button type="button" id="accept-disclaimer-btn">
           Ich habe alles gelesen und akzeptiere dies
         </button>
       </div>
     </div>
-    
-    <div class="logo-wrapper">
-        <div class="logo-top-right">
-          <div class="hj-logo">
-    
-            <div class="orbit orbit-glow"></div>
-            <div class="orbit orbit-line"></div>
-            <div class="text holiday">HOLIDAY</div>
-            <div class="connector"></div>
-            <div class="text job">JOB</div>
-    
-          </div>
+
+    <header class="page-header">
+      <div class="page-header-brand">
+        <a href="about.html" class="page-header-logo-link">
+          <img src="icons/main_logo_transparent.png" alt="holidayjob.ch" class="page-header-logo" />
+        </a>
+        <div class="page-header-text">
+          <h1 class="page-header-title">Ferienjob<span class="page-header-accent">Plattform</span></h1>
+          <p class="page-header-subtitle">Hier können Unternehmen Ferienjobs veröffentlichen und Jugendliche passende Jobs in ihrer Umgebung finden.</p>
         </div>
-    </div>
+      </div>
+      <a href="about.html" class="page-header-nav-link">Über uns →</a>
+    </header>
 
-    <h1>Ferienjob Plattform</h1>
-
-    <div class="page-intro">
-        <p>Hier können Unternehmen Ferienjobs veröffentlichen und Jugendliche passende Jobs in ihrer Umgebung finden.</p>
-    </div>
-
-    <!-- Zufriedene Kunden - Link zu Testemonials -->
-
+    <!-- Zufriedene Kunden - Link zu Testimonials -->
     <section class="customer-logo-section">
         <h2>Trusted By</h2>
         <div id="customer-logo-list" class="customer-logo-list"></div>
     </section>
 
     <!-- ========================= -->
-    <!-- FORMULAR: JOB ERSTELLEN -->
+    <!-- JOB LISTE                 -->
+    <!-- ========================= -->
+    <section class="jobs-section">
+        <div class="jobs-section-header">
+            <h2>Alle Ferienjobs</h2>
+            <div class="filter-popup-anchor">
+                <button type="button" id="filter-toggle" class="filter-popup-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="4" y1="6" x2="20" y2="6"/>
+                        <line x1="8" y1="12" x2="16" y2="12"/>
+                        <line x1="11" y1="18" x2="13" y2="18"/>
+                    </svg>
+                    Ferienjobs filtern
+                </button>
+
+                <div id="filter-popup" class="filter-popup">
+                    <div class="filter-popup-top">
+                        <span class="filter-popup-title">Ferienjobs filtern</span>
+                        <button type="button" id="filter-popup-close" class="filter-popup-close" aria-label="Schliessen">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="search-filters">
+                        <input type="text" id="search-location" placeholder="Ort / PLZ">
+                        <input type="number" id="search-min-salary" placeholder="Mindestlohn (CHF)">
+
+                        <select id="search-category">
+                            <option value="">Alle Kategorien</option>
+                            <option value="Gastronomie">Gastronomie</option>
+                            <option value="Büro">Büro</option>
+                            <option value="Bau">Bau</option>
+                            <option value="Verkauf">Verkauf</option>
+                            <option value="Gartenarbeit">Gartenarbeit</option>
+                            <option value="Landwirtschaft">Landwirtschaft</option>
+                            <option value="Sonstiges">Sonstiges</option>
+                        </select>
+
+                        <div class="date-row">
+                            <input type="date" id="search-date-from">
+                            <input type="date" id="search-date-to">
+                        </div>
+                    </div>
+
+                    <div class="search-actions">
+                        <button type="button" id="apply-filters">Filter anwenden</button>
+                        <button type="button" id="reset-filters" class="secondary-button">Zurücksetzen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="job-list">
+            <p class="jobs-loading-text">Ferienjobs werden geladen...</p>
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- FORMULAR: JOB INSERIEREN  -->
     <!-- ========================= -->
     <section class="post-job-section">
         <button type="button" id="job-form-toggle" class="job-form-toggle">
-            <span>Ferienjob posten</span>
+            <span>Ferienjob inserieren</span>
             <span id="job-form-toggle-icon" class="job-form-toggle-icon">+</span>
         </button>
-    
+
         <div id="job-form-wrapper" class="job-form-wrapper">
             <div id="job-message" class="message-box hidden"></div>
             <form id="job-form">
                 <input type="text" id="company" placeholder="Firma" required>
                 <input type="text" id="title" placeholder="Jobtitel" required>
-    
+
                 <select id="category">
                     <option value="">Kategorie auswählen</option>
                     <option value="Gastronomie">Gastronomie</option>
@@ -125,7 +178,7 @@
                     <option value="Landwirtschaft">Landwirtschaft</option>
                     <option value="Sonstiges">Sonstiges</option>
                 </select>
-    
+
                 <input type="text" id="location" placeholder="Ort / PLZ" required>
                 <input type="text" id="contact" placeholder="Kontakt" required>
                 <input type="text" id="salary" placeholder="Lohn" required>
@@ -140,75 +193,20 @@
                         <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
                     </select>
                 </div>
-                
+
                 <textarea id="description" placeholder="Beschreibung" required></textarea>
-    
+
                 <input type="text" id="website" class="honeypot-field" tabindex="-1" autocomplete="off">
-    
+
                 <button type="submit">Job veröffentlichen</button>
             </form>
         </div>
     </section>
 
     <!-- ========================= -->
-    <!-- SUCHE -->
-    <!-- ========================= -->
-    <section class="filter-section">
-        <button type="button" id="filter-toggle" class="filter-toggle">
-            <span>Ferienjob finden</span>
-            <span class="filter-icon">🔍</span>
-        </button>
-    
-        <div id="filter-wrapper" class="filter-wrapper">
-            <div class="search-filters">
-                <input type="text" id="search-location" placeholder="Ort / PLZ">
-                <input type="number" id="search-min-salary" placeholder="Mindestlohn">
-                
-                <select id="search-category">
-                    <option value="">Alle Kategorien</option>
-                    <option value="Gastronomie">Gastronomie</option>
-                    <option value="Büro">Büro</option>
-                    <option value="Bau">Bau</option>
-                    <option value="Verkauf">Verkauf</option>
-                    <option value="Gartenarbeit">Gartenarbeit</option>
-                    <option value="Landwirtschaft">Landwirtschaft</option>
-                    <option value="Sonstiges">Sonstiges</option>
-                </select>
-    
-                <div class="date-row">
-                    <input type="date" id="search-date-from">
-                    <input type="date" id="search-date-to">
-                </div>
-                
-            </div>
-    
-            <div class="search-actions">
-                <button type="button" id="apply-filters">Filter anwenden</button>
-                <button type="button" id="reset-filters" class="secondary-button">Zurücksetzen</button>
-            </div>
-    
-            <p class="notice">
-                Finde deinen perfekten Ferienjob.
-            </p>
-            
-        </div>
-    </section>
-    
-    <!-- ========================= -->
-    <!-- JOB LISTE -->
-    <!-- ========================= -->
-    <section>
-        <h2>Alle Ferienjobs</h2>
-
-        <div id="job-list">
-            <p class="jobs-loading-text">Ferienjobs werden geladen...</p>
-        </div>
-    </section>
-
-    <!-- ========================= -->
     <!-- SCRIPT UND DIV FÜR AUSBLENDEN -->
     <!-- ========================= -->
-    
+
 <div id="loading-overlay" class="loading-overlay hidden">
     <div class="loading-box">
         <div class="spinner"></div>
@@ -216,7 +214,7 @@
     </div>
 </div>
 
-<!-- Testemonials -->
+<!-- Testimonials -->
 
 <section id="testimonials" class="testimonials-section">
     <h2>Erfahrungen mit HolidayJob</h2>
@@ -237,9 +235,9 @@
     <a href="#" id="change-cookie-settings">Cookie-Einstellungen</a>
   </p>
 <div class="footer-social">
-    <a 
-        href="https://www.instagram.com/holidayjob.ch/" 
-        target="_blank" 
+    <a
+        href="https://www.instagram.com/holidayjob.ch/"
+        target="_blank"
         rel="noopener noreferrer"
         aria-label="Instagram"
         class="instagram-link"
@@ -247,7 +245,6 @@
         <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3zm11.5 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
         </svg>
-
         <span>Instagram</span>
     </a>
 </div>
@@ -277,7 +274,7 @@
     </button>
   </div>
 </div>
-    
+
 <script src="api.js"></script>
 <script src="app.js"></script>
 

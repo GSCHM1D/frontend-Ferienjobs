@@ -5,8 +5,8 @@ const API_URL = "https://script.google.com/macros/s/AKfycby8KH5USSA2NUk35Pq_r-sE
 ========================= */
 async function getJobs() {
     const response = await fetch(`${API_URL}?action=list`);
-    const data = await response.json();
-    return data;
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
 }
 
 /* =========================
@@ -16,14 +16,14 @@ async function createJob(jobData) {
     const response = await fetch(API_URL, {
         method: "POST",
         headers: {
-            "Content-Type": "text/plain"
+            "Content-Type": "text/plain" // text/plain als CORS-Workaround für Google Apps Script
         },
         body: JSON.stringify({
             action: "create",
             ...jobData
         })
     });
-
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
     return await response.json();
 }
 
@@ -34,7 +34,7 @@ async function verifyJob(id, adminKey) {
     const response = await fetch(API_URL, {
         method: "POST",
         headers: {
-            "Content-Type": "text/plain"
+            "Content-Type": "text/plain" // text/plain als CORS-Workaround für Google Apps Script
         },
         body: JSON.stringify({
             action: "verify",
@@ -42,7 +42,7 @@ async function verifyJob(id, adminKey) {
             adminKey: adminKey
         })
     });
-
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
     return await response.json();
 }
 
@@ -53,7 +53,7 @@ async function deleteJob(id, adminKey) {
     const response = await fetch(API_URL, {
         method: "POST",
         headers: {
-            "Content-Type": "text/plain"
+            "Content-Type": "text/plain" // text/plain als CORS-Workaround für Google Apps Script
         },
         body: JSON.stringify({
             action: "delete",
@@ -61,6 +61,6 @@ async function deleteJob(id, adminKey) {
             adminKey: adminKey
         })
     });
-
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
     return await response.json();
 }
