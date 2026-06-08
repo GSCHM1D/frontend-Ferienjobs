@@ -834,7 +834,9 @@ button:disabled {
 ══════════════════════════════════════════ */
 
 .jobs-section {
-    overflow: visible; /* popup darf nach aussen ragen */
+    position: relative; /* stacking context anchor */
+    z-index: 10;        /* render above subsequent sections (which use backdrop-filter and have no explicit z-index) */
+    overflow: visible;  /* popup darf nach aussen ragen */
 }
 
 .jobs-section-header {
