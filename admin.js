@@ -75,50 +75,134 @@ function toast(message, type = "info") {
 }
 
 /* ==================
-   AUTH
+   AUTH – LOCKOUT
 ================== */
+
+/*
+ * Sperrdauer (Minuten) indexiert nach Anzahl Fehlversuche.
+ * Index 0–2 = keine Sperre, ab Index 3 greift die Sperre.
+ * Ab 8+ Fehlversuchen bleibt es bei 60 Minuten.
+ */
+const LOCKOUT_MINUTES = [0, 0, 0, 1, 5, 10, 20, 40, 60];
+
+function getFailCount()     { return parseInt(localStorage.getItem("hjadmin_fails")   || "0", 10); }
+function setFailCount(n)    { localStorage.setItem("hjadmin_fails",   String(n)); }
+function getLockoutUntil()  { return parseInt(localStorage.getItem("hjadmin_lockout") || "0", 10); }
+function setLockoutUntil(ts){ localStorage.setItem("hjadmin_lockout", String(ts)); }
+
+function clearAuthState() {
+    localStorage.removeItem("hjadmin_fails");
+    localStorage.removeItem("hjadmin_lockout");
+}
+
+function isLockedOut() { return Date.now() < getLockoutUntil(); }
+
+function recordFailedAttempt() {
+    const fails = getFailCount() + 1;
+    setFailCount(fails);
+    const idx  = Math.min(fails, LOCKOUT_MINUTES.length - 1);
+    const mins = LOCKOUT_MINUTES[idx];
+    if (mins > 0) setLockoutUntil(Date.now() + mins * 60 * 1000);
+    return fails;
+}
+
+let countdownInterval = null;
+
+function startLockoutCountdown() {
+    if (countdownInterval) clearInterval(countdownInterval);
+    loginKeyInput.disabled = true;
+    loginBtn.disabled      = true;
+    loginBtn.textContent   = "Gesperrt";
+    updateLockoutDisplay();
+    countdownInterval = setInterval(() => {
+        if (!isLockedOut()) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+            loginKeyInput.disabled = false;
+            loginBtn.disabled      = false;
+            loginBtn.textContent   = "Einloggen";
+            clearLoginError();
+        } else {
+            updateLockoutDisplay();
+        }
+    }, 1000);
+}
+
+function updateLockoutDisplay() {
+    const remaining = getLockoutUntil() - Date.now();
+    const mins = Math.floor(remaining / 60000);
+    const secs = Math.ceil((remaining % 60000) / 1000);
+    const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+    showLoginError(`Zu viele Fehlversuche. Bitte warten: ${timeStr}`);
+}
+
 function showLoginError(msg) {
     loginError.textContent = msg;
     loginError.classList.add("visible");
     loginKeyInput.style.borderColor = "var(--adng)";
-    loginKeyInput.style.boxShadow = "0 0 0 4px var(--adngg)";
+    loginKeyInput.style.boxShadow   = "0 0 0 4px var(--adngg)";
 }
 
 function clearLoginError() {
     loginError.classList.remove("visible");
     loginKeyInput.style.borderColor = "";
-    loginKeyInput.style.boxShadow = "";
+    loginKeyInput.style.boxShadow   = "";
 }
 
 async function attemptLogin() {
+    if (isLockedOut()) { startLockoutCountdown(); return; }
+
     const key = loginKeyInput.value.trim();
     if (!key) { showLoginError("Bitte Admin-Schlüssel eingeben."); return; }
 
-    loginBtn.disabled = true;
-    loginBtn.textContent = "Verbinden…";
+    loginBtn.disabled    = true;
+    loginBtn.textContent = "Prüfen…";
     clearLoginError();
 
     try {
-        const jobs = await getJobs();
-        if (!Array.isArray(jobs)) { showLoginError("Ungültige API-Antwort."); return; }
+        const result = await checkAdminKey(key);
+
+        if (!result.success) {
+            const fails = recordFailedAttempt();
+            if (isLockedOut()) {
+                startLockoutCountdown();
+            } else {
+                const attemptsLeft = 3 - fails;
+                if (attemptsLeft > 0) {
+                    showLoginError(`Falscher Admin-Schlüssel. Noch ${attemptsLeft} Versuch${attemptsLeft !== 1 ? "e" : ""}.`);
+                } else {
+                    showLoginError("Falscher Admin-Schlüssel.");
+                }
+                loginBtn.disabled    = false;
+                loginBtn.textContent = "Einloggen";
+            }
+            return;
+        }
+
+        /* Erfolg */
+        clearAuthState();
         adminKey = key;
-        allJobs = jobs;
+        const jobs = await getJobs();
+        allJobs = Array.isArray(jobs) ? jobs : [];
         showAdminApp();
+
     } catch {
-        showLoginError("API nicht erreichbar. Verbindung prüfen.");
-    } finally {
-        loginBtn.disabled = false;
+        showLoginError("Verbindung fehlgeschlagen. Netzwerk prüfen.");
+        loginBtn.disabled    = false;
         loginBtn.textContent = "Einloggen";
     }
 }
 
 loginBtn.addEventListener("click", attemptLogin);
 loginKeyInput.addEventListener("keydown", e => { if (e.key === "Enter") attemptLogin(); });
-loginKeyInput.addEventListener("input", clearLoginError);
+loginKeyInput.addEventListener("input", () => { if (!isLockedOut()) clearLoginError(); });
+
+/* Beim Laden: bereits gesperrte Sitzung sofort anzeigen */
+if (isLockedOut()) startLockoutCountdown();
 
 document.getElementById("logout-btn").addEventListener("click", () => {
     adminKey = "";
-    allJobs = [];
+    allJobs  = [];
     loginKeyInput.value = "";
     clearLoginError();
     adminApp.classList.add("hidden");

@@ -67,9 +67,30 @@ async function deleteJob(id, adminKey) {
 
 /* =====================================================
    HIER ADMIN ACTIONS NEW
-   Neue Admin-Funktionen – Backend muss action "edit"
-   im Google Apps Script implementieren.
+   Neue Admin-Funktionen – Backend muss die folgenden
+   actions im Google Apps Script implementieren:
+     action "edit"     → Job-Felder bearbeiten
+     action "checkKey" → Schlüssel validieren,
+                         gibt {success:true} oder {success:false} zurück
    ===================================================== */
+
+/* =========================
+   ADMIN KEY PRÜFEN
+========================= */
+async function checkAdminKey(adminKey) {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain" // text/plain als CORS-Workaround für Google Apps Script
+        },
+        body: JSON.stringify({
+            action: "checkKey",
+            adminKey: adminKey
+        })
+    });
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
 
 /* =========================
    JOB BEARBEITEN
