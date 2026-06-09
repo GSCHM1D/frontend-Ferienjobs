@@ -163,18 +163,28 @@ async function attemptLogin() {
         const result = await checkAdminKey(key);
 
         if (!result.success) {
-            const fails = recordFailedAttempt();
-            if (isLockedOut()) {
+            if (result.locked) {
+                /* Backend hat gesperrt: Countdown mit Backend-Zeitangabe starten.
+                   Sekunden aus der Nachricht parsen und als lokalen Lockout setzen. */
+                const secsMatch = String(result.message || "").match(/(\d+)\s*Sekunden/);
+                const secs = secsMatch ? parseInt(secsMatch[1], 10) : 60;
+                setLockoutUntil(Date.now() + secs * 1000);
+                setFailCount(Math.max(getFailCount(), 3));
                 startLockoutCountdown();
             } else {
-                const attemptsLeft = 3 - fails;
-                if (attemptsLeft > 0) {
-                    showLoginError(`Falscher Admin-Schlüssel. Noch ${attemptsLeft} Versuch${attemptsLeft !== 1 ? "e" : ""}.`);
+                const fails = recordFailedAttempt();
+                if (isLockedOut()) {
+                    startLockoutCountdown();
                 } else {
-                    showLoginError("Falscher Admin-Schlüssel.");
+                    const attemptsLeft = 3 - fails;
+                    if (attemptsLeft > 0) {
+                        showLoginError(`Falscher Admin-Schlüssel. Noch ${attemptsLeft} Versuch${attemptsLeft !== 1 ? "e" : ""}.`);
+                    } else {
+                        showLoginError("Falscher Admin-Schlüssel.");
+                    }
+                    loginBtn.disabled    = false;
+                    loginBtn.textContent = "Einloggen";
                 }
-                loginBtn.disabled    = false;
-                loginBtn.textContent = "Einloggen";
             }
             return;
         }
