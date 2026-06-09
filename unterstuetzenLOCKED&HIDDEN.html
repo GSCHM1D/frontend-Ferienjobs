@@ -1,28 +1,909 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unterstütze holidayjob.ch</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unterstütze holidayjob.ch</title>
+  <link rel="icon" href="icons/favicon.ico">
+  <style>
+    /* ── FONTS ──────────────────────────────────────── */
+    @font-face { font-family:'Syne'; src:url('fonts/syne-v24-latin-700.woff2') format('woff2'); font-weight:700; font-display:swap; }
+    @font-face { font-family:'Syne'; src:url('fonts/syne-v24-latin-800.woff2') format('woff2'); font-weight:800; font-display:swap; }
+    @font-face { font-family:'DM Sans'; src:url('fonts/dm-sans-v17-latin-300.woff2') format('woff2'); font-weight:300; font-display:swap; }
+    @font-face { font-family:'DM Sans'; src:url('fonts/dm-sans-v17-latin-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+
+    /* ── RESET ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: #0b1220; color: #fff; overflow-x: hidden; }
+
+    :root {
+      --dark:   #0b1220;
+      --light:  #f5f7fb;
+      --c1: #ff9e1f; --c2: #ffd43a; --c3: #74ef55;
+      --c4: #27f0d8; --c5: #16d9ff; --c6: #1277ff;
+      --radius: 22px;
+    }
+
+    /* ── HERO ───────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 620px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--dark);
+    }
+
+    #hero-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+
+    /* slow rotating conic-gradient background glow */
+    #hero-bg-glow {
+      position: absolute;
+      inset: -40%;
+      z-index: 0;
+      background: conic-gradient(
+        from 0deg,
+        rgba(255,158,31,0.04), rgba(116,239,85,0.04),
+        rgba(39,240,216,0.06), rgba(18,119,255,0.05),
+        rgba(255,158,31,0.04)
+      );
+      animation: bgSpin 28s linear infinite;
+    }
+
+    @keyframes bgSpin { to { transform: rotate(360deg); } }
+
+    /* mouse orb */
+    #hero-orb {
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(39,240,216,0.07) 0%, rgba(18,119,255,0.04) 45%, transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      transition: left 1.4s cubic-bezier(0.23,1,0.32,1), top 1.4s cubic-bezier(0.23,1,0.32,1);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 28px;
+      max-width: 860px;
+    }
+
+    .hero-logo {
+      width: 90px;
+      display: block;
+      margin: 0 auto 32px;
+      opacity: 0;
+      animation: fadeSlideDown 1s cubic-bezier(0.16,1,0.3,1) forwards 0.2s,
+                 logoPulse 4s ease-in-out infinite 1.2s;
+      filter: drop-shadow(0 0 28px rgba(39,240,216,0.25));
+    }
+
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes logoPulse {
+      0%,100% { filter: drop-shadow(0 0 22px rgba(39,240,216,0.22)); }
+      50%      { filter: drop-shadow(0 0 44px rgba(39,240,216,0.48)); }
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.32);
+      margin-bottom: 22px;
+      opacity: 0;
+      animation: fadeIn 0.7s ease forwards 0.8s;
+    }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(46px, 7.5vw, 92px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 28px;
+      min-height: 1.05em;
+    }
+
+    .hero-cursor {
+      display: inline-block;
+      width: 3px;
+      background: var(--c4);
+      margin-left: 3px;
+      vertical-align: middle;
+      height: 0.8em;
+      border-radius: 2px;
+      animation: cursorBlink 0.85s step-end infinite;
+    }
+
+    @keyframes cursorBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .hero-sub {
+      font-size: clamp(15px, 1.8vw, 18px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.42);
+      max-width: 520px;
+      margin: 0 auto 48px;
+      line-height: 1.75;
+      opacity: 0;
+      animation: fadeIn 0.9s ease forwards 2.4s;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeIn 0.9s ease forwards 2.8s;
+    }
+
+    /* shared CTA base */
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 26px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 999px;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .cta:hover { transform: translateY(-2px); }
+
+    .cta-primary {
+      color: #0b1220;
+      background: linear-gradient(90deg, var(--c4), var(--c5), var(--c6));
+      background-size: 200% auto;
+      box-shadow: 0 6px 20px rgba(39,240,216,0.28);
+      animation: gradientShift 4s linear infinite;
+    }
+
+    .cta-primary:hover { box-shadow: 0 10px 30px rgba(39,240,216,0.42); }
+
+    @keyframes gradientShift {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .cta-ghost {
+      color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.14);
+      background: transparent;
+    }
+
+    .cta-ghost:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.38);
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* scroll hint */
+    .hero-scroll {
+      position: absolute;
+      bottom: 34px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 3.4s;
+    }
+
+    .scroll-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.22);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+      animation: scrollDrop 2.4s cubic-bezier(0.4,0,0.6,1) infinite;
+    }
+
+    @keyframes scrollDrop {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      60%  { transform: scaleY(1); opacity: 1; }
+      100% { transform: scaleY(1); opacity: 0; }
+    }
+
+    /* ── SUPPORT SECTION ────────────────────────────── */
+    #support {
+      background: var(--light);
+      color: #1e293b;
+    }
+
+    .section-wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 96px 28px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #2563eb;
+      margin-bottom: 14px;
+    }
+
+    .section-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(32px, 5vw, 54px);
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 18px;
+    }
+
+    .section-lead {
+      font-size: 17px;
+      font-weight: 300;
+      color: #64748b;
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 52px;
+    }
+
+    .pay-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* pay card */
+    .pay-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 38px;
+      border: 1px solid #dbe2ea;
+      box-shadow: 0 12px 32px rgba(15,23,42,0.08);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), box-shadow 0.35s ease;
+    }
+
+    .pay-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .pay-card:hover::before { opacity: 1; }
+    .pay-card:hover { transform: translateY(-6px); box-shadow: 0 26px 56px rgba(15,23,42,0.12); }
+
+    .pay-card--bank::before { background: linear-gradient(90deg, var(--c6), var(--c4)); }
+    .pay-card--stripe::before { background: linear-gradient(90deg, #6772e5, #a78bfa, #f0abfc); }
+
+    .pay-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 22px;
+    }
+
+    .pay-card--bank   .pay-icon { background: rgba(18,119,255,0.09); color: #1277ff; }
+    .pay-card--stripe .pay-icon { background: rgba(103,114,229,0.09); color: #6772e5; }
+
+    .pay-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .pay-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: #64748b;
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+
+    /* IBAN rows */
+    .iban-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .iban-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 13px;
+      padding: 11px 14px;
+      transition: border-color 0.2s ease;
+    }
+
+    .iban-row:hover { border-color: #cbd5e1; }
+
+    .iban-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #94a3b8;
+      min-width: 64px;
+      flex-shrink: 0;
+    }
+
+    .iban-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: #0f172a;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      cursor: pointer;
+      flex-shrink: 0;
+      padding: 0;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .copy-btn:hover { background: rgba(18,119,255,0.09); color: #1277ff; }
+    .copy-btn.done  { color: #10b981; background: rgba(16,185,129,0.09); }
+
+    /* Stripe button */
+    .stripe-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(135deg, #6772e5, #9e92ff);
+      border-radius: 15px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 26px rgba(103,114,229,0.38);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stripe-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(103,114,229,0.50); }
+
+    /* shimmer sweep */
+    .stripe-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -110%;
+      width: 80%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .stripe-btn:hover::after { left: 130%; }
+
+    .stripe-note {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #94a3b8;
+      text-align: center;
+      line-height: 1.55;
+    }
+
+    /* ── SPONSOR SECTION ────────────────────────────── */
+    #sponsor {
+      background: var(--dark);
+      color: #fff;
+    }
+
+    .sponsor-wrap {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 100px 28px;
+      text-align: center;
+    }
+
+    .sponsor-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.32);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      padding: 5px 18px;
+      margin-bottom: 28px;
+    }
+
+    .sponsor-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(30px, 4.5vw, 48px);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 18px;
+    }
+
+    .sponsor-lead {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.42);
+      line-height: 1.75;
+      margin-bottom: 40px;
+    }
+
+    /* benefit pills */
+    .perks {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+    }
+
+    .perk {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 999px;
+      padding: 7px 15px;
+    }
+
+    .perk-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* form */
+    .sponsor-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .s-input {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      padding: 14px 18px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 15px;
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      width: 100%;
+    }
+
+    .s-input::placeholder { color: rgba(255,255,255,0.26); }
+    .s-input:focus { border-color: rgba(39,240,216,0.42); background: rgba(255,255,255,0.08); }
+
+    .s-submit {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 15px 24px;
+      color: #0b1220;
+      background: linear-gradient(90deg, var(--c4), var(--c5), var(--c6));
+      background-size: 200% auto;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 8px 26px rgba(39,240,216,0.28);
+      animation: gradientShift 4s linear infinite;
+      margin-top: 6px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .s-submit:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(39,240,216,0.40); }
+
+    .sponsor-confirm {
+      display: none;
+      margin-top: 22px;
+      font-size: 15px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.65;
+    }
+
+    .sponsor-confirm strong { color: rgba(255,255,255,0.8); }
+
+    /* ── FOOTER ─────────────────────────────────────── */
+    #page-footer {
+      background: #000;
+      padding: 38px 24px;
+      text-align: center;
+    }
+
+    .footer-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: rgba(255,255,255,0.32);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .footer-back:hover { color: rgba(255,255,255,0.72); }
+
+    /* ── FADE-IN ─────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+      will-change: opacity, transform;
+    }
+
+    .fade-up.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 720px) {
+      .pay-grid { grid-template-columns: 1fr; }
+      .section-wrap, .sponsor-wrap { padding: 64px 20px; }
+    }
+
+    @media (max-width: 440px) {
+      .hero-cta-row { flex-direction: column; align-items: center; }
+    }
+  </style>
 </head>
 <body>
-    <h1>Unterstütze holidayjob.ch</h1>
-    <div class="page-intro">Hier können Sie unser Projket finanziell unterstützen. Wir freuen uns über jede Hilfe!</div>
-    <section class="account-transfer-informations">
-        <h2>Kontöberweisung</h2>
-        <p>IBAN:</p>
-        <p>BIC:</p>
-    </section>
-    <section class="stripe-link">
-        <h2>Kartenzahlung</h2>
-        <p>Stripe Link:</p>
-    </section>
-    <section class="become-sponsor">
-        <h3>Auf der Webseite als Sponsor genannt werden?</h3>
-        <div class="sponsor-form">
-            <input type="text" id="company-name" placeholder="Name des Unternehmens" required>
-            <input type="file" id="company-logo" placeholder="Logo des Unternehmens (optional)">
+
+  <!-- ═══════════════════════════════════
+       HERO
+  ════════════════════════════════════ -->
+  <section id="hero">
+    <div id="hero-bg-glow"></div>
+    <canvas id="hero-canvas"></canvas>
+    <div id="hero-orb"></div>
+
+    <div class="hero-content">
+      <img src="icons/main_logo_transparent.png" alt="holidayjob.ch" class="hero-logo" />
+      <p class="hero-eyebrow">Unterstütze uns</p>
+      <h1 class="hero-title" id="hero-title"><span class="hero-cursor" id="hero-cursor"></span></h1>
+      <p class="hero-sub">
+        holidayjob.ch ist ein junges, unabhängiges Projekt. Jede Unterstützung hilft uns, die Plattform weiterzuentwickeln – für Jugendliche, die ihren ersten Job suchen.
+      </p>
+      <div class="hero-cta-row">
+        <a href="#support" class="cta cta-primary">
+          Jetzt unterstützen
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="#sponsor" class="cta cta-ghost">Sponsor werden</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll" aria-hidden="true">
+      <span class="scroll-label">Scroll</span>
+      <span class="scroll-line"></span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       ZAHLUNGSOPTIONEN
+  ════════════════════════════════════ -->
+  <section id="support">
+    <div class="section-wrap">
+      <p class="eyebrow fade-up">Deine Unterstützung</p>
+      <h2 class="section-heading fade-up d1">Jede Hilfe zählt.</h2>
+      <p class="section-lead fade-up d2">
+        Wähle die Methode, die dir am liebsten ist. Kein Konto nötig – einfach überweisen oder online bezahlen.
+      </p>
+
+      <div class="pay-grid">
+
+        <!-- Banküberweisung -->
+        <div class="pay-card pay-card--bank fade-up d2">
+          <div class="pay-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="5" width="20" height="14" rx="2"/>
+              <line x1="2" y1="10" x2="22" y2="10"/>
+            </svg>
+          </div>
+          <h3 class="pay-title">Banküberweisung</h3>
+          <p class="pay-desc">Direkte Überweisung ohne Gebühren. Klick auf das Symbol um einen Wert zu kopieren.</p>
+          <div class="iban-list">
+            <div class="iban-row">
+              <span class="iban-label">Empfänger</span>
+              <span class="iban-value">holidayjob.ch</span>
+              <button class="copy-btn" data-copy="holidayjob.ch" title="Kopieren" aria-label="Empfänger kopieren">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+            <div class="iban-row">
+              <span class="iban-label">IBAN</span>
+              <span class="iban-value" id="val-iban">[IBAN einsetzen]</span>
+              <button class="copy-btn" data-target="val-iban" title="IBAN kopieren" aria-label="IBAN kopieren">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+            <div class="iban-row">
+              <span class="iban-label">BIC</span>
+              <span class="iban-value" id="val-bic">[BIC einsetzen]</span>
+              <button class="copy-btn" data-target="val-bic" title="BIC kopieren" aria-label="BIC kopieren">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+          </div>
         </div>
-    </section>
+
+        <!-- Stripe / Online -->
+        <div class="pay-card pay-card--stripe fade-up d3">
+          <div class="pay-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            </svg>
+          </div>
+          <h3 class="pay-title">Online bezahlen</h3>
+          <p class="pay-desc">Schnell und sicher via Stripe – mit Kreditkarte, Debitkarte oder TWINT.</p>
+          <a href="[STRIPE LINK EINSETZEN]" class="stripe-btn" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Jetzt via Stripe unterstützen
+          </a>
+          <p class="stripe-note">Sicher & verschlüsselt über Stripe. Du wirst weitergeleitet.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       SPONSOR
+  ════════════════════════════════════ -->
+  <section id="sponsor">
+    <div class="sponsor-wrap">
+      <span class="sponsor-badge fade-up">Für Unternehmen</span>
+      <h2 class="sponsor-title fade-up d1">Werde Teil<br>unserer Geschichte.</h2>
+      <p class="sponsor-lead fade-up d2">
+        Als Sponsor wirst du sichtbar – auf der Plattform, die täglich von Jugendlichen und Unternehmen aus der ganzen Schweiz besucht wird.
+      </p>
+      <div class="perks fade-up d2">
+        <span class="perk"><span class="perk-dot" style="background:var(--c4)"></span>Logo auf der Plattform</span>
+        <span class="perk"><span class="perk-dot" style="background:var(--c2)"></span>Nennung als Unterstützer</span>
+        <span class="perk"><span class="perk-dot" style="background:var(--c3)"></span>Direkte Reichweite</span>
+      </div>
+      <form class="sponsor-form fade-up d3" id="sponsor-form">
+        <input class="s-input" type="text" id="sp-company" placeholder="Name des Unternehmens" required autocomplete="organization">
+        <input class="s-input" type="email" id="sp-email" placeholder="E-Mail-Adresse" required autocomplete="email">
+        <input class="s-input" type="url" id="sp-website" placeholder="Website (optional)" autocomplete="url">
+        <button type="submit" class="s-submit">Anfrage senden →</button>
+      </form>
+      <p class="sponsor-confirm" id="sponsor-confirm">
+        <strong>Danke!</strong> Wir haben deine Anfrage erhalten und melden uns so schnell wie möglich.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       FOOTER
+  ════════════════════════════════════ -->
+  <footer id="page-footer">
+    <a href="index.html" class="footer-back">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Zurück zur Plattform
+    </a>
+  </footer>
+
+  <script>
+    /* ── CANVAS PARTICLES ────────────────────────────── */
+    (function () {
+      const canvas = document.getElementById('hero-canvas');
+      const ctx    = canvas.getContext('2d');
+      const COLORS = ['#ff9e1f','#ffd43a','#74ef55','#27f0d8','#16d9ff','#1277ff'];
+      let pts = [];
+
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function spawn() {
+        pts = Array.from({ length: 55 }, () => ({
+          x:  Math.random() * canvas.width,
+          y:  Math.random() * canvas.height,
+          r:  Math.random() * 1.8 + 0.5,
+          vx: (Math.random() - 0.5) * 0.22,
+          vy: (Math.random() - 0.5) * 0.22,
+          c:  COLORS[Math.floor(Math.random() * COLORS.length)],
+          a:  Math.random() * 0.45 + 0.1,
+        }));
+      }
+
+      function rgba(hex, a) {
+        const n = parseInt(hex.slice(1), 16);
+        return `rgba(${n >> 16},${(n >> 8) & 0xff},${n & 0xff},${a})`;
+      }
+
+      function tick() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const W = canvas.width, H = canvas.height;
+
+        pts.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < -12) p.x = W + 12;
+          if (p.x > W + 12) p.x = -12;
+          if (p.y < -12) p.y = H + 12;
+          if (p.y > H + 12) p.y = -12;
+
+          /* glow halo */
+          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 10);
+          g.addColorStop(0, rgba(p.c, p.a * 0.55));
+          g.addColorStop(1, rgba(p.c, 0));
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r * 10, 0, Math.PI * 2);
+          ctx.fillStyle = g;
+          ctx.fill();
+
+          /* solid core */
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = rgba(p.c, p.a);
+          ctx.fill();
+        });
+
+        requestAnimationFrame(tick);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      spawn();
+      tick();
+    })();
+
+    /* ── MOUSE ORB ───────────────────────────────────── */
+    (function () {
+      const orb  = document.getElementById('hero-orb');
+      const hero = document.getElementById('hero');
+      /* default centre */
+      orb.style.left = '50%';
+      orb.style.top  = '50%';
+      hero.addEventListener('mousemove', e => {
+        orb.style.left = e.clientX + 'px';
+        orb.style.top  = e.clientY + 'px';
+      });
+    })();
+
+    /* ── TYPEWRITER ──────────────────────────────────── */
+    (function () {
+      const title  = document.getElementById('hero-title');
+      const cursor = document.getElementById('hero-cursor');
+      const text   = 'Mach es möglich.';
+      const node   = document.createTextNode('');
+      title.insertBefore(node, cursor);
+      let i = 0;
+
+      function type() {
+        node.textContent = text.slice(0, i);
+        i++;
+        if (i <= text.length) {
+          setTimeout(type, i === 1 ? 500 : 46 + Math.random() * 30);
+        } else {
+          setTimeout(() => {
+            cursor.style.animation = 'none';
+            cursor.style.opacity   = '0';
+          }, 1600);
+        }
+      }
+
+      setTimeout(type, 700);
+    })();
+
+    /* ── COPY TO CLIPBOARD ───────────────────────────── */
+    const checkSVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+    const copySVG  = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        /* resolve value: either from data-copy or data-target element */
+        const val = btn.dataset.copy
+          || (btn.dataset.target
+              ? document.getElementById(btn.dataset.target)?.textContent.trim()
+              : '');
+        if (!val) return;
+
+        try { await navigator.clipboard.writeText(val); }
+        catch {
+          const t = document.createElement('textarea');
+          Object.assign(t.style, { position:'fixed', opacity:'0' });
+          t.value = val;
+          document.body.appendChild(t);
+          t.select();
+          document.execCommand('copy');
+          document.body.removeChild(t);
+        }
+
+        btn.innerHTML = checkSVG;
+        btn.classList.add('done');
+        setTimeout(() => { btn.innerHTML = copySVG; btn.classList.remove('done'); }, 2000);
+      });
+    });
+
+    /* ── FADE IN (IntersectionObserver) ─────────────── */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -36px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+    /* ── SPONSOR FORM ────────────────────────────────── */
+    document.getElementById('sponsor-form').addEventListener('submit', e => {
+      e.preventDefault();
+      /* production: send to backend / email service */
+      document.getElementById('sponsor-form').style.display    = 'none';
+      document.getElementById('sponsor-confirm').style.display = 'block';
+    });
+  </script>
 </body>
+</html>
