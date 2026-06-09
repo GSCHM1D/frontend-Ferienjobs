@@ -64,3 +64,29 @@ async function deleteJob(id, adminKey) {
     if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
     return await response.json();
 }
+
+/* =====================================================
+   HIER ADMIN ACTIONS NEW
+   Neue Admin-Funktionen – Backend muss action "edit"
+   im Google Apps Script implementieren.
+   ===================================================== */
+
+/* =========================
+   JOB BEARBEITEN
+========================= */
+async function editJob(id, adminKey, jobData) {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain" // text/plain als CORS-Workaround für Google Apps Script
+        },
+        body: JSON.stringify({
+            action: "edit",
+            id: id,
+            adminKey: adminKey,
+            ...jobData
+        })
+    });
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
