@@ -1160,6 +1160,85 @@ body.disclaimer-open {
     }
 }
 
+/* ========================= */
+/* SPONSORS SECTION          */
+/* ========================= */
+
+.sponsors-section {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(219, 226, 234, 0.8);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px 24px;
+    margin-bottom: 24px;
+}
+
+.sponsors-section h2 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-soft);
+    margin-bottom: 16px;
+}
+
+.sponsors-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.sponsor-chip {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 14px 8px 8px;
+    border-radius: 40px;
+    background: #ffffff;
+    border: 1px solid rgba(37, 99, 235, 0.14);
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.18s;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
+}
+
+.sponsor-chip:hover {
+    border-color: rgba(37, 99, 235, 0.32);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.1);
+    transform: translateY(-1px);
+}
+
+.sponsor-chip-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: var(--surface-soft);
+    padding: 3px;
+}
+
+.sponsor-chip-initial {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--success));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.sponsor-chip-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+}
+
 @media (max-width: 720px) {
     .testimonial-list {
         grid-template-columns: 1fr;

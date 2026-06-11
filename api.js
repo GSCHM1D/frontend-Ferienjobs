@@ -106,10 +106,32 @@ async function createSponsor(sponsorData) {
 }
 
 /* =========================
-   ALLE SPONSOREN LADEN
+   ALLE SPONSOREN LADEN (Admin)
 ========================= */
 async function getSponsors(adminKey) {
     const response = await fetch(`${API_URL}?action=getSponsors&adminKey=${encodeURIComponent(adminKey)}`);
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
+
+/* =========================
+   OEFFENTLICHE SPONSOREN
+========================= */
+async function getPublicSponsors() {
+    const response = await fetch(`${API_URL}?action=getPublicSponsors`);
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
+
+/* =========================
+   SPONSOR GENEHMIGEN
+========================= */
+async function approveSponsor(id, adminKey) {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: "approveSponsor", id: id, adminKey: adminKey })
+    });
     if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
     return await response.json();
 }

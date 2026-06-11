@@ -678,10 +678,53 @@ document.addEventListener("keydown", function (e) {
 });
 
 /* =========================
+   SPONSOREN
+========================= */
+
+async function loadPublicSponsors() {
+    const section = document.getElementById("sponsors-section");
+    const list    = document.getElementById("sponsors-list");
+    if (!section || !list) return;
+
+    try {
+        const sponsors = await getPublicSponsors();
+        if (!Array.isArray(sponsors) || sponsors.length === 0) return;
+
+        list.innerHTML = "";
+        sponsors.forEach(function(s) {
+            const chip = el("a", "sponsor-chip");
+            chip.href   = s.website ? (s.website.startsWith("http") ? s.website : "https://" + s.website) : "#";
+            chip.target = s.website ? "_blank" : "_self";
+            chip.rel    = "noopener noreferrer";
+
+            if (s.logo) {
+                const img = document.createElement("img");
+                img.className = "sponsor-chip-logo";
+                img.src = s.logo;
+                img.alt = String(s.company || "") + " Logo";
+                chip.appendChild(img);
+            } else {
+                const av = el("div", "sponsor-chip-initial");
+                av.textContent = String(s.company || "?")[0].toUpperCase();
+                chip.appendChild(av);
+            }
+
+            chip.appendChild(el("span", "sponsor-chip-name", s.company || ""));
+            list.appendChild(chip);
+        });
+
+        section.style.display = "";
+    } catch {
+        /* Keine Sponsoren oder API nicht erreichbar: Abschnitt bleibt versteckt */
+    }
+}
+
+/* =========================
    START
 ========================= */
 
 initDisclaimerGate();
 initCookieBanner();
-renderTestimonials()
+renderTestimonials();
 loadJobs();
+loadPublicSponsors();

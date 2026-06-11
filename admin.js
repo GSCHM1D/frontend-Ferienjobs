@@ -689,14 +689,29 @@ function buildSponsorCard(s) {
         card.appendChild(dateEl);
     }
 
+    /* Status pill */
+    const isApproved = s.status === "approved";
+    const pill = document.createElement("span");
+    pill.className = "status-pill " + (isApproved ? "verified" : "unverified");
+    pill.textContent = isApproved ? "Genehmigt" : "Ausstehend";
+    card.appendChild(pill);
+
     /* Actions */
     const actions = document.createElement("div");
     actions.className = "sponsor-actions";
 
+    if (!isApproved) {
+        const approveBtn = document.createElement("button");
+        approveBtn.className = "ajc-btn verify-btn sponsor-approve-btn";
+        approveBtn.dataset.id = String(s.id ?? "");
+        approveBtn.innerHTML = svgIcon('<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>') + " Genehmigen";
+        actions.appendChild(approveBtn);
+    }
+
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "ajc-btn delete-btn sponsor-delete-btn";
     deleteBtn.dataset.id = String(s.id ?? "");
-    deleteBtn.innerHTML = svgIcon('<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>') + " Anfrage löschen";
+    deleteBtn.innerHTML = svgIcon('<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>') + " Löschen";
 
     actions.appendChild(deleteBtn);
     card.appendChild(actions);
@@ -707,9 +722,29 @@ function buildSponsorCard(s) {
 /* Event delegation for sponsor actions */
 sponsorGrid.addEventListener("click", async function(e) {
     if (isActionRunning) return;
-    const deleteBtn = e.target.closest(".sponsor-delete-btn");
-    if (deleteBtn) await handleDeleteSponsor(deleteBtn.dataset.id);
+    const approveBtn = e.target.closest(".sponsor-approve-btn");
+    const deleteBtn  = e.target.closest(".sponsor-delete-btn");
+    if (approveBtn) await handleApproveSponsor(approveBtn.dataset.id);
+    else if (deleteBtn) await handleDeleteSponsor(deleteBtn.dataset.id);
 });
+
+async function handleApproveSponsor(id) {
+    isActionRunning = true;
+    showLoading("Sponsor wird genehmigt…");
+    try {
+        const result = await approveSponsor(id, adminKey);
+        if (!result.success) { toast(result.message || "Genehmigen fehlgeschlagen.", "error"); return; }
+        const s = allSponsors.find(function(x) { return String(x.id) === String(id); });
+        if (s) s.status = "approved";
+        renderSponsorGrid();
+        toast("Sponsor genehmigt – erscheint nun auf der Startseite.", "success");
+    } catch {
+        toast("Fehler beim Genehmigen.", "error");
+    } finally {
+        hideLoading();
+        isActionRunning = false;
+    }
+}
 
 async function handleDeleteSponsor(id) {
     if (!confirm("Diese Sponsor-Anfrage wirklich löschen?")) return;
