@@ -7,6 +7,7 @@
 ================== */
 let adminKey = "";
 let allJobs = [];
+let allSponsors = [];
 let currentFilter = "all";
 let isActionRunning = false;
 let editingJobId = null;
@@ -42,6 +43,9 @@ const editModalClose     = document.getElementById("edit-modal-close");
 const editModalBackdrop  = document.getElementById("edit-modal-backdrop");
 const editForm           = document.getElementById("edit-form");
 const editCancelBtn      = document.getElementById("edit-cancel-btn");
+const sponsorGrid        = document.getElementById("admin-sponsor-grid");
+const sponsorsSubtitle   = document.getElementById("sponsors-panel-subtitle");
+const sponsorBadge       = document.getElementById("sponsor-badge");
 
 /* ==================
    LOADING
@@ -226,6 +230,7 @@ function showAdminApp() {
     updateStats();
     checkApiStatus();
     renderJobGrid();
+    loadSponsors();
 }
 
 /* ==================
@@ -584,5 +589,155 @@ editForm.addEventListener("submit", async function(e) {
         hideLoading();
         saveBtn.disabled = false;
         isActionRunning = false;
+    }
+});
+
+/* ==================
+   SPONSORS
+================== */
+async function loadSponsors() {
+    try {
+        const result = await getSponsors(adminKey);
+        allSponsors = Array.isArray(result) ? result : [];
+    } catch {
+        allSponsors = [];
+    }
+    renderSponsorGrid();
+    updateSponsorBadge();
+}
+
+function updateSponsorBadge() {
+    if (allSponsors.length > 0) {
+        sponsorBadge.textContent = allSponsors.length;
+        sponsorBadge.classList.remove("hidden");
+    } else {
+        sponsorBadge.classList.add("hidden");
+    }
+}
+
+function renderSponsorGrid() {
+    sponsorGrid.innerHTML = "";
+    sponsorsSubtitle.textContent = allSponsors.length + " Anfrage" + (allSponsors.length !== 1 ? "n" : "");
+
+    if (allSponsors.length === 0) {
+        const msg = document.createElement("p");
+        msg.className = "no-jobs-msg";
+        msg.textContent = "Keine Sponsor-Anfragen vorhanden.";
+        sponsorGrid.appendChild(msg);
+        return;
+    }
+
+    allSponsors.forEach(function(s) { sponsorGrid.appendChild(buildSponsorCard(s)); });
+}
+
+function buildSponsorCard(s) {
+    const card = document.createElement("div");
+    card.className = "sponsor-card";
+
+    /* Logo */
+    const logoWrap = document.createElement("div");
+    logoWrap.style.display = "flex";
+    logoWrap.style.alignItems = "center";
+    logoWrap.style.gap = "14px";
+
+    if (s.logo) {
+        const img = document.createElement("img");
+        img.className = "sponsor-logo-img";
+        img.src = s.logo;
+        img.alt = s.company + " Logo";
+        logoWrap.appendChild(img);
+    } else {
+        const ph = document.createElement("div");
+        ph.className = "sponsor-logo-ph";
+        ph.textContent = "Kein Logo";
+        logoWrap.appendChild(ph);
+    }
+
+    const nameEl = document.createElement("div");
+    nameEl.className = "sponsor-company";
+    nameEl.textContent = s.company || "–";
+    logoWrap.appendChild(nameEl);
+    card.appendChild(logoWrap);
+
+    /* Meta */
+    function metaRow(iconPath, content, isLink) {
+        const row = document.createElement("div");
+        row.className = "sponsor-meta-row";
+        row.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + iconPath + '</svg>';
+        if (isLink && content) {
+            const a = document.createElement("a");
+            a.href = content.startsWith("http") ? content : "https://" + content;
+            a.textContent = content;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            row.appendChild(a);
+        } else {
+            const span = document.createElement("span");
+            span.textContent = content || "–";
+            row.appendChild(span);
+        }
+        return row;
+    }
+
+    card.appendChild(metaRow('<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>', s.email, false));
+    if (s.website) card.appendChild(metaRow('<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>', s.website, true));
+
+    if (s.createdAt) {
+        const dateEl = document.createElement("div");
+        dateEl.className = "sponsor-date";
+        dateEl.textContent = "Eingegangen: " + new Date(s.createdAt).toLocaleDateString("de-CH");
+        card.appendChild(dateEl);
+    }
+
+    /* Actions */
+    const actions = document.createElement("div");
+    actions.className = "sponsor-actions";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "ajc-btn delete-btn sponsor-delete-btn";
+    deleteBtn.dataset.id = String(s.id ?? "");
+    deleteBtn.innerHTML = svgIcon('<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>') + " Anfrage löschen";
+
+    actions.appendChild(deleteBtn);
+    card.appendChild(actions);
+
+    return card;
+}
+
+/* Event delegation for sponsor actions */
+sponsorGrid.addEventListener("click", async function(e) {
+    if (isActionRunning) return;
+    const deleteBtn = e.target.closest(".sponsor-delete-btn");
+    if (deleteBtn) await handleDeleteSponsor(deleteBtn.dataset.id);
+});
+
+async function handleDeleteSponsor(id) {
+    if (!confirm("Diese Sponsor-Anfrage wirklich löschen?")) return;
+    isActionRunning = true;
+    showLoading("Anfrage wird gelöscht…");
+    try {
+        const result = await deleteSponsor(id, adminKey);
+        if (!result.success) { toast(result.message || "Löschen fehlgeschlagen.", "error"); return; }
+        allSponsors = allSponsors.filter(function(s) { return String(s.id) !== String(id); });
+        renderSponsorGrid();
+        updateSponsorBadge();
+        toast("Anfrage gelöscht.", "success");
+    } catch {
+        toast("Fehler beim Löschen.", "error");
+    } finally {
+        hideLoading();
+        isActionRunning = false;
+    }
+}
+
+document.getElementById("sponsors-refresh-btn").addEventListener("click", async function() {
+    showLoading("Anfragen werden geladen…");
+    try {
+        await loadSponsors();
+        toast("Sponsor-Anfragen aktualisiert.", "success");
+    } catch {
+        toast("Laden fehlgeschlagen.", "error");
+    } finally {
+        hideLoading();
     }
 });

@@ -50,6 +50,11 @@
         Jobs
         <span id="pending-badge" class="pending-badge hidden"></span>
       </button>
+      <button class="admin-tab-btn" data-tab="sponsors" role="tab">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Sponsoren
+        <span id="sponsor-badge" class="pending-badge hidden"></span>
+      </button>
       <button class="admin-tab-btn" data-tab="sites" role="tab">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         Seiten
@@ -218,6 +223,23 @@
 
       <div id="admin-job-grid" class="admin-job-grid">
         <p class="no-jobs-msg">Jobs werden geladen…</p>
+      </div>
+    </div>
+
+    <!-- SPONSOREN -->
+    <div id="tab-sponsors" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">Sponsor-Anfragen</h2>
+          <p class="panel-subtitle" id="sponsors-panel-subtitle">–</p>
+        </div>
+        <button id="sponsors-refresh-btn" class="refresh-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Neu laden
+        </button>
+      </div>
+      <div id="admin-sponsor-grid" class="admin-sponsor-grid">
+        <p class="no-jobs-msg">Sponsor-Anfragen werden geladen&hellip;</p>
       </div>
     </div>
 

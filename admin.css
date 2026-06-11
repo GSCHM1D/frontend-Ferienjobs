@@ -747,6 +747,103 @@ body {
 .no-jobs-msg { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--ats); font-size: 14px; }
 
 /* ==================
+   SPONSOR CARDS
+================== */
+
+.admin-sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.sponsor-card {
+  background: var(--as1);
+  border: 1px solid var(--aborder);
+  border-radius: var(--arad);
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.sponsor-card::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  border-radius: 14px 0 0 14px;
+  background: linear-gradient(180deg, var(--acc), var(--acc2));
+}
+
+.sponsor-card:hover {
+  border-color: var(--ab2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+}
+
+.sponsor-logo-img {
+  width: 64px;
+  height: 46px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  padding: 6px;
+  border: 1px solid var(--aborder);
+  flex-shrink: 0;
+}
+
+.sponsor-logo-ph {
+  width: 64px;
+  height: 46px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--aborder);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--ats);
+  flex-shrink: 0;
+}
+
+.sponsor-company {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--at);
+  line-height: 1.3;
+}
+
+.sponsor-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--ats);
+}
+
+.sponsor-meta-row svg { opacity: 0.5; flex-shrink: 0; }
+.sponsor-meta-row span { color: var(--at2); }
+.sponsor-meta-row a { color: var(--acc); text-decoration: none; }
+.sponsor-meta-row a:hover { text-decoration: underline; }
+
+.sponsor-date {
+  font-size: 11.5px;
+  color: var(--ats);
+  padding-top: 2px;
+}
+
+.sponsor-actions {
+  padding-top: 10px;
+  border-top: 1px solid var(--aborder);
+}
+
+.sponsor-delete-btn { width: 100%; }
+
+/* ==================
    EDIT MODAL
 ================== */
 
