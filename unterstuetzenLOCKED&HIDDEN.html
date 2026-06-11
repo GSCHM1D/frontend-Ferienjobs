@@ -1002,12 +1002,13 @@
         email:   document.getElementById('sp-email').value.trim(),
         website: document.getElementById('sp-website').value.trim(),
         logo:    logoBase64 || ''
-      }).then(function() {
+      }).then(function(result) {
+        if (!result.success) throw new Error(result.message || 'Fehler');
         document.getElementById('sponsor-form').style.display    = 'none';
         document.getElementById('sponsor-confirm').style.display = 'block';
       }).catch(function() {
         btn.disabled    = false;
-        btn.textContent = 'Anfrage senden';
+        btn.textContent = 'Anfrage senden →';
         alert('Fehler beim Senden. Bitte erneut versuchen.');
       });
     });
