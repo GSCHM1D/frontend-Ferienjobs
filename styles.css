@@ -1161,82 +1161,160 @@ body.disclaimer-open {
 }
 
 /* ========================= */
-/* SPONSORS SECTION          */
+/* SPONSORS                  */
 /* ========================= */
 
 .sponsors-section {
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(219, 226, 234, 0.8);
+    padding: 56px 0;
+    border-top: 1px solid var(--border);
+}
+
+.sponsors-section-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.sponsors-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.sponsors-heading {
+    font-family: Syne, sans-serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+}
+
+.sponsors-lead {
+    font-size: 14px;
+    color: var(--text-soft);
+    margin-bottom: 36px;
+}
+
+.sponsors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.sponsors-grid--single {
+    grid-template-columns: minmax(0, 480px);
+    justify-content: center;
+}
+
+.sponsor-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 22px 22px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    padding: 22px 24px;
-    margin-bottom: 24px;
-}
-
-.sponsors-section h2 {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-soft);
-    margin-bottom: 16px;
-}
-
-.sponsors-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-}
-
-.sponsor-chip {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 8px 14px 8px 8px;
-    border-radius: 40px;
-    background: #ffffff;
-    border: 1px solid rgba(37, 99, 235, 0.14);
     text-decoration: none;
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.18s;
-    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
+    color: inherit;
+    overflow: hidden;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
-.sponsor-chip:hover {
-    border-color: rgba(37, 99, 235, 0.32);
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.1);
-    transform: translateY(-1px);
+.sponsor-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), #16d9ff);
+    opacity: 0;
+    transition: opacity 0.22s ease;
 }
 
-.sponsor-chip-logo {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
-    border-radius: 50%;
-    background: var(--surface-soft);
-    padding: 3px;
+a.sponsor-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover), 0 0 0 1px rgba(23, 105, 255, 0.12);
 }
 
-.sponsor-chip-initial {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary), var(--success));
+a.sponsor-card:hover::before {
+    opacity: 1;
+}
+
+.sponsor-card-top {
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 13px;
+    gap: 14px;
+}
+
+.sponsor-card-logo {
+    width: auto;
+    height: 44px;
+    max-width: 120px;
+    object-fit: contain;
     flex-shrink: 0;
 }
 
-.sponsor-chip-name {
-    font-size: 13.5px;
-    font-weight: 600;
+.sponsor-card-logo--fallback {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), #16d9ff);
+    color: #fff;
+    font-family: Syne, sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sponsor-card-name {
+    font-family: Syne, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
     color: var(--text);
-    white-space: nowrap;
+    letter-spacing: -0.02em;
+}
+
+.sponsor-card-message {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-soft);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.sponsor-card-link {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-top: auto;
+}
+
+@media (max-width: 720px) {
+    .sponsors-section {
+        padding: 40px 0;
+    }
+    .sponsors-grid,
+    .sponsors-grid--single {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sponsor-card,
+    .sponsor-card::before {
+        transition: none !important;
+    }
 }
 
 @media (max-width: 720px) {

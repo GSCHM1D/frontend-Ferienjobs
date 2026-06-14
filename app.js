@@ -683,35 +683,58 @@ document.addEventListener("keydown", function (e) {
 
 async function loadPublicSponsors() {
     const section = document.getElementById("sponsors-section");
-    const list    = document.getElementById("sponsors-list");
-    if (!section || !list) return;
+    const grid    = document.getElementById("sponsors-grid");
+    if (!section || !grid) return;
 
     try {
         const sponsors = await getPublicSponsors();
         if (!Array.isArray(sponsors) || sponsors.length === 0) return;
 
-        list.innerHTML = "";
+        grid.innerHTML = "";
+
         sponsors.forEach(function(s) {
-            const chip = el("a", "sponsor-chip");
-            chip.href   = s.website ? (s.website.startsWith("http") ? s.website : "https://" + s.website) : "#";
-            chip.target = s.website ? "_blank" : "_self";
-            chip.rel    = "noopener noreferrer";
+            const hasWebsite = Boolean(s.website);
+            const card = document.createElement(hasWebsite ? "a" : "div");
+            card.className = "sponsor-card";
+
+            if (hasWebsite) {
+                card.href   = s.website.startsWith("http") ? s.website : "https://" + s.website;
+                card.target = "_blank";
+                card.rel    = "noopener noreferrer";
+            }
+
+            const top = el("div", "sponsor-card-top");
 
             if (s.logo) {
                 const img = document.createElement("img");
-                img.className = "sponsor-chip-logo";
+                img.className = "sponsor-card-logo";
                 img.src = s.logo;
                 img.alt = String(s.company || "") + " Logo";
-                chip.appendChild(img);
+                top.appendChild(img);
             } else {
-                const av = el("div", "sponsor-chip-initial");
-                av.textContent = String(s.company || "?")[0].toUpperCase();
-                chip.appendChild(av);
+                const fallback = el("div", "sponsor-card-logo sponsor-card-logo--fallback");
+                fallback.textContent = String(s.company || "?")[0].toUpperCase();
+                top.appendChild(fallback);
             }
 
-            chip.appendChild(el("span", "sponsor-chip-name", s.company || ""));
-            list.appendChild(chip);
+            top.appendChild(el("span", "sponsor-card-name", s.company || ""));
+            card.appendChild(top);
+
+            if (s.message) {
+                card.appendChild(el("p", "sponsor-card-message", s.message));
+            }
+
+            if (hasWebsite) {
+                const link = el("span", "sponsor-card-link", "Website besuchen →");
+                card.appendChild(link);
+            }
+
+            grid.appendChild(card);
         });
+
+        if (sponsors.length === 1) {
+            grid.classList.add("sponsors-grid--single");
+        }
 
         section.style.display = "";
     } catch {
