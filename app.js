@@ -694,47 +694,34 @@ async function loadPublicSponsors() {
 
         sponsors.forEach(function(s) {
             const hasWebsite = Boolean(s.website);
-            const card = document.createElement(hasWebsite ? "a" : "div");
-            card.className = "sponsor-card";
+            const tile = document.createElement(hasWebsite ? "a" : "div");
+            tile.className = "sponsor-tile";
 
             if (hasWebsite) {
-                card.href   = s.website.startsWith("http") ? s.website : "https://" + s.website;
-                card.target = "_blank";
-                card.rel    = "noopener noreferrer";
+                tile.href   = s.website.startsWith("http") ? s.website : "https://" + s.website;
+                tile.target = "_blank";
+                tile.rel    = "noopener noreferrer";
+                tile.title  = s.company || "";
             }
 
-            const top = el("div", "sponsor-card-top");
+            const logoBox = el("div", "sponsor-tile-logo-box");
 
             if (s.logo) {
                 const img = document.createElement("img");
-                img.className = "sponsor-card-logo";
+                img.className = "sponsor-tile-img";
                 img.src = s.logo;
                 img.alt = String(s.company || "") + " Logo";
-                top.appendChild(img);
+                logoBox.appendChild(img);
             } else {
-                const fallback = el("div", "sponsor-card-logo sponsor-card-logo--fallback");
+                const fallback = el("div", "sponsor-tile-fallback");
                 fallback.textContent = String(s.company || "?")[0].toUpperCase();
-                top.appendChild(fallback);
+                logoBox.appendChild(fallback);
             }
 
-            top.appendChild(el("span", "sponsor-card-name", s.company || ""));
-            card.appendChild(top);
-
-            if (s.message) {
-                card.appendChild(el("p", "sponsor-card-message", s.message));
-            }
-
-            if (hasWebsite) {
-                const link = el("span", "sponsor-card-link", "Website besuchen →");
-                card.appendChild(link);
-            }
-
-            grid.appendChild(card);
+            tile.appendChild(logoBox);
+            tile.appendChild(el("span", "sponsor-tile-name", s.company || ""));
+            grid.appendChild(tile);
         });
-
-        if (sponsors.length === 1) {
-            grid.classList.add("sponsors-grid--single");
-        }
 
         section.style.display = "";
     } catch {

@@ -734,9 +734,7 @@ async function handleApproveSponsor(id) {
     try {
         const result = await approveSponsor(id, adminKey);
         if (!result.success) { toast(result.message || "Genehmigen fehlgeschlagen.", "error"); return; }
-        const s = allSponsors.find(function(x) { return String(x.id) === String(id); });
-        if (s) s.status = "approved";
-        renderSponsorGrid();
+        await loadSponsors();
         toast("Sponsor genehmigt – erscheint nun auf der Startseite.", "success");
     } catch {
         toast("Fehler beim Genehmigen.", "error");
@@ -753,9 +751,7 @@ async function handleDeleteSponsor(id) {
     try {
         const result = await deleteSponsor(id, adminKey);
         if (!result.success) { toast(result.message || "Löschen fehlgeschlagen.", "error"); return; }
-        allSponsors = allSponsors.filter(function(s) { return String(s.id) !== String(id); });
-        renderSponsorGrid();
-        updateSponsorBadge();
+        await loadSponsors();
         toast("Anfrage gelöscht.", "success");
     } catch {
         toast("Fehler beim Löschen.", "error");
