@@ -311,6 +311,48 @@
     .pay-card--bank::before { background: linear-gradient(90deg, var(--c6), var(--c4)); }
     .pay-card--stripe::before { background: linear-gradient(90deg, #6772e5, #a78bfa, #f0abfc); }
 
+    /* ── STRIPE DEAKTIVIERT (coming soon) ── */
+    .pay-card--disabled {
+      opacity: 0.42;
+      pointer-events: none;
+      user-select: none;
+      filter: grayscale(0.55);
+    }
+    .pay-card--disabled:hover {
+      transform: none !important;
+      box-shadow: 0 12px 32px rgba(15,23,42,0.08) !important;
+    }
+    .coming-soon-badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: rgba(103,114,229,0.12);
+      color: #a78bfa;
+      border: 1px solid rgba(103,114,229,0.28);
+      border-radius: 999px;
+      padding: 4px 13px;
+      pointer-events: none;
+    }
+
+    /* ── HINT UNTERHALB PAY-GRID ── */
+    .support-sponsor-hint {
+      margin-top: 28px;
+      font-size: 13.5px;
+      font-weight: 400;
+      color: #64748b;
+      line-height: 1.6;
+    }
+    .support-sponsor-hint a {
+      color: #2563eb;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .support-sponsor-hint a:hover { text-decoration: underline; }
+
     .pay-icon {
       width: 52px;
       height: 52px;
@@ -663,7 +705,6 @@
           Jetzt unterstützen
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
-        <a href="#sponsor" class="cta cta-ghost">Sponsor werden</a>
       </div>
     </div>
 
@@ -722,7 +763,9 @@
         </div>
 
         <!-- Stripe / Online -->
-        <div class="pay-card pay-card--stripe fade-up d3">
+        <!-- STRIPE DEAKTIVIERT: Klassen pay-card--disabled + coming-soon-badge-Element entfernen zum Reaktivieren -->
+        <div class="pay-card pay-card--stripe pay-card--disabled fade-up d3">
+          <div class="coming-soon-badge">Bald verfügbar</div>
           <div class="pay-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
@@ -738,6 +781,9 @@
         </div>
 
       </div>
+      <p class="support-sponsor-hint fade-up">
+        Möchtest du auf der Plattform als Unterstützer erscheinen? Nach deinem Beitrag einfach <a href="#sponsor">das Formular unten ausfüllen →</a>
+      </p>
     </div>
   </section>
 
