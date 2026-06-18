@@ -72,8 +72,7 @@ function enterDashboard() {
     loginScreen.classList.add("hidden");
     adminApp.classList.remove("hidden");
     checkApiStatus();
-    loadJobs();
-    loadSponsors();
+    Promise.all([loadJobs(), loadSponsors()]).then(initDashboardCharts);
 }
 
 (function init() {
@@ -344,7 +343,11 @@ document.getElementById("jobs-refresh-btn").addEventListener("click", async func
 
 document.getElementById("dash-refresh-btn").addEventListener("click", async function() {
     showLoading("Wird aktualisiert…");
-    try { await Promise.all([loadJobs(), loadSponsors(), checkApiStatus()]); toast("Aktualisiert.", "success"); }
+    try {
+        await Promise.all([loadJobs(), loadSponsors(), checkApiStatus()]);
+        initDashboardCharts();
+        toast("Aktualisiert.", "success");
+    }
     catch { toast("Fehler.", "error"); }
     finally { hideLoading(); }
 });
@@ -552,3 +555,244 @@ document.getElementById("sponsors-refresh-btn").addEventListener("click", async 
     catch { toast("Laden fehlgeschlagen.", "error"); }
     finally { hideLoading(); }
 });
+
+/* ==================
+   DASHBOARD CHARTS
+================== */
+let _charts = {};
+
+function destroyCharts() {
+    Object.values(_charts).forEach(c => { try { c.destroy(); } catch {} });
+    _charts = {};
+}
+
+function initDashboardCharts() {
+    if (typeof Chart === "undefined") return;
+    Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
+    Chart.defaults.font.size   = 12;
+    Chart.defaults.color       = "#9ca3af";
+    destroyCharts();
+    buildTimelineChart();
+    buildCategoryChart();
+    buildStatusChart();
+    buildSponsorChart();
+    buildLocationChart();
+    animateStatNumbers();
+    const el = document.getElementById("dash-updated-at");
+    if (el) el.textContent = new Date().toLocaleTimeString("de-CH");
+}
+
+const CHART_PALETTE = [
+    "#1769ff", "#10b981", "#f59e0b", "#8b5cf6",
+    "#06b6d4", "#f97316", "#ec4899", "#6b7280"
+];
+
+const TOOLTIP_DEFAULTS = {
+    backgroundColor: "#fff",
+    titleColor: "#111827",
+    bodyColor: "#374151",
+    borderColor: "#e5e7eb",
+    borderWidth: 1,
+    padding: 10,
+};
+
+function weekStart(date) {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    return d.toISOString().slice(0, 10);
+}
+
+function buildTimelineChart() {
+    const WEEKS = 12;
+    const weeks = {};
+    for (let i = WEEKS - 1; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i * 7);
+        weeks[weekStart(d)] = 0;
+    }
+    allJobs.forEach(j => {
+        if (!j.createdAt) return;
+        const k = weekStart(j.createdAt);
+        if (k in weeks) weeks[k]++;
+    });
+    const labels = Object.keys(weeks).map(k => {
+        const d = new Date(k);
+        return `${d.getDate()}.${d.getMonth() + 1}.`;
+    });
+    const data = Object.values(weeks);
+
+    const canvas = document.getElementById("chart-timeline");
+    if (!canvas) return;
+    const grd = canvas.getContext("2d").createLinearGradient(0, 0, 0, 200);
+    grd.addColorStop(0, "rgba(23,105,255,0.16)");
+    grd.addColorStop(1, "rgba(23,105,255,0)");
+
+    _charts.timeline = new Chart(canvas, {
+        type: "line",
+        data: {
+            labels,
+            datasets: [{
+                data,
+                borderColor: "#1769ff",
+                backgroundColor: grd,
+                fill: true,
+                tension: 0.45,
+                pointBackgroundColor: "#1769ff",
+                pointBorderColor: "#fff",
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                borderWidth: 2.5,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 900, easing: "easeOutQuart" },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    ...TOOLTIP_DEFAULTS,
+                    callbacks: {
+                        title: items => "KW " + items[0].label,
+                        label: item => ` ${item.raw} neue Inserat${item.raw !== 1 ? "e" : ""}`
+                    }
+                }
+            },
+            scales: {
+                x: { grid: { color: "rgba(0,0,0,0.03)" }, border: { display: false } },
+                y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, grid: { color: "rgba(0,0,0,0.04)" }, border: { display: false } }
+            }
+        }
+    });
+}
+
+function buildCategoryChart() {
+    const cats = {};
+    allJobs.forEach(j => { const c = j.category || "Sonstiges"; cats[c] = (cats[c] || 0) + 1; });
+    const sorted = Object.entries(cats).sort((a, b) => b[1] - a[1]);
+    const canvas = document.getElementById("chart-category");
+    if (!canvas) return;
+    if (sorted.length === 0) { renderNoData(canvas); return; }
+    _charts.category = new Chart(canvas, {
+        type: "doughnut",
+        data: {
+            labels: sorted.map(e => e[0]),
+            datasets: [{ data: sorted.map(e => e[1]), backgroundColor: CHART_PALETTE, borderWidth: 0, hoverOffset: 6 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            animation: { duration: 900, easing: "easeOutQuart" },
+            cutout: "66%",
+            plugins: { legend: { position: "bottom", labels: { boxWidth: 10, padding: 10, font: { size: 11 } } }, tooltip: { ...TOOLTIP_DEFAULTS } }
+        }
+    });
+}
+
+function buildStatusChart() {
+    const verified = allJobs.filter(j => j.status === "verified").length;
+    const pending  = allJobs.length - verified;
+    const canvas = document.getElementById("chart-status");
+    if (!canvas) return;
+    if (allJobs.length === 0) { renderNoData(canvas); return; }
+    _charts.status = new Chart(canvas, {
+        type: "doughnut",
+        data: {
+            labels: ["Verifiziert", "Ausstehend"],
+            datasets: [{ data: [verified, pending], backgroundColor: ["#10b981", "#f59e0b"], borderWidth: 0, hoverOffset: 6 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            animation: { duration: 900, easing: "easeOutQuart" },
+            cutout: "66%",
+            plugins: { legend: { position: "bottom", labels: { boxWidth: 10, padding: 10, font: { size: 11 } } }, tooltip: { ...TOOLTIP_DEFAULTS } }
+        }
+    });
+}
+
+function buildSponsorChart() {
+    const approved = allSponsors.filter(s => s.status === "approved").length;
+    const pending  = allSponsors.length - approved;
+    const canvas = document.getElementById("chart-sponsors");
+    if (!canvas) return;
+    if (allSponsors.length === 0) { renderNoData(canvas); return; }
+    _charts.sponsors = new Chart(canvas, {
+        type: "doughnut",
+        data: {
+            labels: ["Genehmigt", "Ausstehend"],
+            datasets: [{ data: [approved, pending], backgroundColor: ["#1769ff", "#e5e7eb"], borderWidth: 0, hoverOffset: 6 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            animation: { duration: 900, easing: "easeOutQuart" },
+            cutout: "66%",
+            plugins: { legend: { position: "bottom", labels: { boxWidth: 10, padding: 10, font: { size: 11 } } }, tooltip: { ...TOOLTIP_DEFAULTS } }
+        }
+    });
+}
+
+function buildLocationChart() {
+    const locs = {};
+    allJobs.forEach(j => {
+        const raw = (j.location || "").trim();
+        const loc = raw.replace(/^\d{4,}\s*/, "").split(",")[0].trim() || raw.split(" ")[0] || "Unbekannt";
+        if (loc) locs[loc] = (locs[loc] || 0) + 1;
+    });
+    const top = Object.entries(locs).sort((a, b) => b[1] - a[1]).slice(0, 8);
+    const canvas = document.getElementById("chart-locations");
+    if (!canvas) return;
+    if (top.length === 0) { renderNoData(canvas); return; }
+    _charts.locations = new Chart(canvas, {
+        type: "bar",
+        data: {
+            labels: top.map(e => e[0]),
+            datasets: [{
+                data: top.map(e => e[1]),
+                backgroundColor: "rgba(23,105,255,0.10)",
+                borderColor: "#1769ff",
+                borderWidth: 1.5,
+                borderRadius: 5,
+                hoverBackgroundColor: "rgba(23,105,255,0.22)",
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            animation: { duration: 900, easing: "easeOutQuart" },
+            plugins: { legend: { display: false }, tooltip: { ...TOOLTIP_DEFAULTS } },
+            scales: {
+                x: { grid: { display: false }, border: { display: false } },
+                y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, grid: { color: "rgba(0,0,0,0.04)" }, border: { display: false } }
+            }
+        }
+    });
+}
+
+function renderNoData(canvas) {
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#9ca3af";
+    ctx.font = "13px 'DM Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Keine Daten", canvas.width / 2, canvas.height / 2);
+}
+
+function animateStatNumbers() {
+    [
+        { id: "stat-total",    val: allJobs.length },
+        { id: "stat-verified", val: allJobs.filter(j => j.status === "verified").length },
+        { id: "stat-pending",  val: allJobs.filter(j => j.status !== "verified").length },
+        { id: "stat-sponsors", val: allSponsors.length },
+    ].forEach(({ id, val }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const duration = 700, startTime = performance.now();
+        (function step(now) {
+            const p = Math.min((now - startTime) / duration, 1);
+            el.textContent = Math.round(easeOutQuart(p) * val);
+            if (p < 1) requestAnimationFrame(step);
+        })(performance.now());
+    });
+}
+
+function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
