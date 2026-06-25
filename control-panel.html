@@ -3,337 +3,315 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel – holidayjob.ch</title>
+  <title>Admin – holidayjob.ch</title>
   <link rel="stylesheet" href="admin.css">
   <link rel="icon" href="icons/favicon.ico">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
-<!-- ==================
-     LOGIN GATE
-================== -->
-<div id="admin-login-screen" class="admin-login-screen">
+<!-- LOGIN -->
+<div id="login-screen" class="login-screen">
   <div class="login-card">
     <img src="icons/main_logo_transparent.png" alt="holidayjob.ch" class="login-logo">
-    <h1 class="login-title">Admin Panel</h1>
-    <p class="login-subtitle">holidayjob.ch – Interner Bereich</p>
-    <div class="login-input-wrap">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2"/>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-      </svg>
-      <input type="password" id="login-key-input" class="login-key-input" placeholder="Admin-Schlüssel eingeben" autocomplete="current-password">
-    </div>
-    <button id="login-btn" class="login-btn">Einloggen</button>
-    <p id="login-error" class="login-error"></p>
+    <h1 class="login-title">Admin-Zugang</h1>
+    <p class="login-subtitle">holidayjob.ch</p>
+    <form id="login-form" class="login-form">
+      <div class="login-field">
+        <label for="login-key">Admin-Schlüssel</label>
+        <input type="password" id="login-key" autocomplete="current-password" required placeholder="Schlüssel eingeben">
+      </div>
+      <p id="login-error" class="login-error hidden"></p>
+      <button type="submit" id="login-btn" class="login-btn">Anmelden</button>
+    </form>
   </div>
 </div>
 
-<!-- ==================
-     MAIN APP
-================== -->
+<!-- DASHBOARD -->
 <div id="admin-app" class="admin-app hidden">
 
-  <header class="admin-topbar">
-    <a href="index.html" class="topbar-brand" target="_blank">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
       <img src="icons/main_logo_transparent.png" alt="holidayjob.ch">
-      holiday<span>job</span>.ch
-    </a>
+    </div>
 
-    <nav class="admin-tab-nav" role="tablist">
-      <button class="admin-tab-btn active" data-tab="dashboard" role="tab">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Dashboard
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-tab="dashboard">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Übersicht
       </button>
-      <button class="admin-tab-btn" data-tab="jobs" role="tab">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      <button class="nav-item" data-tab="jobs">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
         Jobs
-        <span id="pending-badge" class="pending-badge hidden"></span>
+        <span id="pending-badge" class="nav-badge hidden"></span>
       </button>
-      <button class="admin-tab-btn" data-tab="sponsors" role="tab">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <button class="nav-item" data-tab="sponsors">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         Sponsoren
-        <span id="sponsor-badge" class="pending-badge hidden"></span>
-      </button>
-      <button class="admin-tab-btn" data-tab="sites" role="tab">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        Seiten
+        <span id="sponsor-badge" class="nav-badge hidden"></span>
       </button>
     </nav>
 
-    <div class="topbar-right">
-      <div class="topbar-status">
-        <div class="topbar-status-dot"></div>
-        Eingeloggt
-      </div>
-      <button id="logout-btn" class="topbar-logout-btn">Logout</button>
+    <div class="sidebar-dev-links">
+      <span class="sidebar-section-label">Externe Tools</span>
+      <a href="https://analytics.google.com/" target="_blank" rel="noopener" class="sidebar-ext-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Analytics
+      </a>
+      <a href="https://docs.google.com/spreadsheets/" target="_blank" rel="noopener" class="sidebar-ext-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+        Google Sheets
+      </a>
+      <a href="https://script.google.com/" target="_blank" rel="noopener" class="sidebar-ext-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        App Script
+      </a>
+      <a href="https://github.com/gschm1d/frontend-holidayjob.ch" target="_blank" rel="noopener" class="sidebar-ext-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="https://my.cyon.ch/" target="_blank" rel="noopener" class="sidebar-ext-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Cyon
+      </a>
     </div>
-  </header>
 
-  <main class="admin-content">
+    <div class="sidebar-footer">
+      <button id="logout-btn" class="sidebar-logout-full-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Abmelden
+      </button>
+    </div>
+  </aside>
 
-    <!-- DASHBOARD -->
-    <div id="tab-dashboard" class="tab-panel active">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">Dashboard</h2>
-          <p class="panel-subtitle">Plattform-Übersicht</p>
+  <!-- MAIN -->
+  <div class="main-wrap">
+
+    <header class="topbar">
+      <h2 class="topbar-title" id="topbar-title">Übersicht</h2>
+      <div class="topbar-actions">
+        <div class="api-status-pill">
+          <span class="api-dot" id="api-dot"></span>
+          <span id="api-status-text">–</span>
         </div>
-        <button id="dash-refresh-btn" class="refresh-btn">
+        <button id="dash-refresh-btn" class="topbar-refresh-btn">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
           Aktualisieren
         </button>
       </div>
+    </header>
 
-      <div class="stat-grid">
-        <div class="stat-card total">
-          <div class="stat-icon">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-          </div>
-          <div class="stat-value" id="stat-total">–</div>
-          <div class="stat-label">Jobs total</div>
-        </div>
-        <div class="stat-card verified">
-          <div class="stat-icon">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          </div>
-          <div class="stat-value" id="stat-verified">–</div>
-          <div class="stat-label">Verifiziert</div>
-        </div>
-        <div class="stat-card pending">
-          <div class="stat-icon">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <div class="stat-value" id="stat-pending">–</div>
-          <div class="stat-label">Ausstehend</div>
-        </div>
-        <div class="stat-card api-card">
-          <div class="stat-icon">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          </div>
-          <div id="stat-api" class="stat-value" style="font-size:16px;line-height:1.3;">–</div>
-          <div class="stat-label">API Status</div>
-        </div>
-      </div>
+    <main class="main-content">
 
-      <div class="dash-row">
-        <div class="dash-card">
-          <h3 class="dash-card-title">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            Google Analytics
-          </h3>
-          <div class="ga-badge">
-            <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#ea4335"/></svg>
-            GA4 · Echtzeit via GA-Dashboard
+      <!-- TAB: ÜBERSICHT -->
+      <div id="tab-dashboard" class="tab-panel active">
+
+        <!-- Stat Cards -->
+        <div class="stat-grid">
+          <div class="stat-card stat-card--blue">
+            <div class="stat-label">Jobs total</div>
+            <div class="stat-value" id="stat-total">–</div>
           </div>
-          <div class="ga-measurement-id">
-            <span>Measurement ID</span>
-            <code>G-RDJXNN60R9</code>
+          <div class="stat-card stat-card--green">
+            <div class="stat-label">Verifiziert</div>
+            <div class="stat-value" id="stat-verified">–</div>
           </div>
-          <p style="font-size:12.5px;color:var(--ats);margin-bottom:14px;line-height:1.55;">
-            GA4-Daten sind ausschliesslich über das offizielle Google Analytics Dashboard einsehbar (Google-Login erforderlich).
-          </p>
-          <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer" class="ga-open-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Google Analytics öffnen
-          </a>
+          <div class="stat-card stat-card--amber">
+            <div class="stat-label">Ausstehend</div>
+            <div class="stat-value" id="stat-pending">–</div>
+          </div>
+          <div class="stat-card stat-card--violet">
+            <div class="stat-label">Sponsoren</div>
+            <div class="stat-value" id="stat-sponsors">–</div>
+          </div>
         </div>
 
-        <div class="dash-card">
-          <h3 class="dash-card-title">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            Schnellaktionen
-          </h3>
-          <div class="quick-action-list">
-            <button class="quick-action" data-switch-tab="jobs">
-              <div class="qa-icon" style="background:rgba(245,158,11,0.1);">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              </div>
-              Ausstehende Jobs prüfen
-              <svg class="qa-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-            <a href="index.html" target="_blank" class="quick-action">
-              <div class="qa-icon" style="background:rgba(59,130,246,0.1);">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-              </div>
-              Startseite öffnen
-              <svg class="qa-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-            <a href="about.html" target="_blank" class="quick-action">
-              <div class="qa-icon" style="background:rgba(139,92,246,0.1);">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              </div>
-              Über uns öffnen
-              <svg class="qa-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-            <button class="quick-action" data-switch-tab="sites">
-              <div class="qa-icon" style="background:rgba(16,185,129,0.1);">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              </div>
-              Alle Seiten anzeigen
-              <svg class="qa-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
+        <!-- Hero: Timeline -->
+        <div class="chart-card chart-card--hero">
+          <div class="chart-card-header">
+            <span class="chart-card-title">Neue Inserate – letzte 12 Wochen</span>
+            <span class="chart-live-badge"><span class="chart-live-dot"></span>Live</span>
+          </div>
+          <div class="chart-body" style="height:200px">
+            <canvas id="chart-timeline"></canvas>
           </div>
         </div>
-      </div>
 
-      <div class="dash-card">
-        <h3 class="dash-card-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          API & System
-        </h3>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div class="api-status-row">
-            <div id="api-dot" class="api-dot loading"></div>
-            <span id="api-status-text">Verbindung wird geprüft…</span>
+        <!-- Row: 3 Donuts -->
+        <div class="charts-row-3">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <span class="chart-card-title">Nach Kategorie</span>
+            </div>
+            <div class="chart-body" style="height:210px">
+              <canvas id="chart-category"></canvas>
+            </div>
           </div>
-          <div class="api-status-row">
-            <div class="api-dot ok"></div>
-            <span>Frontend: GitHub Pages</span>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <span class="chart-card-title">Job-Status</span>
+            </div>
+            <div class="chart-body" style="height:210px">
+              <canvas id="chart-status"></canvas>
+            </div>
           </div>
-          <div class="api-status-row" style="font-size:12px;color:var(--ats);margin-top:4px;">
-            Letzte Aktualisierung: <span id="last-updated-time" style="margin-left:6px;color:var(--at2);">–</span>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <span class="chart-card-title">Sponsoren</span>
+            </div>
+            <div class="chart-body" style="height:210px">
+              <canvas id="chart-sponsors"></canvas>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- JOBS -->
-    <div id="tab-jobs" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">Job-Verwaltung</h2>
-          <p class="panel-subtitle" id="jobs-panel-subtitle">–</p>
+        <!-- Row: Bar + Seiten -->
+        <div class="charts-row-2">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <span class="chart-card-title">Top Standorte</span>
+            </div>
+            <div class="chart-body" style="height:195px">
+              <canvas id="chart-locations"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <span class="chart-card-title">Seiten</span>
+            </div>
+            <div class="page-links-grid">
+              <a href="index.html" target="_blank" class="page-link-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <div class="page-link-text">
+                  <span class="page-link-name">Startseite</span>
+                  <span class="page-link-path">index.html</span>
+                </div>
+              </a>
+              <a href="about.html" target="_blank" class="page-link-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <div class="page-link-text">
+                  <span class="page-link-name">Über uns</span>
+                  <span class="page-link-path">about.html</span>
+                </div>
+              </a>
+              <a href="unterstuetzenLOCKED&amp;HIDDEN.html" target="_blank" class="page-link-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <div class="page-link-text">
+                  <span class="page-link-name">Unterstützen</span>
+                  <span class="page-link-path">unterstuetzen…</span>
+                </div>
+              </a>
+              <a href="legal/agb.html" target="_blank" class="page-link-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <div class="page-link-text">
+                  <span class="page-link-name">AGB</span>
+                  <span class="page-link-path">legal/agb.html</span>
+                </div>
+              </a>
+              <a href="legal/datenschutz.html" target="_blank" class="page-link-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div class="page-link-text">
+                  <span class="page-link-name">Datenschutz</span>
+                  <span class="page-link-path">legal/datenschutz.html</span>
+                </div>
+              </a>
+              <a href="legal/impressum.html" target="_blank" class="page-link-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div class="page-link-text">
+                  <span class="page-link-name">Impressum</span>
+                  <span class="page-link-path">legal/impressum.html</span>
+                </div>
+              </a>
+            </div>
+          </div>
         </div>
-        <button id="jobs-refresh-btn" class="refresh-btn">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-          Neu laden
-        </button>
-      </div>
 
-      <div class="jobs-toolbar">
-        <input type="search" id="jobs-search" class="jobs-search-input" placeholder="Suchen nach Titel, Firma, Ort…">
-        <div class="jobs-filter-tabs">
-          <button class="jobs-filter-tab active" data-filter="all">Alle</button>
-          <button class="jobs-filter-tab" data-filter="unverified">Ausstehend</button>
-          <button class="jobs-filter-tab" data-filter="verified">Verifiziert</button>
+        <!-- System Info -->
+        <div class="dash-system-row">
+          <div class="system-info-row">
+            <span class="system-info-label">API</span>
+            <span id="api-detail-text" class="system-info-value">–</span>
+          </div>
+          <div class="system-info-row">
+            <span class="system-info-label">Frontend</span>
+            <span class="system-info-value">GitHub Pages</span>
+          </div>
+          <div class="system-info-row">
+            <span class="system-info-label">Backend</span>
+            <span class="system-info-value">Google Apps Script</span>
+          </div>
+          <div class="system-info-row">
+            <span class="system-info-label">Aktualisiert</span>
+            <span class="system-info-value" id="dash-updated-at">–</span>
+          </div>
         </div>
-        <span id="jobs-count-label" class="jobs-count-label"></span>
+
       </div>
 
-      <div id="admin-job-grid" class="admin-job-grid">
-        <p class="no-jobs-msg">Jobs werden geladen…</p>
-      </div>
-    </div>
-
-    <!-- SPONSOREN -->
-    <div id="tab-sponsors" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">Sponsor-Anfragen</h2>
-          <p class="panel-subtitle" id="sponsors-panel-subtitle">–</p>
-        </div>
-        <button id="sponsors-refresh-btn" class="refresh-btn">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-          Neu laden
-        </button>
-      </div>
-      <div id="admin-sponsor-grid" class="admin-sponsor-grid">
-        <p class="no-jobs-msg">Sponsor-Anfragen werden geladen&hellip;</p>
-      </div>
-    </div>
-
-    <!-- SEITEN -->
-    <div id="tab-sites" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">Alle Seiten</h2>
-          <p class="panel-subtitle">Direktlinks zu allen Seiten der Plattform</p>
-        </div>
-      </div>
-      <div class="site-links-grid">
-        <a href="index.html" target="_blank" class="site-link-card">
-          <div class="site-link-icon" style="background:rgba(59,130,246,0.1);">🏠</div>
+      <!-- TAB: JOBS -->
+      <div id="tab-jobs" class="tab-panel hidden">
+        <div class="panel-header">
           <div>
-            <div class="site-link-title">Startseite</div>
-            <div class="site-link-url">index.html</div>
+            <h2>Job-Verwaltung</h2>
+            <p class="panel-subtitle" id="jobs-panel-subtitle">–</p>
           </div>
-        </a>
-        <a href="about.html" target="_blank" class="site-link-card">
-          <div class="site-link-icon" style="background:rgba(139,92,246,0.1);">ℹ️</div>
-          <div>
-            <div class="site-link-title">Über uns</div>
-            <div class="site-link-url">about.html</div>
+          <button id="jobs-refresh-btn" class="topbar-refresh-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Neu laden
+          </button>
+        </div>
+        <div class="jobs-toolbar">
+          <input type="search" id="jobs-search" class="toolbar-search" placeholder="Titel, Firma, Ort…">
+          <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">Alle</button>
+            <button class="filter-tab" data-filter="unverified">Ausstehend</button>
+            <button class="filter-tab" data-filter="verified">Verifiziert</button>
           </div>
-        </a>
-        <a href="unterstuetzenLOCKED&HIDDEN.html" target="_blank" class="site-link-card">
-          <div class="site-link-icon" style="background:rgba(16,185,129,0.1);">💚</div>
-          <div>
-            <div class="site-link-title">Unterstützen</div>
-            <div class="site-link-url">unterstuetzenLOCKED&amp;HIDDEN.html</div>
-          </div>
-        </a>
-        <a href="control-panel.html" target="_blank" class="site-link-card">
-          <div class="site-link-icon" style="background:rgba(6,182,212,0.1);">⚙️</div>
-          <div>
-            <div class="site-link-title">Admin Panel</div>
-            <div class="site-link-url">control-panel.html</div>
-          </div>
-        </a>
-        <a href="legal/impressum.html" target="_blank" class="site-link-card">
-          <div class="site-link-icon" style="background:rgba(245,158,11,0.1);">📄</div>
-          <div>
-            <div class="site-link-title">Impressum</div>
-            <div class="site-link-url">legal/impressum.html</div>
-          </div>
-        </a>
-        <a href="legal/datenschutz.html" target="_blank" class="site-link-card">
-          <div class="site-link-icon" style="background:rgba(239,68,68,0.1);">🔒</div>
-          <div>
-            <div class="site-link-title">Datenschutzerklärung</div>
-            <div class="site-link-url">legal/datenschutz.html</div>
-          </div>
-        </a>
-        <a href="legal/agb.html" target="_blank" class="site-link-card">
-          <div class="site-link-icon" style="background:rgba(234,179,8,0.1);">📋</div>
-          <div>
-            <div class="site-link-title">AGB</div>
-            <div class="site-link-url">legal/agb.html</div>
-          </div>
-        </a>
+        </div>
+        <div id="admin-job-grid" class="admin-job-grid">
+          <p class="empty-msg">Jobs werden geladen…</p>
+        </div>
       </div>
-    </div>
 
-  </main>
+      <!-- TAB: SPONSOREN -->
+      <div id="tab-sponsors" class="tab-panel hidden">
+        <div class="panel-header">
+          <div>
+            <h2>Sponsor-Anfragen</h2>
+            <p class="panel-subtitle" id="sponsors-panel-subtitle">–</p>
+          </div>
+          <button id="sponsors-refresh-btn" class="topbar-refresh-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Neu laden
+          </button>
+        </div>
+        <div id="admin-sponsor-grid" class="admin-sponsor-grid">
+          <p class="empty-msg">Sponsor-Anfragen werden geladen…</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
 </div>
 
-<!-- Edit Modal -->
-<div id="edit-modal" class="edit-modal hidden">
-  <div class="edit-modal-backdrop" id="edit-modal-backdrop"></div>
-  <div class="edit-modal-card">
-    <div class="edit-modal-header">
+<!-- JOB EDIT MODAL -->
+<div id="edit-modal" class="modal-overlay hidden">
+  <div class="modal-card modal-card--wide">
+    <div class="modal-header">
       <h3>Job bearbeiten</h3>
-      <button id="edit-modal-close" class="edit-modal-close" aria-label="Schliessen">×</button>
-    </div>
-    <div class="edit-note">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Backend-Voraussetzung: action "edit" muss im Google Apps Script implementiert sein.
+      <button id="edit-modal-close" class="modal-close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
     <form id="edit-form">
       <input type="hidden" id="edit-job-id">
       <div class="edit-form-body">
-        <div>
-          <label class="edit-field-label" for="edit-company">Firma</label>
-          <input type="text" id="edit-company" class="edit-input" placeholder="Firma">
-        </div>
-        <div>
-          <label class="edit-field-label" for="edit-title">Jobtitel</label>
-          <input type="text" id="edit-title" class="edit-input" placeholder="Jobtitel">
-        </div>
-        <div>
-          <label class="edit-field-label" for="edit-category">Kategorie</label>
+        <div class="form-field"><label>Firma</label><input type="text" id="edit-company" class="edit-input"></div>
+        <div class="form-field"><label>Jobtitel</label><input type="text" id="edit-title" class="edit-input"></div>
+        <div class="form-field"><label>Kategorie</label>
           <select id="edit-category" class="edit-input">
-            <option value="">Keine Angabe</option>
+            <option value="">–</option>
             <option value="Gastronomie">Gastronomie</option>
             <option value="Büro">Büro</option>
             <option value="Bau">Bau</option>
@@ -343,64 +321,42 @@
             <option value="Sonstiges">Sonstiges</option>
           </select>
         </div>
-        <div>
-          <label class="edit-field-label" for="edit-location">Ort / PLZ</label>
-          <input type="text" id="edit-location" class="edit-input" placeholder="Ort / PLZ">
-        </div>
-        <div>
-          <label class="edit-field-label" for="edit-contact">Kontakt</label>
-          <input type="text" id="edit-contact" class="edit-input" placeholder="Kontakt">
-        </div>
-        <div>
-          <label class="edit-field-label" for="edit-salary">Lohn</label>
-          <input type="text" id="edit-salary" class="edit-input" placeholder="Lohn">
-        </div>
-        <div class="span2">
-          <label class="edit-field-label" for="edit-requirements">Anforderungen</label>
-          <input type="text" id="edit-requirements" class="edit-input" placeholder="Anforderungen (optional)">
-        </div>
-        <div>
-          <label class="edit-field-label" for="edit-date-from">Von</label>
-          <input type="date" id="edit-date-from" class="edit-input">
-        </div>
-        <div>
-          <label class="edit-field-label" for="edit-date-to">Bis</label>
-          <input type="date" id="edit-date-to" class="edit-input">
-        </div>
-        <div class="span2">
-          <label class="edit-field-label" for="edit-specific-or-not">Einmalig / Dauerhaft</label>
+        <div class="form-field"><label>Ort / PLZ</label><input type="text" id="edit-location" class="edit-input"></div>
+        <div class="form-field"><label>Kontakt</label><input type="text" id="edit-contact" class="edit-input"></div>
+        <div class="form-field"><label>Lohn</label><input type="text" id="edit-salary" class="edit-input"></div>
+        <div class="form-field span2"><label>Anforderungen</label><input type="text" id="edit-requirements" class="edit-input"></div>
+        <div class="form-field"><label>Von</label><input type="date" id="edit-date-from" class="edit-input"></div>
+        <div class="form-field"><label>Bis</label><input type="date" id="edit-date-to" class="edit-input"></div>
+        <div class="form-field span2">
+          <label>Einmalig / Dauerhaft</label>
           <select id="edit-specific-or-not" class="edit-input">
-            <option value="">Keine Angabe</option>
-            <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
-            <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
+            <option value="">–</option>
+            <option value="Dauerhaft">Dauerhaft</option>
+            <option value="Spezifisch">Spezifisch</option>
           </select>
         </div>
-        <div class="span2">
-          <label class="edit-field-label" for="edit-description">Beschreibung</label>
-          <textarea id="edit-description" class="edit-input" placeholder="Beschreibung"></textarea>
-        </div>
+        <div class="form-field span2"><label>Beschreibung</label><textarea id="edit-description" class="edit-input" rows="4"></textarea></div>
       </div>
-      <div class="edit-modal-footer">
-        <button type="button" id="edit-cancel-btn" class="edit-cancel-btn">Abbrechen</button>
-        <button type="submit" id="edit-save-btn" class="edit-save-btn">Änderungen speichern</button>
+      <div class="modal-footer">
+        <button type="button" id="edit-cancel-btn" class="btn-ghost">Abbrechen</button>
+        <button type="submit" id="edit-save-btn" class="btn-primary">Speichern</button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Loading Overlay -->
-<div id="admin-loading-overlay" class="admin-loading-overlay hidden">
+<!-- LOADING OVERLAY -->
+<div id="admin-loading-overlay" class="loading-overlay hidden">
   <div class="loading-box">
     <div class="spinner"></div>
-    <p id="loading-text">Aktion wird ausgeführt…</p>
+    <p id="loading-text">Bitte warten…</p>
   </div>
 </div>
 
-<!-- Toast Container -->
+<!-- TOAST -->
 <div id="toast-container" class="toast-container"></div>
 
 <script src="api.js"></script>
 <script src="admin.js"></script>
-
 </body>
 </html>

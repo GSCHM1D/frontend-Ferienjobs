@@ -168,3 +168,4 @@ async function editJob(id, adminKey, jobData) {
     if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
     return await response.json();
 }
+
