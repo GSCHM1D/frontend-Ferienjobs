@@ -678,10 +678,63 @@ document.addEventListener("keydown", function (e) {
 });
 
 /* =========================
+   SPONSOREN
+========================= */
+
+async function loadPublicSponsors() {
+    const section = document.getElementById("sponsors-section");
+    const grid    = document.getElementById("sponsors-grid");
+    if (!section || !grid) return;
+
+    try {
+        const sponsors = await getPublicSponsors();
+        if (!Array.isArray(sponsors) || sponsors.length === 0) return;
+
+        grid.innerHTML = "";
+
+        sponsors.forEach(function(s) {
+            const hasWebsite = Boolean(s.website);
+            const tile = document.createElement(hasWebsite ? "a" : "div");
+            tile.className = "sponsor-tile";
+
+            if (hasWebsite) {
+                tile.href   = s.website.startsWith("http") ? s.website : "https://" + s.website;
+                tile.target = "_blank";
+                tile.rel    = "noopener noreferrer";
+                tile.title  = s.company || "";
+            }
+
+            const logoBox = el("div", "sponsor-tile-logo-box");
+
+            if (s.logo) {
+                const img = document.createElement("img");
+                img.className = "sponsor-tile-img";
+                img.src = s.logo;
+                img.alt = String(s.company || "") + " Logo";
+                logoBox.appendChild(img);
+            } else {
+                const fallback = el("div", "sponsor-tile-fallback");
+                fallback.textContent = String(s.company || "?")[0].toUpperCase();
+                logoBox.appendChild(fallback);
+            }
+
+            tile.appendChild(logoBox);
+            tile.appendChild(el("span", "sponsor-tile-name", s.company || ""));
+            grid.appendChild(tile);
+        });
+
+        section.style.display = "";
+    } catch {
+        /* Keine Sponsoren oder API nicht erreichbar: Abschnitt bleibt versteckt */
+    }
+}
+
+/* =========================
    START
 ========================= */
 
 initDisclaimerGate();
 initCookieBanner();
-renderTestimonials()
+renderTestimonials();
 loadJobs();
+loadPublicSponsors();

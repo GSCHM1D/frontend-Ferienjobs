@@ -93,26 +93,6 @@ async function checkAdminKey(adminKey) {
 }
 
 /* =========================
-   JOB BEARBEITEN
-========================= */
-async function editJob(id, adminKey, jobData) {
-    const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "text/plain" // text/plain als CORS-Workaround für Google Apps Script
-        },
-        body: JSON.stringify({
-            action: "edit",
-            id: id,
-            adminKey: adminKey,
-            ...jobData
-        })
-    });
-    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
-    return await response.json();
-}
-
-/* =========================
    SPONSOR ANFRAGE SENDEN
 ========================= */
 async function createSponsor(sponsorData) {
@@ -164,6 +144,26 @@ async function deleteSponsor(id, adminKey) {
         method: "POST",
         headers: { "Content-Type": "text/plain" },
         body: JSON.stringify({ action: "deleteSponsor", id: id, adminKey: adminKey })
+    });
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
+
+/* =========================
+   JOB BEARBEITEN
+========================= */
+async function editJob(id, adminKey, jobData) {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain" // text/plain als CORS-Workaround für Google Apps Script
+        },
+        body: JSON.stringify({
+            action: "edit",
+            id: id,
+            adminKey: adminKey,
+            ...jobData
+        })
     });
     if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
     return await response.json();

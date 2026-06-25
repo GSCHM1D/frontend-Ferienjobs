@@ -311,6 +311,48 @@
     .pay-card--bank::before { background: linear-gradient(90deg, var(--c6), var(--c4)); }
     .pay-card--stripe::before { background: linear-gradient(90deg, #6772e5, #a78bfa, #f0abfc); }
 
+    /* ── STRIPE DEAKTIVIERT (coming soon) ── */
+    .pay-card--disabled {
+      opacity: 0.42;
+      pointer-events: none;
+      user-select: none;
+      filter: grayscale(0.55);
+    }
+    .pay-card--disabled:hover {
+      transform: none !important;
+      box-shadow: 0 12px 32px rgba(15,23,42,0.08) !important;
+    }
+    .coming-soon-badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: rgba(103,114,229,0.12);
+      color: #a78bfa;
+      border: 1px solid rgba(103,114,229,0.28);
+      border-radius: 999px;
+      padding: 4px 13px;
+      pointer-events: none;
+    }
+
+    /* ── HINT UNTERHALB PAY-GRID ── */
+    .support-sponsor-hint {
+      margin-top: 28px;
+      font-size: 13.5px;
+      font-weight: 400;
+      color: #64748b;
+      line-height: 1.6;
+    }
+    .support-sponsor-hint a {
+      color: #2563eb;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .support-sponsor-hint a:hover { text-decoration: underline; }
+
     .pay-icon {
       width: 52px;
       height: 52px;
@@ -605,6 +647,31 @@
     .d3 { transition-delay: 0.3s; }
     .d4 { transition-delay: 0.4s; }
 
+    /* ── LOGO UPLOAD ─────────────────────────────── */
+    .logo-upload-area {
+      border: 2px dashed rgba(39,240,216,0.22);
+      border-radius: 15px;
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.22s, background 0.22s;
+      background: rgba(255,255,255,0.03);
+      position: relative;
+      user-select: none;
+    }
+    .logo-upload-area:hover { border-color: rgba(39,240,216,0.44); background: rgba(39,240,216,0.04); }
+    .logo-upload-area.drag-over { border-color: var(--c4); background: rgba(39,240,216,0.07); }
+    .logo-upload-area.has-file { border-color: rgba(116,239,85,0.38); background: rgba(116,239,85,0.04); }
+    .logo-upload-placeholder { display: flex; flex-direction: column; align-items: center; gap: 5px; color: rgba(255,255,255,0.32); font-size: 13.5px; pointer-events: none; }
+    .logo-upload-placeholder svg { opacity: 0.45; }
+    .logo-upload-placeholder span { color: rgba(255,255,255,0.52); font-weight: 500; }
+    .logo-upload-placeholder small { font-size: 11.5px; }
+    .logo-preview-wrap { display: none; align-items: center; gap: 12px; }
+    .logo-preview-img { max-width: 60px; max-height: 44px; object-fit: contain; border-radius: 8px; background: rgba(255,255,255,0.06); padding: 6px; border: 1px solid rgba(255,255,255,0.1); }
+    .logo-preview-name { font-size: 12.5px; color: rgba(255,255,255,0.48); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; }
+    .logo-remove-btn { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.24); color: #ef4444; width: 26px; height: 26px; border-radius: 7px; font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; line-height: 1; font-weight: 300; transition: background 0.15s; padding: 0; box-shadow: none; margin-top: 0; }
+    .logo-remove-btn:hover { background: rgba(239,68,68,0.22); }
+
     /* ── RESPONSIVE ──────────────────────────────────── */
     @media (max-width: 720px) {
       .pay-grid { grid-template-columns: 1fr; }
@@ -638,7 +705,6 @@
           Jetzt unterstützen
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
-        <a href="#sponsor" class="cta cta-ghost">Sponsor werden</a>
       </div>
     </div>
 
@@ -656,7 +722,7 @@
       <p class="eyebrow fade-up">Deine Unterstützung</p>
       <h2 class="section-heading fade-up d1">Jede Hilfe zählt.</h2>
       <p class="section-lead fade-up d2">
-        Wähle die Methode, die dir am liebsten ist. Kein Konto nötig – einfach überweisen oder online bezahlen.
+        Wähle Sie die Methode, die Ihnen am liebsten ist. 
       </p>
 
       <div class="pay-grid">
@@ -670,25 +736,25 @@
             </svg>
           </div>
           <h3 class="pay-title">Banküberweisung</h3>
-          <p class="pay-desc">Direkte Überweisung ohne Gebühren. Klick auf das Symbol um einen Wert zu kopieren.</p>
+          <p class="pay-desc">Direkte Überweisung ohne Gebühren. Klicken Sie auf das Symbol um einen Wert zu kopieren.</p>
           <div class="iban-list">
             <div class="iban-row">
               <span class="iban-label">Empfänger</span>
-              <span class="iban-value">holidayjob.ch</span>
+              <span class="iban-value">Gabriel Schmid - holidayjob.ch</span>
               <button class="copy-btn" data-copy="holidayjob.ch" title="Kopieren" aria-label="Empfänger kopieren">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </button>
             </div>
             <div class="iban-row">
               <span class="iban-label">IBAN</span>
-              <span class="iban-value" id="val-iban">[IBAN einsetzen]</span>
+              <span class="iban-value" id="val-iban">CH24 0027 6276 1228 9640 G</span>
               <button class="copy-btn" data-target="val-iban" title="IBAN kopieren" aria-label="IBAN kopieren">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </button>
             </div>
             <div class="iban-row">
               <span class="iban-label">BIC</span>
-              <span class="iban-value" id="val-bic">[BIC einsetzen]</span>
+              <span class="iban-value" id="val-bic">UBSWCHZH80A</span>
               <button class="copy-btn" data-target="val-bic" title="BIC kopieren" aria-label="BIC kopieren">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </button>
@@ -697,7 +763,9 @@
         </div>
 
         <!-- Stripe / Online -->
-        <div class="pay-card pay-card--stripe fade-up d3">
+        <!-- STRIPE DEAKTIVIERT: Klassen pay-card--disabled + coming-soon-badge-Element entfernen zum Reaktivieren -->
+        <div class="pay-card pay-card--stripe pay-card--disabled fade-up d3">
+          <div class="coming-soon-badge">Bald verfügbar</div>
           <div class="pay-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
@@ -709,10 +777,13 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
             Jetzt via Stripe unterstützen
           </a>
-          <p class="stripe-note">Sicher & verschlüsselt über Stripe. Du wirst weitergeleitet.</p>
+          <p class="stripe-note">Sicher & verschlüsselt über Stripe. Sie werden weitergeleitet.</p>
         </div>
 
       </div>
+      <p class="support-sponsor-hint fade-up">
+        Möchten Sie auf der Plattform als Unterstützer erscheinen? Nach Ihrem Beitrag einfach <a href="#sponsor">das Formular unten ausfüllen →</a>
+      </p>
     </div>
   </section>
 
@@ -722,9 +793,9 @@
   <section id="sponsor">
     <div class="sponsor-wrap">
       <span class="sponsor-badge fade-up">Für Unternehmen</span>
-      <h2 class="sponsor-title fade-up d1">Werde Teil<br>unserer Geschichte.</h2>
+      <h2 class="sponsor-title fade-up d1">Werden Sie Teil<br>unserer Geschichte.</h2>
       <p class="sponsor-lead fade-up d2">
-        Als Sponsor wirst du sichtbar – auf der Plattform, die täglich von Jugendlichen und Unternehmen aus der ganzen Schweiz besucht wird.
+        Als Sponsor werden Sie sichtbar – auf der Plattform, die täglich von Jugendlichen und Unternehmen aus der ganzen Schweiz besucht wird.
       </p>
       <div class="perks fade-up d2">
         <span class="perk"><span class="perk-dot" style="background:var(--c4)"></span>Logo auf der Plattform</span>
@@ -734,11 +805,26 @@
       <form class="sponsor-form fade-up d3" id="sponsor-form">
         <input class="s-input" type="text" id="sp-company" placeholder="Name des Unternehmens" required autocomplete="organization">
         <input class="s-input" type="email" id="sp-email" placeholder="E-Mail-Adresse" required autocomplete="email">
-        <input class="s-input" type="url" id="sp-website" placeholder="Website (optional)" autocomplete="url">
-        <button type="submit" class="s-submit">Anfrage senden →</button>
+        <input class="s-input" type="text" id="sp-website" placeholder="Website (optional, z. B. beispiel.ch)" autocomplete="url">
+
+        <div class="logo-upload-area" id="logo-drop-zone">
+          <input type="file" id="sp-logo" accept="image/png,image/jpeg,image/webp" hidden>
+          <div class="logo-upload-placeholder" id="logo-placeholder">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Firmen-Logo hochladen</span>
+            <small>PNG oder JPG · optional · max 5 MB</small>
+          </div>
+          <div class="logo-preview-wrap" id="logo-preview-wrap">
+            <img id="logo-preview-img" class="logo-preview-img" src="" alt="Logo-Vorschau">
+            <span id="logo-file-name" class="logo-preview-name"></span>
+            <button type="button" id="logo-remove-btn" class="logo-remove-btn">&#215;</button>
+          </div>
+        </div>
+
+        <button type="submit" class="s-submit">Anfrage senden &#8594;</button>
       </form>
       <p class="sponsor-confirm" id="sponsor-confirm">
-        <strong>Danke!</strong> Wir haben deine Anfrage erhalten und melden uns so schnell wie möglich.
+        <strong>Danke!</strong> Wir haben Ihre Anfrage erhalten und melden uns so schnell wie möglich.
       </p>
     </div>
   </section>
@@ -753,6 +839,7 @@
     </a>
   </footer>
 
+  <script src="api.js"></script>
   <script>
     /* ── CANVAS PARTICLES ────────────────────────────── */
     (function () {
@@ -897,12 +984,79 @@
 
     document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
 
+    /* ── LOGO UPLOAD ─────────────────────────────────── */
+    var logoBase64 = null;
+    var dropZone   = document.getElementById('logo-drop-zone');
+    var fileInput  = document.getElementById('sp-logo');
+
+    dropZone.addEventListener('click', function(e) {
+      if (e.target.id !== 'logo-remove-btn') fileInput.click();
+    });
+    dropZone.addEventListener('dragover', function(e) {
+      e.preventDefault(); dropZone.classList.add('drag-over');
+    });
+    dropZone.addEventListener('dragleave', function() {
+      dropZone.classList.remove('drag-over');
+    });
+    dropZone.addEventListener('drop', function(e) {
+      e.preventDefault(); dropZone.classList.remove('drag-over');
+      if (e.dataTransfer.files[0]) processLogo(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', function() {
+      if (fileInput.files[0]) processLogo(fileInput.files[0]);
+    });
+
+    function processLogo(file) {
+      if (file.size > 5 * 1024 * 1024) { alert('Logo ist zu gross (max 5 MB).'); return; }
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        var img = new Image();
+        img.onload = function() {
+          var MAX = 160, w = img.width, h = img.height;
+          if (w > MAX || h > MAX) { var r = Math.min(MAX/w, MAX/h); w = Math.round(w*r); h = Math.round(h*r); }
+          var canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          logoBase64 = canvas.toDataURL('image/jpeg', 0.72);
+          document.getElementById('logo-preview-img').src = logoBase64;
+          document.getElementById('logo-file-name').textContent = file.name;
+          document.getElementById('logo-placeholder').style.display  = 'none';
+          document.getElementById('logo-preview-wrap').style.display = 'flex';
+          dropZone.classList.add('has-file');
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    document.getElementById('logo-remove-btn').addEventListener('click', function(e) {
+      e.stopPropagation();
+      logoBase64 = null; fileInput.value = '';
+      document.getElementById('logo-placeholder').style.display  = '';
+      document.getElementById('logo-preview-wrap').style.display = 'none';
+      dropZone.classList.remove('has-file');
+    });
+
     /* ── SPONSOR FORM ────────────────────────────────── */
-    document.getElementById('sponsor-form').addEventListener('submit', e => {
+    document.getElementById('sponsor-form').addEventListener('submit', function(e) {
       e.preventDefault();
-      /* production: send to backend / email service */
-      document.getElementById('sponsor-form').style.display    = 'none';
-      document.getElementById('sponsor-confirm').style.display = 'block';
+      var btn = document.querySelector('.s-submit');
+      btn.disabled    = true;
+      btn.textContent = 'Wird gesendet...';
+      createSponsor({
+        company: document.getElementById('sp-company').value.trim(),
+        email:   document.getElementById('sp-email').value.trim(),
+        website: document.getElementById('sp-website').value.trim(),
+        logo:    logoBase64 || ''
+      }).then(function(result) {
+        if (!result.success) throw new Error(result.message || 'Fehler');
+        document.getElementById('sponsor-form').style.display    = 'none';
+        document.getElementById('sponsor-confirm').style.display = 'block';
+      }).catch(function(err) {
+        btn.disabled    = false;
+        btn.textContent = 'Anfrage senden →';
+        alert('Fehler beim Senden: ' + (err && err.message ? err.message : err));
+      });
     });
   </script>
 </body>
