@@ -214,9 +214,42 @@ const testimonials = [
 /* =========================
    JOBS LADEN UND ANZEIGEN
 ========================= */
+function renderJobSkeletons(count = 6) {
+    jobList.innerHTML = "";
+    for (let i = 0; i < count; i++) {
+        const sk = el("div", "skeleton-card");
+        sk.appendChild(el("div", "skeleton-line w40"));
+        sk.appendChild(el("div", "skeleton-line w70"));
+        sk.appendChild(el("div", "skeleton-line w55"));
+        sk.appendChild(el("div", "skeleton-line"));
+        sk.appendChild(el("div", "skeleton-line tall"));
+        jobList.appendChild(sk);
+    }
+}
+
 async function loadJobs() {
-    allJobs = await getJobs();
+    renderJobSkeletons();
+    try {
+        allJobs = await getJobs();
+    } catch (error) {
+        console.error(error);
+        allJobs = [];
+        jobList.innerHTML = "";
+        const box = el("div", "jobs-empty");
+        box.appendChild(el("strong", null, "Jobs konnten nicht geladen werden."));
+        box.appendChild(el("span", null, "Bitte versuche es in ein paar Minuten erneut."));
+        jobList.appendChild(box);
+        return;
+    }
     renderJobs();
+}
+
+/* Ist das Inserat jünger als 7 Tage? */
+function isNewJob(job) {
+    if (!job.createdAt) return false;
+    const created = new Date(job.createdAt);
+    if (isNaN(created.getTime())) return false;
+    return Date.now() - created.getTime() < 7 * 24 * 60 * 60 * 1000;
 }
 
 /* =========================
@@ -369,10 +402,25 @@ function renderJobs() {
         });
     }
 
+    /* Schnellsuche (Titel / Firma / Ort) */
+    if (quickSearchQuery) {
+        visibleJobs = visibleJobs.filter(job =>
+            String(job.title || "").toLowerCase().includes(quickSearchQuery) ||
+            String(job.company || "").toLowerCase().includes(quickSearchQuery) ||
+            String(job.location || "").toLowerCase().includes(quickSearchQuery)
+        );
+    }
+
+    syncCategoryChips();
+    updateJobsCount(visibleJobs.length);
+
     jobList.innerHTML = "";
 
     if (visibleJobs.length === 0) {
-        jobList.appendChild(el("p", null, "Keine Jobs gefunden."));
+        const box = el("div", "jobs-empty");
+        box.appendChild(el("strong", null, "Keine Jobs gefunden."));
+        box.appendChild(el("span", null, "Passe die Suche oder Filter an – oder schau später wieder vorbei."));
+        jobList.appendChild(box);
         return;
     }
 
@@ -381,7 +429,10 @@ function renderJobs() {
         const card = el("div", "job-card public-job-card");
 
         const top = el("div", "job-card-top");
-        if (job.category) top.appendChild(el("span", "job-category-badge", job.category));
+        const badgeRow = el("div", "job-badge-row");
+        if (job.category) badgeRow.appendChild(el("span", "job-category-badge", job.category));
+        if (isNewJob(job)) badgeRow.appendChild(el("span", "job-new-badge", "Neu"));
+        if (badgeRow.childNodes.length > 0) top.appendChild(badgeRow);
         top.appendChild(el("h3", "job-title", job.title));
         top.appendChild(el("p", "job-company", job.company));
         card.appendChild(top);
@@ -735,6 +786,44 @@ async function loadPublicSponsors() {
 
 initDisclaimerGate();
 initCookieBanner();
+/* =========================
+   SCHNELLSUCHE + KATEGORIE-CHIPS
+========================= */
+let quickSearchQuery = "";
+
+const quickSearchInput = document.getElementById("job-quick-search");
+const jobsCountLabel = document.getElementById("jobs-count");
+const categoryChips = document.querySelectorAll(".job-chip");
+
+if (quickSearchInput) {
+    quickSearchInput.addEventListener("input", function () {
+        quickSearchQuery = quickSearchInput.value.trim().toLowerCase();
+        renderJobs();
+    });
+}
+
+categoryChips.forEach(chip => {
+    chip.addEventListener("click", function () {
+        const cat = chip.dataset.cat || "";
+        activeFilters.category = cat;
+        if (searchCategoryInput) searchCategoryInput.value = cat;
+        trackEvent("category_chip_used");
+        renderJobs();
+    });
+});
+
+/* Chips folgen dem aktiven Kategorie-Filter (auch aus dem Popup) */
+function syncCategoryChips() {
+    categoryChips.forEach(chip => {
+        chip.classList.toggle("active", (chip.dataset.cat || "") === (activeFilters.category || ""));
+    });
+}
+
+function updateJobsCount(n) {
+    if (!jobsCountLabel) return;
+    jobsCountLabel.textContent = n === 1 ? "1 Job online" : n + " Jobs online";
+}
+
 renderTestimonials();
 loadJobs();
 loadPublicSponsors();

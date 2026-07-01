@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ferienjob-Wissen – Alter, Lohn & Regeln | holidayjob.ch</title>
+  <meta name="description" content="Ab wann darf ich arbeiten? Was ist ein fairer Lohn? Was gilt für Unternehmen? Das Wichtigste rund um Ferienjobs in der Schweiz – kompakt erklärt.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="icons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="theme-color" content="#f7f9fd">
+  <style>
+    /* ── Seitenspezifisch: Wissen ── */
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .fact-tile {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .fact-tile .fact-k {
+      font-family: var(--ff-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+    .fact-tile .fact-v {
+      font-family: var(--ff-head);
+      font-weight: 800;
+      font-size: 26px;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .fact-tile .fact-d {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-body);
+      margin: 0;
+    }
+    @media (max-width: 900px) { .facts-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .facts-grid { grid-template-columns: 1fr; } }
+
+    /* Platzhalter-Markierung: Angaben, die der Betreiber prüfen/füllen sollte */
+    .ph {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px dashed rgba(245, 158, 11, 0.5);
+      color: #92610a;
+      font-family: var(--ff-mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .law-note {
+      margin-top: 18px;
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text-soft);
+    }
+
+    .check-list { display: flex; flex-direction: column; gap: 10px; }
+    .check-item {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 13px;
+      padding: 15px 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      align-items: start;
+    }
+    .check-item .ck {
+      width: 26px; height: 26px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-family: var(--ff-mono);
+      font-size: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 2px;
+    }
+    .check-item strong {
+      display: block;
+      font-family: var(--ff-head);
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-bottom: 3px;
+    }
+    .check-item p { margin: 0; font-size: 13.5px; line-height: 1.55; }
+
+    .audience-label {
+      margin: 26px 0 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ TOPBAR ═══════════ -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="topbar-brand">
+        <img src="icons/main_logo_transparent.png" alt="holidayjob.ch">
+        <span>holiday<b>job</b>.ch</span>
+      </a>
+      <nav class="topbar-nav" aria-label="Hauptnavigation">
+        <a href="index.html#jobs" class="topbar-link">Jobs</a>
+        <a href="wissen.html" class="topbar-link active">Wissen</a>
+        <a href="about.html" class="topbar-link">Über uns</a>
+        <a href="unterstuetzen.html" class="topbar-link">Unterstützen</a>
+      </nav>
+      <a href="index.html#post-job-section" class="topbar-cta">Job inserieren</a>
+    </div>
+  </header>
+
+  <!-- ═══════════ PAGE HERO ═══════════ -->
+  <div class="page-hero anim-rise">
+    <span class="kicker">Ferienjob-Wissen</span>
+    <h1>Alles, was du vor dem ersten Job wissen musst.</h1>
+    <p class="lead">Alter, Lohn, Arbeitszeiten, Versicherung – die wichtigsten Antworten für Jugendliche und Unternehmen. Kompakt, verständlich, ohne Juristendeutsch.</p>
+  </div>
+
+  <main class="site-main">
+
+    <!-- ═══════════ QUICK FACTS ═══════════ -->
+    <section class="panel anim-rise d1">
+      <span class="section-eyebrow">Das Wichtigste in Kürze</span>
+      <div class="section-head"><h2>Vier Zahlen, die du kennen solltest</h2></div>
+      <div class="facts-grid">
+        <div class="fact-tile">
+          <span class="fact-k">Leichte Arbeiten ab</span>
+          <span class="fact-v">13 Jahren</span>
+          <p class="fact-d">z. B. Botengänge, Nachhilfe, Gartenhilfe – in begrenztem Umfang. <span class="ph">Angabe prüfen</span></p>
+        </div>
+        <div class="fact-tile">
+          <span class="fact-k">Reguläre Jobs ab</span>
+          <span class="fact-v">15 Jahren</span>
+          <p class="fact-d">Nach Ende der obligatorischen Schulzeit gelten die Jugendschutz-Regeln des Arbeitsgesetzes. <span class="ph">Angabe prüfen</span></p>
+        </div>
+        <div class="fact-tile">
+          <span class="fact-k">Üblicher Stundenlohn</span>
+          <span class="fact-v">CHF 13–20</span>
+          <p class="fact-d">Je nach Alter, Region und Aufgabe – Richtwert, kein gesetzliches Minimum. <span class="ph">Angabe prüfen</span></p>
+        </div>
+        <div class="fact-tile">
+          <span class="fact-k">AHV-Pflicht ab</span>
+          <span class="fact-v">17 Jahren</span>
+          <p class="fact-d">Ab dem 1. Januar nach dem 17. Geburtstag werden AHV-Beiträge fällig. <span class="ph">Angabe prüfen</span></p>
+        </div>
+      </div>
+      <p class="law-note">
+        Diese Seite fasst allgemeine Informationen zusammen und ersetzt keine Rechtsberatung.
+        Massgeblich sind das Schweizer Arbeitsgesetz (ArG) und die Jugendarbeitsschutzverordnung (ArGV 5).
+        Verbindliche Auskünfte gibt das kantonale Arbeitsinspektorat.
+      </p>
+    </section>
+
+    <!-- ═══════════ FAQ ═══════════ -->
+    <section class="panel anim-rise d2">
+      <span class="section-eyebrow">Fragen &amp; Antworten</span>
+      <div class="section-head"><h2>Häufige Fragen</h2></div>
+
+      <p class="audience-label"><span class="kicker">Für Jugendliche</span></p>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Ab welchem Alter darf ich einen Ferienjob machen?</summary>
+          <div class="faq-body">
+            <p>Leichte Arbeiten wie Botengänge, Babysitten oder Gartenhilfe sind in der Schweiz ab <strong>13 Jahren</strong> erlaubt – zeitlich begrenzt und ohne Gefährdung. Reguläre Jobs sind ab <strong>15 Jahren</strong> möglich. Für alles unter 18 gelten besondere Schutzregeln (keine Nachtarbeit, keine gefährlichen Arbeiten). <span class="ph">Details prüfen</span></p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Wie viele Stunden darf ich arbeiten?</summary>
+          <div class="faq-body">
+            <p>Während der Schulzeit gelten enge Grenzen; in den Ferien dürfen Jugendliche ab 15 in der Regel bis zu <strong>8 Stunden pro Tag</strong> (max. 40 Stunden pro Woche) arbeiten – höchstens während der halben Feriendauer. Zwischen 20 Uhr und 6 Uhr ist Arbeit für Schulpflichtige nicht erlaubt. <span class="ph">Details prüfen</span></p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Was ist ein fairer Lohn?</summary>
+          <div class="faq-body">
+            <p>Es gibt keinen gesetzlichen Mindestlohn für Ferienjobs (ausser in einzelnen Kantonen). Üblich sind je nach Alter und Aufgabe etwa <strong>CHF 13–20 pro Stunde</strong>. Vergleiche ähnliche Inserate auf der Plattform – und sprich den Lohn immer <em>vor</em> dem ersten Einsatz ab. <span class="ph">Richtwerte prüfen</span></p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Muss ich AHV zahlen oder Steuern abrechnen?</summary>
+          <div class="faq-body">
+            <p>AHV-Beiträge werden ab dem 1. Januar nach deinem <strong>17. Geburtstag</strong> fällig – vorher nicht. Bei kleinen Löhnen bleibt meist alles unkompliziert; dein Lohn gehört aber grundsätzlich in die Steuererklärung deiner Eltern bzw. später deine eigene. <span class="ph">Details prüfen</span></p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Bin ich beim Ferienjob versichert?</summary>
+          <div class="faq-body">
+            <p>Unfallversicherung: Bei mehr als 8 Stunden pro Woche beim gleichen Arbeitgeber bist du auch ausserhalb der Arbeit (Nichtberufsunfall) über ihn versichert, darunter nur während der Arbeit. Kläre das kurz mit dem Unternehmen – und behalte deine Krankenkasse im Blick. <span class="ph">Details prüfen</span></p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Brauchen meine Eltern zuzustimmen?</summary>
+          <div class="faq-body">
+            <p>Ja – solange du minderjährig bist, braucht es das Einverständnis deiner Eltern oder deiner gesetzlichen Vertretung. Bei vielen Jobs reicht das mündlich, schriftlich ist es aber für beide Seiten sicherer.</p>
+          </div>
+        </details>
+      </div>
+
+      <p class="audience-label"><span class="kicker">Für Unternehmen</span></p>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Was muss ich beachten, wenn ich Jugendliche beschäftige?</summary>
+          <div class="faq-body">
+            <p>Für Mitarbeitende unter 18 gelten die Jugendschutzbestimmungen (ArGV 5): keine gefährlichen Arbeiten, begrenzte Arbeitszeiten, keine Nachtarbeit. Bei Schulpflichtigen sind die Grenzen enger. Eine kurze schriftliche Vereinbarung (Einsatz, Lohn, Dauer) schafft Klarheit. <span class="ph">Details prüfen</span></p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Wie inseriere ich auf holidayjob.ch?</summary>
+          <div class="faq-body">
+            <p>Direkt auf der <a href="index.html#post-job-section">Startseite</a>: Formular ausfüllen, absenden – fertig. Kein Konto, keine Kosten. Wir prüfen jedes Inserat kurz, bevor es öffentlich erscheint. Danach melden sich Interessierte direkt bei dir.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Was kostet ein Inserat?</summary>
+          <div class="faq-body">
+            <p>Nichts. holidayjob.ch ist ein unabhängiges Projekt zweier Schüler – Inserate sind kostenlos, es gibt keine Provision. Wer das Projekt unterstützen möchte, kann das freiwillig über die <a href="unterstuetzen.html">Unterstützen-Seite</a> tun.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ═══════════ CHECKLISTE ═══════════ -->
+    <section class="panel anim-rise d3">
+      <span class="section-eyebrow">Checkliste</span>
+      <div class="section-head"><h2>In 5 Schritten zur ersten Zusage</h2></div>
+      <div class="check-list">
+        <div class="check-item">
+          <span class="ck">1</span>
+          <div><strong>Job aussuchen &amp; Inserat genau lesen</strong><p>Passt der Zeitraum? Erfüllst du die Anforderungen? Notiere dir, was im Inserat steht – darauf beziehst du dich bei der Kontaktaufnahme.</p></div>
+        </div>
+        <div class="check-item">
+          <span class="ck">2</span>
+          <div><strong>Eltern kurz informieren</strong><p>Bei Minderjährigen braucht es ihr Einverständnis – und sie haben oft gute Tipps für den ersten Kontakt.</p></div>
+        </div>
+        <div class="check-item">
+          <span class="ck">3</span>
+          <div><strong>Melden – kurz, freundlich, konkret</strong><p>Zwei, drei Sätze reichen: Wer du bist, warum der Job passt, wann du verfügbar bist. Am Telefon: vorher Stichworte aufschreiben.</p></div>
+        </div>
+        <div class="check-item">
+          <span class="ck">4</span>
+          <div><strong>Details vor dem Start klären</strong><p>Lohn, Arbeitszeiten, Kleidung, Treffpunkt – lieber einmal zu viel gefragt als am ersten Tag überrascht.</p></div>
+        </div>
+        <div class="check-item">
+          <span class="ck">5</span>
+          <div><strong>Zuverlässig sein</strong><p>Pünktlich erscheinen, absagen wenn etwas dazwischenkommt, nachfragen statt raten. So wirst du auch nächsten Sommer wieder gefragt.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ CTA ═══════════ -->
+    <div class="cta-band anim-rise">
+      <div>
+        <h2>Bereit? Die Jobs warten.</h2>
+        <p>Alle aktuellen Ferienjobs auf einen Blick – kostenlos und ohne Anmeldung.</p>
+      </div>
+      <a href="index.html#jobs" class="btn btn-solid">Jobs ansehen</a>
+    </div>
+
+  </main>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="foot">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <img src="icons/main_logo_transparent.png" alt="holidayjob.ch">
+        <p>Die Schweizer Plattform für Ferienjobs, Aushilfejobs und temporäre Einsätze. Von zwei Schülern gebaut – für alle, die loslegen wollen.</p>
+        <a href="https://www.instagram.com/holidayjob.ch/" target="_blank" rel="noopener noreferrer" class="foot-social" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3zm11.5 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/></svg>
+          @holidayjob.ch
+        </a>
+      </div>
+      <div>
+        <h4>Entdecken</h4>
+        <ul>
+          <li><a href="index.html#jobs">Alle Ferienjobs</a></li>
+          <li><a href="index.html#post-job-section">Job inserieren</a></li>
+          <li><a href="wissen.html">Ferienjob-Wissen</a></li>
+          <li><a href="about.html">Über uns</a></li>
+          <li><a href="unterstuetzen.html">Unterstützen</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="/legal/impressum.html">Impressum</a></li>
+          <li><a href="/legal/datenschutz.html">Datenschutz</a></li>
+          <li><a href="/legal/agb.html">AGB</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontakt</h4>
+        <address>
+          Gabriel Schmid &amp; Lucas Laverty<br>
+          Bollackerweg 23a<br>
+          5024 Küttigen, Schweiz<br>
+          <a href="mailto:holidayjob.ch@gmail.com">holidayjob.ch@gmail.com</a>
+        </address>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div class="foot-bottom-inner">
+        <span>© 2026 holidayjob.ch – alle Rechte vorbehalten</span>
+        <span class="foot-legal-note">Made in Aarau · CH</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

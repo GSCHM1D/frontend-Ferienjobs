@@ -1,276 +1,463 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Über uns – holidayjob.ch</title>
-  <link rel="stylesheet" href="about.css" />
+  <meta name="description" content="Zwei Aargauer Schüler, eine Idee: holidayjob.ch macht Ferienjobs in der Schweiz einfach zugänglich. Die Geschichte hinter der Plattform.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="icons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="theme-color" content="#f7f9fd">
+  <style>
+    /* ── Seitenspezifisch: Über uns ── */
+    .about-lede {
+      font-size: clamp(16px, 1.9vw, 19px);
+      line-height: 1.6;
+      max-width: 720px;
+    }
+    .about-lede + .about-lede { margin-top: 6px; }
 
+    /* Team */
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .team-card {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 22px;
+    }
+    .team-photo {
+      width: 76px; height: 76px;
+      flex-shrink: 0;
+      border-radius: 18px;
+      background:
+        radial-gradient(120% 120% at 80% 10%, rgba(91,155,255,0.35), transparent 55%),
+        var(--navy);
+      color: #fff;
+      font-family: var(--ff-head);
+      font-weight: 800;
+      font-size: 24px;
+      display: flex; align-items: center; justify-content: center;
+      letter-spacing: -0.02em;
+    }
+    .team-name { font-size: 18px; margin-bottom: 2px; }
+    .team-role {
+      font-family: var(--ff-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin: 0 0 10px;
+    }
+    .team-quote {
+      margin: 0;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--text-body);
+    }
+    @media (max-width: 760px) { .team-grid { grid-template-columns: 1fr; } }
+
+    /* Impact — Zahlen im Navy-Band */
+    .impact-band {
+      background:
+        radial-gradient(120% 140% at 90% 0%, rgba(91, 155, 255, 0.2), transparent 55%),
+        var(--navy);
+      border-radius: var(--radius-lg);
+      padding: clamp(26px, 4vw, 44px);
+      margin-bottom: 20px;
+      color: #eaf0fb;
+    }
+    .impact-band .section-eyebrow { color: var(--sky); }
+    .impact-band .section-eyebrow::before { background: var(--sky); }
+    .impact-band h2 { color: #fff; margin-bottom: 24px; }
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .impact-tile b {
+      display: block;
+      font-family: var(--ff-head);
+      font-weight: 800;
+      font-size: clamp(30px, 3.6vw, 44px);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: #fff;
+    }
+    .impact-tile b .plus { color: var(--sky); }
+    .impact-tile .lbl {
+      display: block;
+      margin-top: 8px;
+      font-family: var(--ff-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(234, 240, 251, 0.65);
+    }
+    .impact-tile .dsc {
+      display: block;
+      margin-top: 7px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(234, 240, 251, 0.55);
+    }
+    @media (max-width: 900px) { .impact-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .impact-grid { grid-template-columns: 1fr; } }
+
+    /* Presse */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .article-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      overflow: hidden;
+      text-decoration: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .article-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(23, 105, 255, 0.35);
+      box-shadow: var(--shadow-hover);
+      text-decoration: none;
+    }
+    .article-img-wrap {
+      position: relative;
+      aspect-ratio: 16 / 8.4;
+      overflow: hidden;
+      background: var(--surface-soft);
+    }
+    .article-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+    .article-card:hover .article-img { transform: scale(1.035); }
+    .article-source {
+      position: absolute;
+      left: 12px; bottom: 12px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(11, 27, 58, 0.82);
+      color: #fff;
+      font-family: var(--ff-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      backdrop-filter: blur(4px);
+    }
+    .article-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; }
+    .article-title {
+      font-size: 16.5px;
+      line-height: 1.28;
+      color: var(--text);
+    }
+    .article-teaser {
+      margin: 0;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text-body);
+    }
+    .article-cta {
+      margin-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      font-weight: 500;
+      font-size: 13.5px;
+    }
+    @media (max-width: 760px) { .articles-grid { grid-template-columns: 1fr; } }
+
+    /* CTA-Karten */
+    .cta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .cta-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: var(--surface);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .cta-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(23, 105, 255, 0.35);
+      text-decoration: none;
+    }
+    .cta-card .tag {
+      font-family: var(--ff-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+    .cta-card h3 { font-size: 19px; color: var(--text); }
+    .cta-card p { margin: 0; font-size: 14px; color: var(--text-body); }
+    .cta-card .go {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--primary);
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .cta-card--navy {
+      background:
+        radial-gradient(130% 120% at 90% 0%, rgba(91, 155, 255, 0.22), transparent 55%),
+        var(--navy);
+      border-color: var(--navy);
+    }
+    .cta-card--navy .tag { color: var(--sky); }
+    .cta-card--navy h3 { color: #fff; }
+    .cta-card--navy p { color: rgba(234, 240, 251, 0.7); }
+    .cta-card--navy .go { color: var(--sky); }
+    @media (max-width: 700px) { .cta-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════
-       HERO — dark full-screen with logo
-  ════════════════════════════════════════════ -->
-  <section id="hero">
-    <div id="hero-overlay"></div>
-    <div id="hero-logo">
-      <img src="icons/main_logo_transparent.png" alt="Holiday Job Logo" id="logo-img" />
+  <!-- ═══════════ TOPBAR ═══════════ -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="topbar-brand">
+        <img src="icons/main_logo_transparent.png" alt="holidayjob.ch">
+        <span>holiday<b>job</b>.ch</span>
+      </a>
+      <nav class="topbar-nav" aria-label="Hauptnavigation">
+        <a href="index.html#jobs" class="topbar-link">Jobs</a>
+        <a href="wissen.html" class="topbar-link">Wissen</a>
+        <a href="about.html" class="topbar-link active">Über uns</a>
+        <a href="unterstuetzen.html" class="topbar-link">Unterstützen</a>
+      </nav>
+      <a href="index.html#post-job-section" class="topbar-cta">Job inserieren</a>
     </div>
-    <div id="hero-tagline">
-      <p class="hero-tagline-text">Die Schweizer Ferienjob-Plattform</p>
-    </div>
-    <div id="scroll-hint">
-      <span></span>
-    </div>
-  </section>
+  </header>
 
-  <!-- ═══════════════════════════════════════════
-       WRAPPER — everything below hero (LIGHT)
-  ════════════════════════════════════════════ -->
-  <main id="main-content">
+  <!-- ═══════════ PAGE HERO ═══════════ -->
+  <div class="page-hero anim-rise">
+    <span class="kicker">Über uns</span>
+    <h1>Zwei Schüler.<br>Eine <em style="font-style:normal;color:var(--primary)">Plattform.</em></h1>
+    <p class="lead">holidayjob.ch entstand aus einem echten Problem: Jugendliche wollen arbeiten, Unternehmen suchen Unterstützung – und trotzdem finden beide oft nicht zusammen.</p>
+  </div>
 
-    <!-- sticky small logo top-right -->
-    <div class="logo-wrapper" id="sticky-logo">
-      <img src="icons/main_logo_transparent.png" alt="Holiday Job" class="logo-sticky-img" />
-    </div>
+  <main class="site-main">
 
-    <!-- ── TITLE + DESCRIPTION ────────────────── -->
-    <section id="about-intro" class="section">
-      <div class="container">
-        <div class="fade-up">
-          <p class="eyebrow">Über uns</p>
-          <h1 class="about-title">Wer wir sind.</h1>
-        </div>
-        <div class="fade-up delay-1">
-          <p class="about-description">
-            holidayjob.ch ist mehr als nur eine Jobplattform. Das Projekt entstand aus einem echten Problem: Jugendliche wollen arbeiten, Unternehmen suchen Unterstützung – und trotzdem finden beide oft nicht zusammen. Deshalb haben wir eine moderne Plattform aufgebaut, die Ferienjobs und kurzfristige Einsätze einfach, schnell und regional zugänglich macht.
-          </p>
-          <p class="about-description">
-            Keine komplizierten Prozesse und keine unnötigen Hürden, sondern direkte Möglichkeiten, erste Arbeitserfahrungen zu sammeln und eigenes Geld zu verdienen. Genau so, wie wir uns die Suche selbst immer gewünscht hätten.
-          </p>
-        </div>
+    <!-- ═══════════ STORY ═══════════ -->
+    <section class="panel anim-rise d1">
+      <span class="section-eyebrow">Die Geschichte</span>
+      <div class="section-head"><h2>Wer wir sind</h2></div>
+      <p class="about-lede">
+        holidayjob.ch ist mehr als nur eine Jobplattform. Das Projekt entstand aus einem echten Problem: Jugendliche wollen arbeiten, Unternehmen suchen Unterstützung – und trotzdem finden beide oft nicht zusammen. Deshalb haben wir eine moderne Plattform aufgebaut, die Ferienjobs und kurzfristige Einsätze einfach, schnell und regional zugänglich macht.
+      </p>
+      <p class="about-lede">
+        Keine komplizierten Prozesse und keine unnötigen Hürden, sondern direkte Möglichkeiten, erste Arbeitserfahrungen zu sammeln und eigenes Geld zu verdienen. Genau so, wie wir uns die Suche selbst immer gewünscht hätten.
+      </p>
+    </section>
+
+    <!-- ═══════════ TEAM ═══════════ -->
+    <section class="panel anim-rise d2">
+      <span class="section-eyebrow">Das Gründerteam</span>
+      <div class="section-head"><h2>Zwei Schüler, eine Idee</h2></div>
+      <div class="team-grid">
+        <article class="team-card">
+          <div class="team-photo">GS</div>
+          <div>
+            <h3 class="team-name">Gabriel Schmid</h3>
+            <p class="team-role">Mitgründer · Plattform</p>
+            <p class="team-quote">„Wir haben nicht auf eine Lösung gewartet. Wir haben sie für jeden gebaut, der nach uns kommt."</p>
+          </div>
+        </article>
+        <article class="team-card">
+          <div class="team-photo">LL</div>
+          <div>
+            <h3 class="team-name">Lucas Laverty</h3>
+            <p class="team-role">Mitgründer · Partnerschaften</p>
+            <p class="team-quote">„Jede Karriere hat einmal mit einer Bewerbung begonnen."</p>
+          </div>
+        </article>
       </div>
     </section>
 
-    <!-- ── TEAM — Gründerteam ─────────────────── -->
-    <section id="team" class="section">
-      <div class="container">
-        <div class="fade-up">
-          <p class="eyebrow">Das Gründerteam</p>
-          <h2 class="section-title">Zwei Schüler, eine Idee.</h2>
-          <p class="section-lead">
-            Hinter holidayjob.ch stehen keine grossen Konzerne, sondern zwei Jugendliche, die ihr eigenes Problem gelöst haben – und daraus eine Plattform für tausende andere gemacht haben.
-          </p>
+    <!-- ═══════════ IMPACT ═══════════ -->
+    <div class="impact-band anim-rise d3">
+      <span class="section-eyebrow">Impact in Zahlen</span>
+      <h2>Was bisher entstanden ist.</h2>
+      <div class="impact-grid">
+        <div class="impact-tile">
+          <b>30<span class="plus">+</span></b>
+          <span class="lbl">Ferienjobs ermöglicht</span>
+          <span class="dsc">Echte Einsätze für Jugendliche in der ganzen Region.</span>
         </div>
-        <div class="team-grid">
-
-          <article class="team-card fade-left">
-            <div class="team-photo-placeholder">GS</div>
-            <div class="team-body">
-              <h3 class="team-name">Gabriel Schmid</h3>
-              <p class="team-role">Mitgründer &amp; Plattform</p>
-              <p class="team-quote">„Wir haben nicht auf eine Lösung gewartet. Wir haben sie für jeden gebaut, der nach uns kommt.“</p>
-            </div>
-          </article>
-
-          <article class="team-card fade-right">
-            <div class="team-photo-placeholder">LL</div>
-            <div class="team-body">
-              <h3 class="team-name">Lucas Laverty</h3>
-              <p class="team-role">Mitgründer &amp; Partnerschaften</p>
-              <p class="team-quote">„Jede Karriere hat einmal mit einer Bewerbung begonnen.“</p>
-            </div>
-          </article>
-
+        <div class="impact-tile">
+          <b>20<span class="plus">+</span></b>
+          <span class="lbl">Unternehmen an Bord</span>
+          <span class="dsc">Vom Hotel bis zum Vertrieb – Partner, die auf uns vertrauen.</span>
+        </div>
+        <div class="impact-tile">
+          <b>2536</b>
+          <span class="lbl">Nutzer erreicht</span>
+          <span class="dsc">Eine wachsende Community rund um Ferienjobs.</span>
+        </div>
+        <div class="impact-tile">
+          <b>2026</b>
+          <span class="lbl">gegründet</span>
+          <span class="dsc">Aus einem Schulprojekt zu einer echten Anlaufstelle.</span>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- ── IMPACT — Zahlen ────────────────────── -->
-    <section id="impact" class="section">
-      <div class="container">
-        <div class="fade-up">
-          <p class="eyebrow">Impact in Zahlen</p>
-          <h2 class="section-title">Was bisher entstanden ist.</h2>
-        </div>
-        <div class="impact-grid fade-up delay-1">
+    <!-- ═══════════ PRESSE ═══════════ -->
+    <section class="panel">
+      <span class="section-eyebrow">In den Medien</span>
+      <div class="section-head"><h2>Was andere über uns schreiben</h2></div>
+      <div class="articles-grid">
 
-          <div class="impact-tile">
-            <span class="impact-number">30<span class="impact-plus">+</span></span>
-            <span class="impact-label">Ferienjobs ermöglicht</span>
-            <span class="impact-desc">Echte Einsätze für Jugendliche in der ganzen Region.</span>
-          </div>
-
-          <div class="impact-tile">
-            <span class="impact-number">20<span class="impact-plus">+</span></span>
-            <span class="impact-label">Unternehmen an Bord</span>
-            <span class="impact-desc">Vom Hotel bis zum Vertrieb – Partner, die auf uns vertrauen.</span>
-          </div>
-
-          <div class="impact-tile">
-            <span class="impact-number">2536</span>
-            <span class="impact-label">Nutzer erreicht</span>
-            <span class="impact-desc">Eine wachsende Community rund um Ferienjobs.</span>
-          </div>
-
-          <div class="impact-tile">
-            <span class="impact-number">2026</span>
-            <span class="impact-label">gegründet</span>
-            <span class="impact-desc">Aus einem Schulprojekt zu einer echten Anlaufstelle.</span>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ── ARTICLES ───────────────────────────── -->
-    <section id="articles" class="section">
-      <div class="container">
-        <p class="eyebrow fade-up">In den Medien</p>
-        <div class="articles-grid">
-
-          <a href="https://lenzburger-nachrichten.ch/aarau/detail/eine-idee-mit-zukunft"
-             target="_blank" rel="noopener" class="article-card fade-left">
-            <div class="article-img-wrap">
-              <img src="images/AN_img_formatiert.jpg" alt="Eine Idee mit Zukunft" class="article-img" />
-              <div class="article-img-overlay"></div>
-              <span class="article-source">Lenzburger Nachrichten</span>
-            </div>
-            <div class="article-body">
-              <h3 class="article-title">Eine Idee mit Zukunft</h3>
-              <p class="article-teaser">Zwei Aargauer Schüler haben erkannt, was fehlt – und einfach selbst gebaut. Wie aus einer persönlichen Frustration eine Plattform für tausende Jugendliche wurde.</p>
-              <span class="article-cta">Artikel lesen <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </div>
-          </a>
-
-          <a href="https://www.aargauerzeitung.ch/aargau/kanton-aargau/ferienjobs-aargauer-schueler-bauen-eigene-jobplattform-ld.4160630"
-             target="_blank" rel="noopener" class="article-card fade-right">
-            <div class="article-img-wrap">
-              <img src="images/AZ_img.WEBP" alt="Aargauer Kantischüler bauen eigene Plattform" class="article-img" />
-              <div class="article-img-overlay"></div>
-              <span class="article-source">Aargauer Zeitung</span>
-            </div>
-            <div class="article-body">
-              <h3 class="article-title">Aargauer Kantischüler finden keinen Ferienjob – und bauen eigene Jobplattform</h3>
-              <p class="article-teaser">Was als Schulprojekt begann, ist heute eine echte Anlaufstelle für Jugendliche im Aargau. Die Aargauer Zeitung über eine Gründergeschichte, die man sich merkt.</p>
-              <span class="article-cta">Artikel lesen <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </div>
-          </a>
-
-          <a href="https://weloveaarau.ch/ferien-fertig-job-zwei-aarauer-kantischueler-schaffen-was-fehlte/"
-            target="_blank" rel="noopener" class="article-card fade-left">
+        <a href="https://lenzburger-nachrichten.ch/aarau/detail/eine-idee-mit-zukunft"
+           target="_blank" rel="noopener" class="article-card">
           <div class="article-img-wrap">
-            <img src="images/WLA_img_formatiert.jpeg" alt="Zwei Aarauer Kantischüler schaffen, was fehlte" class="article-img" />
-            <div class="article-img-overlay"></div>
+            <img src="images/AN_img_formatiert.jpg" alt="Eine Idee mit Zukunft" class="article-img" loading="lazy">
+            <span class="article-source">Lenzburger Nachrichten</span>
+          </div>
+          <div class="article-body">
+            <h3 class="article-title">Eine Idee mit Zukunft</h3>
+            <p class="article-teaser">Zwei Aargauer Schüler haben erkannt, was fehlt – und einfach selbst gebaut. Wie aus einer persönlichen Frustration eine Plattform für tausende Jugendliche wurde.</p>
+            <span class="article-cta">Artikel lesen <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </a>
+
+        <a href="https://www.aargauerzeitung.ch/aargau/kanton-aargau/ferienjobs-aargauer-schueler-bauen-eigene-jobplattform-ld.4160630"
+           target="_blank" rel="noopener" class="article-card">
+          <div class="article-img-wrap">
+            <img src="images/AZ_img.WEBP" alt="Aargauer Kantischüler bauen eigene Plattform" class="article-img" loading="lazy">
+            <span class="article-source">Aargauer Zeitung</span>
+          </div>
+          <div class="article-body">
+            <h3 class="article-title">Aargauer Kantischüler finden keinen Ferienjob – und bauen eigene Jobplattform</h3>
+            <p class="article-teaser">Was als Schulprojekt begann, ist heute eine echte Anlaufstelle für Jugendliche im Aargau. Die Aargauer Zeitung über eine Gründergeschichte, die man sich merkt.</p>
+            <span class="article-cta">Artikel lesen <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </a>
+
+        <a href="https://weloveaarau.ch/ferien-fertig-job-zwei-aarauer-kantischueler-schaffen-was-fehlte/"
+           target="_blank" rel="noopener" class="article-card">
+          <div class="article-img-wrap">
+            <img src="images/WLA_img_formatiert.jpeg" alt="Zwei Aarauer Kantischüler schaffen, was fehlte" class="article-img" loading="lazy">
             <span class="article-source">We Love Aarau</span>
           </div>
           <div class="article-body">
-              <h3 class="article-title">Ferien, fertig, Job: Zwei Aarauer Kantischüler schaffen, was fehlte</h3>
-              <p class="article-teaser">Eine neue Plattform ganz «made in Aarau» soll die Suche nach Ferienjobs für Schülerinnen und Schüler vereinfachen und Firmen die Möglichkeit geben, diese unkompliziert auszuschreiben.</p>
-              <span class="article-cta">Artikel lesen <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </div>
-          </a>
+            <h3 class="article-title">Ferien, fertig, Job: Zwei Aarauer Kantischüler schaffen, was fehlte</h3>
+            <p class="article-teaser">Eine neue Plattform ganz «made in Aarau» soll die Suche nach Ferienjobs für Schülerinnen und Schüler vereinfachen und Firmen die Möglichkeit geben, diese unkompliziert auszuschreiben.</p>
+            <span class="article-cta">Artikel lesen <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </a>
 
-          <a href="https://issuu.com/az-anzeiger/docs/20260625_woz_laanz?mode=embed&layout=white"
-            target="_blank" rel="noopener" class="article-card fade-right">
+        <a href="https://issuu.com/az-anzeiger/docs/20260625_woz_laanz?mode=embed&layout=white"
+           target="_blank" rel="noopener" class="article-card">
           <div class="article-img-wrap">
-            <img src="images/LA_img_formatiert.png" alt="Zwei Aarauer Kantischüler schaffen Lösung für Ferienjobsuche" class="article-img" />
-            <div class="article-img-overlay"></div>
+            <img src="images/LA_img_formatiert.png" alt="Zwei Aarauer Kantischüler schaffen Lösung für Ferienjobsuche" class="article-img" loading="lazy">
             <span class="article-source">Landanzeiger</span>
           </div>
           <div class="article-body">
-              <h3 class="article-title">Zwei Aarauer Kantischüler schaffen eine Lösung für die Ferienjobsuche</h3>
-              <p class="article-teaser">Aus der Not eine Tugend gemacht: holidayjob.ch ist entstanden, weil Gabriel Schmid und Lucas Laverty vergeblich nach einem Ferienjob gesucht haben.</p>
-              <span class="article-cta">Artikel lesen <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </div>
-          </a>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ── INSTAGRAM (contained dark navy card) ── -->
-    <section id="instagram" class="section">
-      <div class="insta-inner fade-up">
-        <p class="insta-label">Bleib dabei</p>
-        <h2 class="insta-headline">Folg uns in den Sommer.</h2>
-        <a href="https://www.instagram.com/holidayjob.ch/" target="_blank" rel="noopener" class="insta-link" id="insta-link">
-          <svg class="insta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-            <circle cx="12" cy="12" r="4"/>
-            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-          </svg>
-          <span class="insta-handle">@holidayjob.ch</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- ── TRUSTED BY ─────────────────────────── -->
-    <section id="trusted" class="section">
-      <div class="container">
-        <p class="eyebrow fade-up">Trusted by</p>
-        <div class="testimonial-track-wrap fade-up delay-1">
-          <div class="testimonial-track" id="testimonial-track">
-            <!-- JS renders cards here -->
+            <h3 class="article-title">Zwei Aarauer Kantischüler schaffen eine Lösung für die Ferienjobsuche</h3>
+            <p class="article-teaser">Aus der Not eine Tugend gemacht: holidayjob.ch ist entstanden, weil Gabriel Schmid und Lucas Laverty vergeblich nach einem Ferienjob gesucht haben.</p>
+            <span class="article-cta">Artikel lesen <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
           </div>
-        </div>
+        </a>
+
       </div>
     </section>
 
-    <!-- ── CTA / MITMACHEN ────────────────────── -->
-    <section id="cta-section" class="section">
-      <div class="container">
-        <div class="fade-up">
-          <p class="eyebrow">Mitmachen</p>
-          <h2 class="section-title">Bereit loszulegen?</h2>
-          <p class="section-lead">
-            Egal ob du deinen ersten Ferienjob suchst oder als Unternehmen Unterstützung brauchst – bei holidayjob.ch bist du in zwei Klicks dabei.
-          </p>
-        </div>
-        <div class="cta-grid fade-up delay-1">
-
-          <a href="index.html" class="cta-card cta-card-primary">
-            <span class="cta-tag">Für Jugendliche</span>
-            <h3 class="cta-title">Ich suche einen Job</h3>
-            <p class="cta-text">Finde Ferienjobs in deiner Region – schnell, einfach und ohne Hürden.</p>
-            <span class="cta-action">Jobs entdecken <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-          </a>
-
-          <a href="index.html#job-form-toggle" class="cta-card cta-card-secondary">
-            <span class="cta-tag">Für Unternehmen</span>
-            <h3 class="cta-title">Ich möchte inserieren</h3>
-            <p class="cta-text">Erreiche motivierte Jugendliche und besetze deine offenen Einsätze.</p>
-            <span class="cta-action">Job inserieren <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-          </a>
-
-        </div>
+    <!-- ═══════════ MITMACHEN ═══════════ -->
+    <section class="panel">
+      <span class="section-eyebrow">Mitmachen</span>
+      <div class="section-head"><h2>Bereit loszulegen?</h2></div>
+      <div class="cta-grid">
+        <a href="index.html#jobs" class="cta-card cta-card--navy">
+          <span class="tag">Für Jugendliche</span>
+          <h3>Ich suche einen Job</h3>
+          <p>Finde Ferienjobs in deiner Region – schnell, einfach und ohne Hürden.</p>
+          <span class="go">Jobs entdecken <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </a>
+        <a href="index.html#post-job-section" class="cta-card">
+          <span class="tag">Für Unternehmen</span>
+          <h3>Ich möchte inserieren</h3>
+          <p>Erreiche motivierte Jugendliche und besetze deine offenen Einsätze.</p>
+          <span class="go">Job inserieren <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </a>
       </div>
     </section>
 
   </main>
 
-  <!-- ═══════════════════════════════════════════
-       FOOTER
-  ════════════════════════════════════════════ -->
-  <footer id="site-footer">
-    <div class="footer-logo-wrap">
-      <img src="icons/main_logo_transparent.png" alt="Holiday Job" class="footer-logo" />
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="foot">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <img src="icons/main_logo_transparent.png" alt="holidayjob.ch">
+        <p>Die Schweizer Plattform für Ferienjobs, Aushilfejobs und temporäre Einsätze. Von zwei Schülern gebaut – für alle, die loslegen wollen.</p>
+        <a href="https://www.instagram.com/holidayjob.ch/" target="_blank" rel="noopener noreferrer" class="foot-social" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3zm11.5 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/></svg>
+          @holidayjob.ch
+        </a>
+      </div>
+      <div>
+        <h4>Entdecken</h4>
+        <ul>
+          <li><a href="index.html#jobs">Alle Ferienjobs</a></li>
+          <li><a href="index.html#post-job-section">Job inserieren</a></li>
+          <li><a href="wissen.html">Ferienjob-Wissen</a></li>
+          <li><a href="about.html">Über uns</a></li>
+          <li><a href="unterstuetzen.html">Unterstützen</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="/legal/impressum.html">Impressum</a></li>
+          <li><a href="/legal/datenschutz.html">Datenschutz</a></li>
+          <li><a href="/legal/agb.html">AGB</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontakt</h4>
+        <address>
+          Gabriel Schmid &amp; Lucas Laverty<br>
+          Bollackerweg 23a<br>
+          5024 Küttigen, Schweiz<br>
+          <a href="mailto:holidayjob.ch@gmail.com">holidayjob.ch@gmail.com</a>
+        </address>
+      </div>
     </div>
-    <a href="index.html" class="footer-home-link" id="footer-home-link">
-      <span class="footer-home-text">
-        <span class="wave-char" style="--i:0">h</span><span class="wave-char" style="--i:1">o</span><span class="wave-char" style="--i:2">l</span><span class="wave-char" style="--i:3">i</span><span class="wave-char" style="--i:4">d</span><span class="wave-char" style="--i:5">a</span><span class="wave-char" style="--i:6">y</span><span class="wave-char" style="--i:7">j</span><span class="wave-char" style="--i:8">o</span><span class="wave-char" style="--i:9">b</span><span class="wave-char" style="--i:10">.</span><span class="wave-char" style="--i:11">c</span><span class="wave-char" style="--i:12">h</span>
-      </span>
-      <svg class="footer-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/>
-      </svg>
-    </a>
-    <p class="footer-copy">© 2026 holidayjob.ch</p>
+    <div class="foot-bottom">
+      <div class="foot-bottom-inner">
+        <span>© 2026 holidayjob.ch – alle Rechte vorbehalten</span>
+        <span class="foot-legal-note">Made in Aarau · CH</span>
+      </div>
+    </div>
   </footer>
 
-  <div id="page-fade"></div>
-
-  <script src="about.js"></script>
 </body>
 </html>

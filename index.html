@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ferienjob Plattform</title>
+    <title>holidayjob.ch – Ferienjobs in der Schweiz finden & inserieren</title>
+    <meta name="description" content="Die Schweizer Plattform für Ferienjobs: Jugendliche finden Jobs in ihrer Nähe, Unternehmen inserieren kostenlos und ohne Login. Direkt, lokal, unkompliziert.">
     <link rel="stylesheet" href="styles.css">
     <!--Icons-->
     <link rel="icon" href="icons/favicon.ico">
@@ -13,7 +14,10 @@
     <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
     <link rel="manifest" href="icons/site.webmanifest">
-    <meta name="theme-color" content="#0b1220">
+    <meta name="theme-color" content="#f7f9fd">
+    <meta property="og:title" content="holidayjob.ch – Ferienjobs in der Schweiz">
+    <meta property="og:description" content="Ferienjobs finden und inserieren – kostenlos, ohne Login, direkt zwischen Firma und Jugendlichen.">
+    <meta property="og:type" content="website">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RDJXNN60R9"></script>
     <script>
@@ -61,9 +65,9 @@
           </p>
           <p>
             Weitere Informationen finden sich in den
-            <a href="/agb.html">AGB</a>,
-            in der <a href="/datenschutz.html">Datenschutzerklärung</a>
-            und im <a href="/impressum.html">Impressum</a>.
+            <a href="/legal/agb.html">AGB</a>,
+            in der <a href="/legal/datenschutz.html">Datenschutzerklärung</a>
+            und im <a href="/legal/impressum.html">Impressum</a>.
           </p>
 
         <button type="button" id="accept-disclaimer-btn">
@@ -72,31 +76,59 @@
       </div>
     </div>
 
-    <header class="page-header">
-      <div class="page-header-brand">
-        <a href="about.html" class="page-header-logo-link">
-          <img src="icons/main_logo_transparent.png" alt="holidayjob.ch" class="page-header-logo" />
+    <!-- ═══════════ TOPBAR ═══════════ -->
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a href="index.html" class="topbar-brand">
+          <img src="icons/main_logo_transparent.png" alt="holidayjob.ch">
+          <span>holiday<b>job</b>.ch</span>
         </a>
-        <div class="page-header-text">
-          <h1 class="page-header-title">Ferienjob<span class="page-header-accent">Plattform</span></h1>
-          <p class="page-header-subtitle">Hier können Unternehmen Ferienjobs veröffentlichen und Jugendliche passende Jobs in ihrer Umgebung finden.</p>
-        </div>
+        <nav class="topbar-nav" aria-label="Hauptnavigation">
+          <a href="#jobs" class="topbar-link active">Jobs</a>
+          <a href="wissen.html" class="topbar-link">Wissen</a>
+          <a href="about.html" class="topbar-link">Über uns</a>
+          <a href="unterstuetzen.html" class="topbar-link">Unterstützen</a>
+        </nav>
+        <a href="#post-job-section" class="topbar-cta" id="header-insert-cta">Job inserieren</a>
       </div>
-      <a href="about.html" class="page-header-nav-link">Über uns →</a>
     </header>
 
-    <!-- Zufriedene Kunden - Link zu Testimonials -->
-    <section class="customer-logo-section">
-        <h2>Trusted By</h2>
-        <div id="customer-logo-list" class="customer-logo-list"></div>
-    </section>
+    <!-- ═══════════ HERO ═══════════ -->
+    <div class="hero-section anim-rise">
+      <div class="hero-card">
+        <div class="hero-left">
+          <div>
+            <span class="kicker">Ferienjobs · Schweiz</span>
+            <h1 class="hero-headline">Der Sommerjob<br>in deiner <em>Nähe.</em></h1>
+            <p class="hero-sub">Unternehmen schreiben temporäre Einsätze aus, Jugendliche bewerben sich direkt. Kostenlos, ohne Login, ohne Vermittler.</p>
+          </div>
+          <div class="hero-ctas">
+            <a href="#jobs" class="btn btn-solid">Jobs finden</a>
+            <a href="#post-job-section" class="btn btn-ghost" id="hero-insert-cta">Job inserieren</a>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-stat"><b>7</b><span>Job-Kategorien</span></div>
+          <div class="hero-stat hero-stat-accent"><b>0.–</b><span>Kosten &amp; Provision</span></div>
+          <div class="hero-stat"><b>CH</b><span>Lokal &amp; direkt</span></div>
+        </div>
+      </div>
+    </div>
 
-    <!-- ========================= -->
-    <!-- JOB LISTE                 -->
-    <!-- ========================= -->
-    <section class="jobs-section">
-        <div class="jobs-section-header">
+    <main class="site-main">
+
+    <!-- ═══════════ JOB LISTE ═══════════ -->
+    <section class="panel jobs-section anim-rise d1" id="jobs">
+        <div class="section-head">
             <h2>Alle Ferienjobs</h2>
+            <span id="jobs-count" class="jobs-count"></span>
+        </div>
+
+        <div class="jobs-toolbar">
+            <div class="jobs-quick-search">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="search" id="job-quick-search" placeholder="Jobtitel, Firma oder Ort suchen…" autocomplete="off">
+            </div>
             <div class="filter-popup-anchor">
                 <button type="button" id="filter-toggle" class="filter-popup-btn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -104,7 +136,7 @@
                         <line x1="8" y1="12" x2="16" y2="12"/>
                         <line x1="11" y1="18" x2="13" y2="18"/>
                     </svg>
-                    Ferienjobs filtern
+                    Mehr Filter
                 </button>
 
                 <div id="filter-popup" class="filter-popup">
@@ -147,15 +179,65 @@
             </div>
         </div>
 
+        <div class="chip-row" id="category-chips" aria-label="Nach Kategorie filtern">
+            <button type="button" class="job-chip active" data-cat="">Alle</button>
+            <button type="button" class="job-chip" data-cat="Gastronomie">Gastronomie</button>
+            <button type="button" class="job-chip" data-cat="Büro">Büro</button>
+            <button type="button" class="job-chip" data-cat="Bau">Bau</button>
+            <button type="button" class="job-chip" data-cat="Verkauf">Verkauf</button>
+            <button type="button" class="job-chip" data-cat="Gartenarbeit">Gartenarbeit</button>
+            <button type="button" class="job-chip" data-cat="Landwirtschaft">Landwirtschaft</button>
+            <button type="button" class="job-chip" data-cat="Sonstiges">Sonstiges</button>
+        </div>
+
         <div id="job-list">
             <p class="jobs-loading-text">Ferienjobs werden geladen...</p>
         </div>
     </section>
 
-    <!-- ========================= -->
-    <!-- FORMULAR: JOB INSERIEREN  -->
-    <!-- ========================= -->
-    <section class="post-job-section">
+    <!-- ═══════════ SO FUNKTIONIERT'S ═══════════ -->
+    <section class="panel anim-rise d2" id="so-funktionierts">
+        <span class="section-eyebrow">So funktioniert's</span>
+        <div class="section-head">
+            <h2>In drei Schritten zum Job</h2>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <span class="step-num">01</span>
+                <h3>Job finden oder inserieren</h3>
+                <p>Jugendliche stöbern in der Liste – Unternehmen erfassen ihr Inserat in zwei Minuten. Ohne Konto, ohne Kosten.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-num">02</span>
+                <h3>Direkt Kontakt aufnehmen</h3>
+                <p>Jedes Inserat zeigt den direkten Kontakt. Keine Zwischenstelle, keine Wartezeit – einfach melden.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-num">03</span>
+                <h3>Loslegen &amp; verdienen</h3>
+                <p>Einsatz vereinbaren, arbeiten, ersten eigenen Lohn verdienen. Alles Weitere klärt ihr direkt miteinander.</p>
+            </div>
+        </div>
+        <p class="steps-note">Noch unsicher wegen Alter, Lohn oder Regeln? Antworten gibt's im <a href="wissen.html">Ferienjob-Wissen →</a></p>
+    </section>
+
+    <!-- ═══════════ VERTRAUEN ═══════════ -->
+    <section class="panel anim-rise d3" id="vertrauen">
+        <span class="section-eyebrow">Vertrauen von Unternehmen</span>
+        <div class="section-head">
+            <h2>Diese Firmen setzen auf uns</h2>
+        </div>
+        <div id="customer-logo-list" class="customer-logo-list"></div>
+        <div id="testimonial-list" class="testimonial-list"></div>
+    </section>
+
+    <!-- ═══════════ FORMULAR: JOB INSERIEREN ═══════════ -->
+    <section class="panel post-job-section" id="post-job-section">
+        <div class="post-job-intro">
+            <span class="section-eyebrow">Für Unternehmen &amp; Private</span>
+            <h2>Ferienjob inserieren</h2>
+            <p class="post-job-tagline">Kostenlos · Kein Login · In 2 Minuten online</p>
+        </div>
         <button type="button" id="job-form-toggle" class="job-form-toggle">
             <span>Ferienjob inserieren</span>
             <span id="job-form-toggle-icon" class="job-form-toggle-icon">+</span>
@@ -164,36 +246,70 @@
         <div id="job-form-wrapper" class="job-form-wrapper">
             <div id="job-message" class="message-box hidden"></div>
             <form id="job-form">
-                <input type="text" id="company" placeholder="Firma" required>
-                <input type="text" id="title" placeholder="Jobtitel" required>
-
-                <select id="category">
-                    <option value="">Kategorie auswählen</option>
-                    <option value="Gastronomie">Gastronomie</option>
-                    <option value="Büro">Büro</option>
-                    <option value="Bau">Bau</option>
-                    <option value="Verkauf">Verkauf</option>
-                    <option value="Gartenarbeit">Gartenarbeit</option>
-                    <option value="Landwirtschaft">Landwirtschaft</option>
-                    <option value="Sonstiges">Sonstiges</option>
-                </select>
-
-                <input type="text" id="location" placeholder="Ort / PLZ" required>
-                <input type="text" id="contact" placeholder="Kontakt" required>
-                <input type="text" id="salary" placeholder="Lohn" required>
-                <input type="text" id="requirements" placeholder="Anforderungen (optional)">
-
-                <div class="date-row">
-                    <input type="date" id="date_from" title="Von">
-                    <input type="date" id="date_to" title="Bis">
-                    <select id="specific_or_not">
-                        <option value="">Einmalig/Dauerhaft Hilfe gesucht?</option>
-                        <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
-                        <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
-                    </select>
+                <div class="field">
+                    <label for="company">Firma / Name</label>
+                    <input type="text" id="company" placeholder="z. B. Gartenbau Muster AG" required>
+                </div>
+                <div class="field">
+                    <label for="title">Jobtitel</label>
+                    <input type="text" id="title" placeholder="z. B. Aushilfe Gartenarbeit" required>
                 </div>
 
-                <textarea id="description" placeholder="Beschreibung" required></textarea>
+                <div class="field">
+                    <label for="category">Kategorie</label>
+                    <select id="category">
+                        <option value="">Kategorie auswählen</option>
+                        <option value="Gastronomie">Gastronomie</option>
+                        <option value="Büro">Büro</option>
+                        <option value="Bau">Bau</option>
+                        <option value="Verkauf">Verkauf</option>
+                        <option value="Gartenarbeit">Gartenarbeit</option>
+                        <option value="Landwirtschaft">Landwirtschaft</option>
+                        <option value="Sonstiges">Sonstiges</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="location">Ort / PLZ</label>
+                    <input type="text" id="location" placeholder="z. B. 5000 Aarau" required>
+                </div>
+
+                <div class="field">
+                    <label for="contact">Kontakt <span class="optional">(E-Mail oder Telefon)</span></label>
+                    <input type="text" id="contact" placeholder="So melden sich Interessierte" required>
+                </div>
+                <div class="field">
+                    <label for="salary">Lohn</label>
+                    <input type="text" id="salary" placeholder="z. B. 18 CHF/h" required>
+                </div>
+
+                <div class="field span2">
+                    <label for="requirements">Anforderungen <span class="optional">(optional)</span></label>
+                    <input type="text" id="requirements" placeholder="z. B. Mindestalter 15, körperlich fit">
+                </div>
+
+                <div class="date-row">
+                    <div class="field">
+                        <label for="specific_or_not">Zeitraum</label>
+                        <select id="specific_or_not">
+                            <option value="">Einmalig oder dauerhaft?</option>
+                            <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
+                            <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="date_from">Von</label>
+                        <input type="date" id="date_from" title="Von">
+                    </div>
+                    <div class="field">
+                        <label for="date_to">Bis</label>
+                        <input type="date" id="date_to" title="Bis">
+                    </div>
+                </div>
+
+                <div class="field span2">
+                    <label for="description">Beschreibung</label>
+                    <textarea id="description" placeholder="Was ist zu tun? Was sollte man mitbringen?" required></textarea>
+                </div>
 
                 <input type="text" id="website" class="honeypot-field" tabindex="-1" autocomplete="off">
 
@@ -202,9 +318,88 @@
         </div>
     </section>
 
-    <!-- ========================= -->
-    <!-- SCRIPT UND DIV FÜR AUSBLENDEN -->
-    <!-- ========================= -->
+    <!-- ═══════════ SPONSOREN (via JS eingeblendet) ═══════════ -->
+    <section id="sponsors-section" class="sponsors-section" style="display:none;">
+      <div class="sponsors-section-inner">
+        <span class="section-eyebrow">Unterstützt durch</span>
+        <h2 class="sponsors-heading">Diese Unternehmen machen es möglich.</h2>
+        <p class="sponsors-lead">Danke an alle, die hinter holidayjob.ch stehen.</p>
+        <div id="sponsors-grid" class="sponsors-grid"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════ FAQ TEASER ═══════════ -->
+    <section class="panel" id="faq">
+        <span class="section-eyebrow">Häufige Fragen</span>
+        <div class="section-head">
+            <h2>Kurz beantwortet</h2>
+        </div>
+        <div class="faq-list">
+            <details class="faq-item">
+                <summary>Kostet holidayjob.ch etwas?</summary>
+                <div class="faq-body"><p>Nein. Suchen, finden und inserieren ist komplett kostenlos – für Jugendliche und für Unternehmen. Es gibt keine Provision und keine versteckten Gebühren.</p></div>
+            </details>
+            <details class="faq-item">
+                <summary>Brauche ich ein Konto?</summary>
+                <div class="faq-body"><p>Nein. Jobs ansehen geht sofort, und auch ein Inserat erfassst du ohne Registrierung. Die Kontaktaufnahme läuft direkt zwischen dir und dem Unternehmen.</p></div>
+            </details>
+            <details class="faq-item">
+                <summary>Ab welchem Alter darf ich einen Ferienjob machen?</summary>
+                <div class="faq-body"><p>Das hängt von der Art der Arbeit ab – leichte Einsätze sind früher möglich als reguläre Jobs. Die wichtigsten Regeln haben wir im <a href="wissen.html">Ferienjob-Wissen</a> zusammengefasst.</p></div>
+            </details>
+        </div>
+        <p class="faq-more">Mehr Antworten zu Alter, Lohn und Regeln → <a href="wissen.html">Ferienjob-Wissen</a></p>
+    </section>
+
+    </main>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <img src="icons/main_logo_transparent.png" alt="holidayjob.ch">
+      <p>Die Schweizer Plattform für Ferienjobs, Aushilfejobs und temporäre Einsätze. Von zwei Schülern gebaut – für alle, die loslegen wollen.</p>
+      <a href="https://www.instagram.com/holidayjob.ch/" target="_blank" rel="noopener noreferrer" class="foot-social" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3zm11.5 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/></svg>
+        @holidayjob.ch
+      </a>
+    </div>
+    <div>
+      <h4>Entdecken</h4>
+      <ul>
+        <li><a href="index.html#jobs">Alle Ferienjobs</a></li>
+        <li><a href="index.html#post-job-section">Job inserieren</a></li>
+        <li><a href="wissen.html">Ferienjob-Wissen</a></li>
+        <li><a href="about.html">Über uns</a></li>
+        <li><a href="unterstuetzen.html">Unterstützen</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Rechtliches</h4>
+      <ul>
+        <li><a href="/legal/impressum.html">Impressum</a></li>
+        <li><a href="/legal/datenschutz.html">Datenschutz</a></li>
+        <li><a href="/legal/agb.html">AGB</a></li>
+        <li><a href="#" id="change-cookie-settings">Cookie-Einstellungen</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Kontakt</h4>
+      <address>
+        Gabriel Schmid &amp; Lucas Laverty<br>
+        Bollackerweg 23a<br>
+        5024 Küttigen, Schweiz<br>
+        <a href="mailto:holidayjob.ch@gmail.com">holidayjob.ch@gmail.com</a>
+      </address>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div class="foot-bottom-inner">
+      <span>© 2026 holidayjob.ch – alle Rechte vorbehalten</span>
+      <span class="foot-legal-note">Made in Aarau · CH</span>
+    </div>
+  </div>
+</footer>
 
 <div id="loading-overlay" class="loading-overlay hidden">
     <div class="loading-box">
@@ -213,54 +408,7 @@
     </div>
 </div>
 
-<!-- Testimonials -->
-
-<section id="testimonials" class="testimonials-section">
-    <h2>Erfahrungen mit HolidayJob</h2>
-    <div id="testimonial-list" class="testimonial-list"></div>
-</section>
-
-<!-- Unterstützt durch -->
-    <section id="sponsors-section" class="sponsors-section" style="display:none;">
-      <div class="sponsors-section-inner">
-        <p class="sponsors-eyebrow">Unterstützt durch</p>
-        <h2 class="sponsors-heading">Diese Unternehmen machen es möglich.</h2>
-        <p class="sponsors-lead">Danke an alle, die hinter holidayjob.ch stehen.</p>
-        <div id="sponsors-grid" class="sponsors-grid"></div>
-      </div>
-    </section>
-
-<!-- Footer -->
-
-<footer id="site-impressum" class="site-footer">
-  <p><strong>holidayjob.ch</strong> – Plattform für Ferienjobs, Aushilfejobs und temporäre Einsätze in der Schweiz</p>
-  <p><strong>Betreiber / Gründer:</strong><br>Gabriel Schmid<br>Lucas Laverty</p>
-  <p><strong>Geschäftsadresse:</strong><br>Bollackerweg 23a<br>5024 Küttigen<br>Schweiz</p>
-  <p><strong>E-Mail:</strong> <a href="mailto:holidayjob.ch@gmail.com">holidayjob.ch@gmail.com</a></p>
-  <p>
-    <a href="/legal/impressum.html">Impressum</a> |
-    <a href="/legal/datenschutz.html">Datenschutzerklärung</a> |
-    <a href="/legal/agb.html">AGB</a> |
-    <a href="#" id="change-cookie-settings">Cookie-Einstellungen</a>
-  </p>
-<div class="footer-social">
-    <a
-        href="https://www.instagram.com/holidayjob.ch/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Instagram"
-        class="instagram-link"
-    >
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3zm11.5 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
-        </svg>
-        <span>Instagram</span>
-    </a>
-</div>
-</footer>
-
 <!-- Cookie-Banner -->
-
 <div id="cookie-banner" class="cookie-banner hidden">
   <div class="cookie-banner-text">
     <strong>Cookies & Analyse</strong>
@@ -286,6 +434,22 @@
 
 <script src="api.js"></script>
 <script src="app.js"></script>
+
+<script>
+  // "Job inserieren" (Topbar + Hero): Formular aufklappen (Scroll via #anchor)
+  function openJobForm() {
+    var toggle  = document.getElementById('job-form-toggle');
+    var wrapper = document.getElementById('job-form-wrapper');
+    if (wrapper && !wrapper.classList.contains('open')) {
+      wrapper.classList.add('open');
+      if (toggle) toggle.classList.add('active');
+    }
+  }
+  ['header-insert-cta', 'hero-insert-cta'].forEach(function(id) {
+    var btn = document.getElementById(id);
+    if (btn) btn.addEventListener('click', openJobForm);
+  });
+</script>
 
 </body>
 </html>
