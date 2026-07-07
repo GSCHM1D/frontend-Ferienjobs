@@ -183,14 +183,22 @@
                 <input type="text" id="salary" placeholder="Lohn" required>
                 <input type="text" id="requirements" placeholder="Anforderungen (optional)">
 
-                <div class="date-row">
-                    <input type="date" id="date_from" title="Von">
-                    <input type="date" id="date_to" title="Bis">
+                <div class="duration-block">
                     <select id="specific_or_not">
                         <option value="">Einmalig/Dauerhaft Hilfe gesucht?</option>
                         <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
                         <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
                     </select>
+                    <div class="date-row" id="date-row">
+                        <div class="date-field">
+                            <label for="date_from">Von</label>
+                            <input type="date" id="date_from" title="Von">
+                        </div>
+                        <div class="date-field">
+                            <label for="date_to">Bis</label>
+                            <input type="date" id="date_to" title="Bis">
+                        </div>
+                    </div>
                 </div>
 
                 <textarea id="description" placeholder="Beschreibung" required></textarea>

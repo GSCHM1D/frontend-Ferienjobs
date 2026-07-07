@@ -49,24 +49,41 @@ function trackEvent(eventName) {
     }
 }
 
-/* Datumsfelder */ 
+/* Datumsfelder */
 
 function updateDurationInputs() {
     const mode = specificOrNotSelect.value;
+    const disabled = mode === "Dauerhaft";
 
-    if (mode === "Dauerhaft") {
+    if (disabled) {
         dateFromInput.value = "";
         dateToInput.value = "";
+    }
 
-        dateFromInput.disabled = true;
-        dateToInput.disabled = true;
-    } else {
-        dateFromInput.disabled = false;
-        dateToInput.disabled = false;
+    dateFromInput.disabled = disabled;
+    dateToInput.disabled = disabled;
+
+    /* Label mitdimmen (Klasse auf dem .date-field-Wrapper) */
+    const fromField = dateFromInput.closest(".date-field");
+    const toField = dateToInput.closest(".date-field");
+    if (fromField) fromField.classList.toggle("is-disabled", disabled);
+    if (toField) toField.classList.toggle("is-disabled", disabled);
+}
+
+/* Wird ein Datum eingegeben, bevor das Dropdown gesetzt ist,
+   automatisch auf "Spezifisch" stellen. */
+function autoSelectSpecific() {
+    if ((dateFromInput.value || dateToInput.value) && specificOrNotSelect.value !== "Spezifisch") {
+        specificOrNotSelect.value = "Spezifisch";
+        updateDurationInputs();
     }
 }
 
 specificOrNotSelect.addEventListener("change", updateDurationInputs);
+dateFromInput.addEventListener("input", autoSelectSpecific);
+dateToInput.addEventListener("input", autoSelectSpecific);
+dateFromInput.addEventListener("change", autoSelectSpecific);
+dateToInput.addEventListener("change", autoSelectSpecific);
 updateDurationInputs();
 
 /* ---------------------- */
