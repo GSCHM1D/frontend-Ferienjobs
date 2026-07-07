@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inserat verwalten – holidayjob.ch</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="icons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+</head>
+<body>
+
+  <div class="manage-wrap">
+
+    <a href="index.html" class="manage-back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Zurück zu holidayjob.ch
+    </a>
+
+    <!-- Laden -->
+    <section id="manage-loading" class="manage-state">
+      <div class="spinner" style="margin:0 auto 14px;"></div>
+      <h2>Inserat wird geladen…</h2>
+      <p>Einen Moment bitte.</p>
+    </section>
+
+    <!-- Ungültiger Link -->
+    <section id="manage-error" class="manage-state hidden">
+      <h2>Dieser Link ist ungültig.</h2>
+      <p id="manage-error-text">
+        Der Verwaltungslink ist falsch, abgelaufen oder das Inserat wurde bereits gelöscht.
+        Bei Fragen melde dich unter
+        <a href="mailto:holidayjob.ch@gmail.com">holidayjob.ch@gmail.com</a>.
+      </p>
+    </section>
+
+    <!-- Gelöscht -->
+    <section id="manage-deleted" class="manage-state hidden">
+      <h2>Inserat gelöscht.</h2>
+      <p>Dein Inserat wurde von der Plattform entfernt. Danke, dass du holidayjob.ch genutzt hast – du kannst jederzeit ein neues Inserat aufgeben.</p>
+      <p style="margin-top:14px;"><a href="index.html">Zur Startseite →</a></p>
+    </section>
+
+    <!-- Inhalt -->
+    <section id="manage-content" class="hidden">
+      <div class="manage-job-head">
+        <div>
+          <h2 id="manage-job-title">–</h2>
+          <p class="manage-job-sub" id="manage-job-sub">–</p>
+        </div>
+        <span id="manage-status-pill" class="manage-status-pill unverified">–</span>
+      </div>
+
+      <div id="manage-message" class="message-box hidden"></div>
+
+      <form id="manage-form">
+        <div>
+          <label for="m-company">Firma / Name</label>
+          <input type="text" id="m-company" required>
+        </div>
+        <div>
+          <label for="m-title">Jobtitel</label>
+          <input type="text" id="m-title" required>
+        </div>
+
+        <div>
+          <label for="m-category">Kategorie</label>
+          <select id="m-category">
+            <option value="">Kategorie auswählen</option>
+            <option value="Gastronomie">Gastronomie</option>
+            <option value="Büro">Büro</option>
+            <option value="Bau">Bau</option>
+            <option value="Verkauf">Verkauf</option>
+            <option value="Gartenarbeit">Gartenarbeit</option>
+            <option value="Landwirtschaft">Landwirtschaft</option>
+            <option value="Sonstiges">Sonstiges</option>
+          </select>
+        </div>
+        <div>
+          <label for="m-location">Ort / PLZ</label>
+          <input type="text" id="m-location" required>
+        </div>
+
+        <div>
+          <label for="m-contact">Kontakt</label>
+          <input type="text" id="m-contact" required>
+        </div>
+        <div>
+          <label for="m-salary">Lohn</label>
+          <input type="text" id="m-salary" required>
+        </div>
+
+        <div style="grid-column: 1 / -1;">
+          <label for="m-requirements">Anforderungen (optional)</label>
+          <input type="text" id="m-requirements">
+        </div>
+
+        <div class="date-row" style="grid-column: 1 / -1;">
+          <div style="flex:1;">
+            <label for="m-specific_or_not">Zeitraum</label>
+            <select id="m-specific_or_not">
+              <option value="">Einmalig oder dauerhaft?</option>
+              <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
+              <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
+            </select>
+          </div>
+          <div style="flex:1;">
+            <label for="m-date_from">Von</label>
+            <input type="date" id="m-date_from">
+          </div>
+          <div style="flex:1;">
+            <label for="m-date_to">Bis</label>
+            <input type="date" id="m-date_to">
+          </div>
+        </div>
+
+        <div style="grid-column: 1 / -1;">
+          <label for="m-description">Beschreibung</label>
+          <textarea id="m-description" required></textarea>
+        </div>
+
+        <button type="submit" id="manage-save-btn">Änderungen speichern</button>
+      </form>
+      <p class="notice">Hinweis: Nach einer Bearbeitung wird dein Inserat kurz erneut geprüft, bevor es wieder öffentlich erscheint.</p>
+
+      <div class="manage-danger-zone">
+        <h3>Inserat löschen</h3>
+        <p>Das Inserat wird dauerhaft von der Plattform entfernt. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+        <button type="button" id="manage-delete-btn" class="delete-btn">Inserat endgültig löschen</button>
+      </div>
+    </section>
+
+  </div>
+
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <p id="manage-overlay-text">Bitte warten…</p>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const jobId  = params.get("id")    || "";
+      const token  = params.get("token") || "";
+
+      const stateLoading = document.getElementById("manage-loading");
+      const stateError   = document.getElementById("manage-error");
+      const stateDeleted = document.getElementById("manage-deleted");
+      const stateContent = document.getElementById("manage-content");
+      const overlay      = document.getElementById("loading-overlay");
+      const overlayText  = document.getElementById("manage-overlay-text");
+      const msgBox       = document.getElementById("manage-message");
+
+      function show(el) {
+        [stateLoading, stateError, stateDeleted, stateContent].forEach(s => s.classList.add("hidden"));
+        el.classList.remove("hidden");
+      }
+
+      function showOverlay(text) {
+        overlayText.textContent = text;
+        overlay.classList.remove("hidden");
+      }
+      function hideOverlay() { overlay.classList.add("hidden"); }
+
+      function showMessage(text, type) {
+        msgBox.textContent = text;
+        msgBox.className = "message-box show " + (type === "error" ? "message-error" : "message-success");
+        msgBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      /* Sheets liefert Datumswerte teils als ISO-Timestamp – auf YYYY-MM-DD kürzen */
+      function toDateValue(v) {
+        const s = String(v || "");
+        return /^\d{4}-\d{2}-\d{2}/.test(s) ? s.slice(0, 10) : "";
+      }
+
+      function setStatusPill(status) {
+        const pill = document.getElementById("manage-status-pill");
+        const verified = status === "verified";
+        pill.className = "manage-status-pill " + (verified ? "verified" : "unverified");
+        pill.textContent = verified ? "Öffentlich sichtbar" : "Wird geprüft";
+      }
+
+      /* Von/Bis deaktivieren, wenn "Dauerhaft" gewählt ist (wie auf der Startseite) */
+      const specificSelect = document.getElementById("m-specific_or_not");
+      const dateFromInput  = document.getElementById("m-date_from");
+      const dateToInput    = document.getElementById("m-date_to");
+
+      function updateDateInputs() {
+        const isSpecific = specificSelect.value === "Spezifisch";
+        dateFromInput.disabled = !isSpecific;
+        dateToInput.disabled   = !isSpecific;
+        if (!isSpecific) { dateFromInput.value = ""; dateToInput.value = ""; }
+      }
+      specificSelect.addEventListener("change", updateDateInputs);
+
+      function fillForm(job) {
+        document.getElementById("manage-job-title").textContent = job.title || "Dein Inserat";
+        document.getElementById("manage-job-sub").textContent =
+            [job.company, job.location].filter(Boolean).join(" · ");
+        setStatusPill(job.status);
+
+        document.getElementById("m-company").value         = job.company         || "";
+        document.getElementById("m-title").value           = job.title           || "";
+        document.getElementById("m-category").value        = job.category        || "";
+        document.getElementById("m-location").value        = job.location        || "";
+        document.getElementById("m-contact").value         = job.contact         || "";
+        document.getElementById("m-salary").value          = job.salary          || "";
+        document.getElementById("m-requirements").value    = job.requirements    || "";
+        document.getElementById("m-specific_or_not").value = job.specific_or_not || "";
+        document.getElementById("m-date_from").value       = toDateValue(job.date_from);
+        document.getElementById("m-date_to").value         = toDateValue(job.date_to);
+        document.getElementById("m-description").value     = job.description     || "";
+        updateDateInputs();
+      }
+
+      /* ── Laden ── */
+      async function init() {
+        if (!jobId || !token) { show(stateError); return; }
+        try {
+          const result = await manageGetJob(jobId, token);
+          if (!result.success || !result.job) { show(stateError); return; }
+          fillForm(result.job);
+          show(stateContent);
+        } catch (e) {
+          console.error(e);
+          show(stateError);
+        }
+      }
+
+      /* ── Speichern ── */
+      document.getElementById("manage-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const data = {
+          company:         document.getElementById("m-company").value.trim(),
+          title:           document.getElementById("m-title").value.trim(),
+          category:        document.getElementById("m-category").value,
+          location:        document.getElementById("m-location").value.trim(),
+          contact:         document.getElementById("m-contact").value.trim(),
+          salary:          document.getElementById("m-salary").value.trim(),
+          requirements:    document.getElementById("m-requirements").value.trim(),
+          date_from:       document.getElementById("m-date_from").value,
+          date_to:         document.getElementById("m-date_to").value,
+          specific_or_not: document.getElementById("m-specific_or_not").value,
+          description:     document.getElementById("m-description").value.trim()
+        };
+
+        if (data.specific_or_not === "Spezifisch" && (!data.date_from || !data.date_to)) {
+          showMessage("Bitte wähle bei spezifischem Zeitraum ein Von- und Bis-Datum.", "error");
+          return;
+        }
+
+        showOverlay("Änderungen werden gespeichert…");
+        try {
+          const result = await manageEditJob(jobId, token, data);
+          if (!result.success) {
+            showMessage(result.message || "Speichern fehlgeschlagen.", "error");
+            return;
+          }
+          setStatusPill("unverified");
+          document.getElementById("manage-job-title").textContent = data.title;
+          document.getElementById("manage-job-sub").textContent =
+              [data.company, data.location].filter(Boolean).join(" · ");
+          showMessage("Gespeichert. Dein Inserat wird kurz geprüft und erscheint dann wieder öffentlich.", "success");
+        } catch (err) {
+          console.error(err);
+          showMessage("Beim Speichern ist ein Fehler aufgetreten.", "error");
+        } finally {
+          hideOverlay();
+        }
+      });
+
+      /* ── Löschen (nur nach explizitem Klick – nie beim Laden) ── */
+      document.getElementById("manage-delete-btn").addEventListener("click", async function () {
+        if (!confirm("Dieses Inserat wirklich endgültig löschen?")) return;
+
+        showOverlay("Inserat wird gelöscht…");
+        try {
+          const result = await manageDeleteJob(jobId, token);
+          if (!result.success) {
+            showMessage(result.message || "Löschen fehlgeschlagen.", "error");
+            return;
+          }
+          show(stateDeleted);
+        } catch (err) {
+          console.error(err);
+          showMessage("Beim Löschen ist ein Fehler aufgetreten.", "error");
+        } finally {
+          hideOverlay();
+        }
+      });
+
+      init();
+    })();
+  </script>
+</body>
+</html>

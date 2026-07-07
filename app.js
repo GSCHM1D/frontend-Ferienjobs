@@ -478,7 +478,13 @@ jobForm.addEventListener("submit", async function(event) {
         jobForm.reset();
         await loadJobs();
         updateDurationInputs();
-        showJobMessage("Job erfolgreich veröffentlicht.");
+
+        if (result.deleteToken && result.id) {
+            showManageLinkPanel(result.id, result.deleteToken, result.emailSent === true);
+        } else {
+            /* Fallback, solange das Backend noch keinen Token zurückgibt */
+            showJobMessage("Job erfolgreich veröffentlicht.");
+        }
     } catch (error) {
         showJobMessage("Beim Veröffentlichen ist ein Fehler aufgetreten.");
         console.error(error);
@@ -488,6 +494,59 @@ jobForm.addEventListener("submit", async function(event) {
         isSubmittingJob = false;
     }
 });
+
+/* =========================
+   VERWALTUNGSLINK NACH DEM INSERIEREN
+   Wird nur EINMAL angezeigt – der Token ist danach
+   nicht mehr abrufbar (nur serverseitiger Vergleich).
+========================= */
+function buildManageUrl(id, token) {
+    const dir = window.location.href.replace(/[#?].*$/, "").replace(/[^/]*$/, "");
+    return dir + "manage.html?id=" + encodeURIComponent(id) + "&token=" + encodeURIComponent(token);
+}
+
+function showManageLinkPanel(id, token, emailSent) {
+    const url = buildManageUrl(id, token);
+
+    jobMessage.className = "message-box show message-success manage-link-panel";
+    jobMessage.textContent = "";
+
+    jobMessage.appendChild(el("strong", "manage-link-title", "Job erfolgreich veröffentlicht."));
+
+    jobMessage.appendChild(el(
+        "p",
+        "manage-link-text",
+        emailSent
+            ? "Mit diesem Link kannst du dein Inserat später bearbeiten oder löschen. Wir haben ihn dir zusätzlich per E-Mail geschickt – bitte trotzdem jetzt sichern, er wird nur einmal angezeigt."
+            : "Mit diesem Link kannst du dein Inserat später bearbeiten oder löschen. Bitte jetzt kopieren und sicher aufbewahren – er wird nur einmal angezeigt."
+    ));
+
+    const row = el("div", "manage-link-row");
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.readOnly = true;
+    input.value = url;
+    input.className = "manage-link-input";
+    input.addEventListener("focus", function () { input.select(); });
+    row.appendChild(input);
+
+    const copyBtn = el("button", "manage-link-copy", "Link kopieren");
+    copyBtn.type = "button";
+    copyBtn.addEventListener("click", async function () {
+        try {
+            await navigator.clipboard.writeText(url);
+        } catch {
+            input.select();
+            document.execCommand("copy");
+        }
+        copyBtn.textContent = "Kopiert!";
+        setTimeout(() => { copyBtn.textContent = "Link kopieren"; }, 2000);
+    });
+    row.appendChild(copyBtn);
+
+    jobMessage.appendChild(row);
+}
 
 /* =========================
    SUCHE

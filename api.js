@@ -169,3 +169,49 @@ async function editJob(id, adminKey, jobData) {
     return await response.json();
 }
 
+
+/* ═════════════════════════════════════════════════
+   SELBSTVERWALTUNG VON INSERATEN (delete-jobs)
+   Der deleteToken wird beim Erstellen einmalig
+   zurückgegeben und danach nur noch serverseitig
+   verglichen – nie wieder ausgeliefert.
+═════════════════════════════════════════════════ */
+
+/* =========================
+   INSERAT PER TOKEN LADEN
+========================= */
+async function manageGetJob(id, token) {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" }, // CORS-Workaround für Google Apps Script
+        body: JSON.stringify({ action: "manageGetJob", id: id, token: token })
+    });
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
+
+/* =========================
+   INSERAT PER TOKEN LÖSCHEN
+========================= */
+async function manageDeleteJob(id, token) {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: "manageDeleteJob", id: id, token: token })
+    });
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
+
+/* =========================
+   INSERAT PER TOKEN BEARBEITEN
+========================= */
+async function manageEditJob(id, token, jobData) {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: "manageEditJob", id: id, token: token, ...jobData })
+    });
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
