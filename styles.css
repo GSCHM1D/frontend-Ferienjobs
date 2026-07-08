@@ -120,26 +120,30 @@ select {
         transform 0.15s ease;
 }
 
-/* Zeitraum-Block: volle Formularbreite, damit die Datumsfelder gross genug
-   sind, um sie tatsächlich bedienen zu können */
+/* Anforderungen füllt die ganze Zeile (nicht "verzogen" als halbes Feld) */
+.full-span {
+    grid-column: 1 / -1;
+}
+
+/* Zeitraum-Block: volle Formularbreite, Von + Bis + Auswahl NEBENEINANDER,
+   damit die Datumsfelder gross genug sind, um sie zu bedienen */
 .duration-block {
     grid-column: 1 / -1;
     display: flex;
-    flex-direction: column;
     gap: 12px;
-}
-
-.date-row {
-    display: flex;
-    gap: 12px; /* Abstand zwischen den Feldern */
+    flex-wrap: wrap;
 }
 
 .date-field {
-    flex: 1; /* beide gleich breit */
+    flex: 1 1 170px; /* nebeneinander, umbruch auf schmalen Screens */
     display: flex;
     flex-direction: column;
     gap: 6px;
     min-width: 0;
+}
+
+.date-field--select {
+    flex: 1.3 1 200px; /* Dropdown etwas breiter für den langen Text */
 }
 
 .date-field label {
@@ -149,20 +153,43 @@ select {
     color: #475569;
 }
 
-.date-field input[type="date"] {
-    flex: 1;
+.date-field input[type="date"],
+.date-field select {
     width: 100%;
     min-height: 52px;
     padding: 14px 16px;
     font-size: 16px; /* verhindert Zoom auf iOS und macht die Ziffern gut lesbar */
-    cursor: text;
+}
+.date-field input[type="date"] { cursor: text; }
+
+/* Graue "Platzhalter"-Optik, solange nichts gewählt/eingegeben ist –
+   gleicher Grauton wie input::placeholder */
+.date-field input[type="date"].date-empty::-webkit-datetime-edit {
+    color: #94a3b8;
+}
+.date-field select.is-placeholder {
+    color: #94a3b8;
+}
+.date-field select.is-placeholder option {
+    color: var(--text); /* Optionsliste bleibt dunkel lesbar */
 }
 
+/* "Dauerhaft" / "flexibel": Datumsfelder komplett ausgegraut & deaktiviert */
 .date-field input[type="date"]:disabled {
+    background: #e5e7eb;
+    color: #94a3b8;
+    cursor: not-allowed;
+    opacity: 1;
+}
+.date-field input[type="date"]:disabled::-webkit-datetime-edit {
+    color: #b6bfcc;
+}
+.date-field input[type="date"]:disabled::-webkit-calendar-picker-indicator {
+    opacity: 0.25;
     cursor: not-allowed;
 }
 
-/* Label mitdimmen, wenn das Feld deaktiviert ist (bei "Dauerhaft") */
+/* Label mitdimmen, wenn das Feld deaktiviert ist */
 .date-field.is-disabled label {
     color: #94a3b8;
 }

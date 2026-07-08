@@ -181,23 +181,25 @@
                 <input type="text" id="location" placeholder="Ort / PLZ" required>
                 <input type="text" id="contact" placeholder="Kontakt" required>
                 <input type="text" id="salary" placeholder="Lohn" required>
-                <input type="text" id="requirements" placeholder="Anforderungen (optional)">
+                <input type="text" id="requirements" class="full-span" placeholder="Anforderungen (optional)">
 
-                <div class="duration-block">
-                    <select id="specific_or_not">
-                        <option value="">Einmalig/Dauerhaft Hilfe gesucht?</option>
-                        <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
-                        <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
-                    </select>
-                    <div class="date-row" id="date-row">
-                        <div class="date-field">
-                            <label for="date_from">Von</label>
-                            <input type="date" id="date_from" title="Von">
-                        </div>
-                        <div class="date-field">
-                            <label for="date_to">Bis</label>
-                            <input type="date" id="date_to" title="Bis">
-                        </div>
+                <div class="duration-block" id="date-row">
+                    <div class="date-field">
+                        <label for="date_from">Von</label>
+                        <input type="date" id="date_from" title="Von">
+                    </div>
+                    <div class="date-field">
+                        <label for="date_to">Bis</label>
+                        <input type="date" id="date_to" title="Bis">
+                    </div>
+                    <div class="date-field date-field--select">
+                        <label for="specific_or_not">Zeitraum</label>
+                        <select id="specific_or_not">
+                            <option value="">Einmalig/Dauerhaft Hilfe gesucht?</option>
+                            <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
+                            <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
+                            <option value="flexibel">Zeitraum flexibel absprechbar</option>
+                        </select>
                     </div>
                 </div>
 

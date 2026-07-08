@@ -51,9 +51,19 @@ function trackEvent(eventName) {
 
 /* Datumsfelder */
 
+/* Modi ohne konkrete Daten: Felder werden ausgegraut & geleert */
+const DATELESS_MODES = ["Dauerhaft", "flexibel"];
+
+/* Graue "Platzhalter"-Optik pflegen (leere Datumsfelder + Placeholder im Select) */
+function refreshDurationPlaceholders() {
+    dateFromInput.classList.toggle("date-empty", !dateFromInput.value);
+    dateToInput.classList.toggle("date-empty", !dateToInput.value);
+    specificOrNotSelect.classList.toggle("is-placeholder", specificOrNotSelect.value === "");
+}
+
 function updateDurationInputs() {
     const mode = specificOrNotSelect.value;
-    const disabled = mode === "Dauerhaft";
+    const disabled = DATELESS_MODES.indexOf(mode) !== -1;
 
     if (disabled) {
         dateFromInput.value = "";
@@ -68,6 +78,8 @@ function updateDurationInputs() {
     const toField = dateToInput.closest(".date-field");
     if (fromField) fromField.classList.toggle("is-disabled", disabled);
     if (toField) toField.classList.toggle("is-disabled", disabled);
+
+    refreshDurationPlaceholders();
 }
 
 /* Wird ein Datum eingegeben, bevor das Dropdown gesetzt ist,
@@ -77,6 +89,7 @@ function autoSelectSpecific() {
         specificOrNotSelect.value = "Spezifisch";
         updateDurationInputs();
     }
+    refreshDurationPlaceholders();
 }
 
 specificOrNotSelect.addEventListener("change", updateDurationInputs);
@@ -259,6 +272,13 @@ function getDurationDisplay(job) {
     if (job.specific_or_not === "Dauerhaft") {
         return {
             text: "Dauerhaft Aushilfe gesucht",
+            className: "job-duration-item"
+        };
+    }
+
+    if (job.specific_or_not === "flexibel") {
+        return {
+            text: "Zeitraum flexibel",
             className: "job-duration-item"
         };
     }
@@ -564,7 +584,9 @@ function matchesCategory(job, selectedCategory) {
 function matchesDuration(job, searchDateFromValue, searchDateToValue) {
     if (!searchDateFromValue && !searchDateToValue) return true;
 
-    if (job.specific_or_not === "Dauerhaft") {
+    /* Dauerhaft & flexibel absprechbar haben keinen festen Zeitraum
+       und erscheinen daher immer, wenn nach Daten gefiltert wird */
+    if (job.specific_or_not === "Dauerhaft" || job.specific_or_not === "flexibel") {
         return true;
     }
 
