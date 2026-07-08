@@ -1,4 +1,11 @@
-const API_URL = "https://script.google.com/macros/s/AKfycby8KH5USSA2NUk35Pq_r-sECj1lBOhD_M7uweC4_kv3FD9X9gZDnk50uogBw_sXiZLG/exec";
+const isLocal =
+    window.location.hostname === "localhost" || 
+    window.location.hostname === "127.0.0.1";
+
+const API_URL = isLocal
+    ? "https://script.google.com/macros/s/AKfycbxhmOXxHqvpaSuzluHNV1miNmTt5S2lVU32wnwwRdK82RQV30ucTRzuQC-dUW7IdgAaTg/exec"
+    : "https://script.google.com/macros/s/AKfycby8KH5USSA2NUk35Pq_r-sECj1lBOhD_M7uweC4_kv3FD9X9gZDnk50uogBw_sXiZLG/exec";
+
 
 /* =========================
    ALLE JOBS LADEN
