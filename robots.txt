@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /control-panel.html
+Disallow: /legal/disclaimer-snippet.html
+
+Sitemap: https://holidayjob.ch/sitemap.xml

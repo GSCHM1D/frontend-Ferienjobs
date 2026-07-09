@@ -15,9 +15,39 @@
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
     <link rel="manifest" href="icons/site.webmanifest">
     <meta name="theme-color" content="#f7f9fd">
+    <link rel="canonical" href="https://holidayjob.ch/">
     <meta property="og:title" content="holidayjob.ch – Ferienjobs in der Schweiz">
     <meta property="og:description" content="Ferienjobs finden und inserieren – kostenlos, ohne Login, direkt zwischen Firma und Jugendlichen.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://holidayjob.ch/">
+    <meta property="og:image" content="https://holidayjob.ch/icons/android-chrome-512x512.png">
+    <meta property="og:locale" content="de_CH">
+    <link rel="preload" href="fonts/syne-v24-latin-800.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/dm-sans-v17-latin-300.woff2" as="font" type="font/woff2" crossorigin>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://holidayjob.ch/#org",
+          "name": "holidayjob.ch",
+          "url": "https://holidayjob.ch/",
+          "logo": "https://holidayjob.ch/icons/android-chrome-512x512.png",
+          "email": "holidayjob.ch@gmail.com",
+          "address": { "@type": "PostalAddress", "streetAddress": "Bollackerweg 23a", "postalCode": "5024", "addressLocality": "Küttigen", "addressCountry": "CH" },
+          "sameAs": ["https://www.instagram.com/holidayjob.ch/"]
+        },
+        {
+          "@type": "WebSite",
+          "url": "https://holidayjob.ch/",
+          "name": "holidayjob.ch",
+          "inLanguage": "de-CH",
+          "publisher": { "@id": "https://holidayjob.ch/#org" }
+        }
+      ]
+    }
+    </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RDJXNN60R9"></script>
     <script>
@@ -28,6 +58,8 @@
     </script>
 </head>
 <body>
+
+    <a href="#jobs" class="skip-link">Direkt zu den Jobs</a>
 
     <div id="disclaimer-gate" class="disclaimer-gate">
       <div class="disclaimer-gate-card">
@@ -108,10 +140,19 @@
           </div>
         </div>
         <div class="hero-right">
-          <div class="hero-stat"><b>7</b><span>Job-Kategorien</span></div>
+          <div class="hero-stat"><b>30+</b><span>Jobs ermöglicht</span></div>
           <div class="hero-stat hero-stat-accent"><b>0.–</b><span>Kosten &amp; Provision</span></div>
-          <div class="hero-stat"><b>CH</b><span>Lokal &amp; direkt</span></div>
+          <div class="hero-stat"><b>20+</b><span>Firmen an Bord</span></div>
         </div>
+      </div>
+
+      <!-- Presse-Strip: geliehene Glaubwürdigkeit direkt unter dem Hero -->
+      <div class="press-strip" aria-label="Bekannt aus den Medien">
+        <span class="press-label">Bekannt aus</span>
+        <a href="https://www.aargauerzeitung.ch/aargau/kanton-aargau/ferienjobs-aargauer-schueler-bauen-eigene-jobplattform-ld.4160630" target="_blank" rel="noopener">Aargauer Zeitung</a>
+        <a href="https://lenzburger-nachrichten.ch/aarau/detail/eine-idee-mit-zukunft" target="_blank" rel="noopener">Lenzburger Nachrichten</a>
+        <a href="https://weloveaarau.ch/ferien-fertig-job-zwei-aarauer-kantischueler-schaffen-was-fehlte/" target="_blank" rel="noopener">We Love Aarau</a>
+        <a href="https://issuu.com/az-anzeiger/docs/20260625_woz_laanz?mode=embed&amp;layout=white" target="_blank" rel="noopener">Landanzeiger</a>
       </div>
     </div>
 
@@ -238,6 +279,21 @@
             <h2>Ferienjob inserieren</h2>
             <p class="post-job-tagline">Kostenlos · Kein Login · In 2 Minuten online</p>
         </div>
+
+        <div class="employer-benefits">
+            <div class="employer-benefit">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span><b>Geprüfte Veröffentlichung</b> – wir schauen jedes Inserat kurz an, bevor es live geht.</span>
+            </div>
+            <div class="employer-benefit">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span><b>Direkte Bewerbungen</b> – Interessierte melden sich ohne Umweg bei dir.</span>
+            </div>
+            <div class="employer-benefit">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                <span><b>In 2 Minuten online</b> – kein Konto, keine Kosten, keine Provision.</span>
+            </div>
+        </div>
         <button type="button" id="job-form-toggle" class="job-form-toggle">
             <span>Ferienjob inserieren</span>
             <span id="job-form-toggle-icon" class="job-form-toggle-icon">+</span>
@@ -251,8 +307,8 @@
                     <input type="text" id="company" placeholder="z. B. Gartenbau Muster AG" required>
                 </div>
                 <div class="field">
-                    <label for="title">Jobtitel</label>
-                    <input type="text" id="title" placeholder="z. B. Aushilfe Gartenarbeit" required>
+                    <label for="title">Jobtitel <span class="optional">(max. 30 Zeichen)</span></label>
+                    <input type="text" id="title" placeholder="z. B. Aushilfe Gartenarbeit" maxlength="30" required>
                 </div>
 
                 <div class="field">
@@ -279,7 +335,7 @@
                 </div>
                 <div class="field">
                     <label for="salary">Lohn</label>
-                    <input type="text" id="salary" placeholder="z. B. 18 CHF/h" required>
+                    <input type="text" id="salary" placeholder="z. B. 18 CHF/h" maxlength="25" required>
                 </div>
 
                 <div class="field span2">
@@ -289,14 +345,6 @@
 
                 <div class="date-row">
                     <div class="field">
-                        <label for="specific_or_not">Zeitraum</label>
-                        <select id="specific_or_not">
-                            <option value="">Einmalig oder dauerhaft?</option>
-                            <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
-                            <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
-                        </select>
-                    </div>
-                    <div class="field">
                         <label for="date_from">Von</label>
                         <input type="date" id="date_from" title="Von">
                     </div>
@@ -304,11 +352,20 @@
                         <label for="date_to">Bis</label>
                         <input type="date" id="date_to" title="Bis">
                     </div>
+                    <div class="field field--zeitraum">
+                        <label for="specific_or_not">Zeitraum</label>
+                        <select id="specific_or_not">
+                            <option value="">Einmalig oder dauerhaft?</option>
+                            <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
+                            <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
+                            <option value="flexibel">Zeitraum flexibel absprechbar</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="field span2">
-                    <label for="description">Beschreibung</label>
-                    <textarea id="description" placeholder="Was ist zu tun? Was sollte man mitbringen?" required></textarea>
+                    <label for="description">Beschreibung <span class="optional" id="description-counter">max. 500 Zeichen</span></label>
+                    <textarea id="description" placeholder="Was ist zu tun? Was sollte man mitbringen?" maxlength="500" required></textarea>
                 </div>
 
                 <input type="text" id="website" class="honeypot-field" tabindex="-1" autocomplete="off">
@@ -345,7 +402,11 @@
             </details>
             <details class="faq-item">
                 <summary>Ab welchem Alter darf ich einen Ferienjob machen?</summary>
-                <div class="faq-body"><p>Das hängt von der Art der Arbeit ab – leichte Einsätze sind früher möglich als reguläre Jobs. Die wichtigsten Regeln haben wir im <a href="wissen.html">Ferienjob-Wissen</a> zusammengefasst.</p></div>
+                <div class="faq-body"><p>Das hängt von der Art der Arbeit ab – leichte Einsätze sind ab 13 möglich, reguläre Jobs ab 15. Die wichtigsten Regeln haben wir im <a href="wissen.html">Ferienjob-Wissen</a> zusammengefasst.</p></div>
+            </details>
+            <details class="faq-item">
+                <summary>Wie kann ich mein Inserat ändern oder löschen?</summary>
+                <div class="faq-body"><p>Schreib uns eine kurze Mail an <a href="mailto:holidayjob.ch@gmail.com?subject=Inserat%20%C3%A4ndern%20oder%20l%C3%B6schen">holidayjob.ch@gmail.com</a> mit dem Jobtitel und deinem Firmennamen – wir kümmern uns in der Regel innert 24 Stunden darum.</p></div>
             </details>
         </div>
         <p class="faq-more">Mehr Antworten zu Alter, Lohn und Regeln → <a href="wissen.html">Ferienjob-Wissen</a></p>

@@ -49,25 +49,66 @@ function trackEvent(eventName) {
     }
 }
 
-/* Datumsfelder */ 
+/* Datumsfelder */
+
+/* Modi ohne konkrete Daten: Felder werden ausgegraut & geleert */
+const DATELESS_MODES = ["Dauerhaft", "flexibel"];
+
+/* Graue Platzhalter-Optik pflegen (leere Datumsfelder + Placeholder im Select) */
+function refreshDurationPlaceholders() {
+    dateFromInput.classList.toggle("date-empty", !dateFromInput.value);
+    dateToInput.classList.toggle("date-empty", !dateToInput.value);
+    specificOrNotSelect.classList.toggle("is-placeholder", specificOrNotSelect.value === "");
+}
 
 function updateDurationInputs() {
     const mode = specificOrNotSelect.value;
+    const disabled = DATELESS_MODES.indexOf(mode) !== -1;
 
-    if (mode === "Dauerhaft") {
+    if (disabled) {
         dateFromInput.value = "";
         dateToInput.value = "";
-
-        dateFromInput.disabled = true;
-        dateToInput.disabled = true;
-    } else {
-        dateFromInput.disabled = false;
-        dateToInput.disabled = false;
     }
+
+    dateFromInput.disabled = disabled;
+    dateToInput.disabled = disabled;
+
+    const fromField = dateFromInput.closest(".field");
+    const toField = dateToInput.closest(".field");
+    if (fromField) fromField.classList.toggle("is-disabled", disabled);
+    if (toField) toField.classList.toggle("is-disabled", disabled);
+
+    refreshDurationPlaceholders();
+}
+
+/* Wird ein Datum eingegeben, bevor das Dropdown gesetzt ist,
+   automatisch auf "Spezifisch" stellen. */
+function autoSelectSpecific() {
+    if ((dateFromInput.value || dateToInput.value) && specificOrNotSelect.value !== "Spezifisch") {
+        specificOrNotSelect.value = "Spezifisch";
+        updateDurationInputs();
+    }
+    refreshDurationPlaceholders();
 }
 
 specificOrNotSelect.addEventListener("change", updateDurationInputs);
+dateFromInput.addEventListener("input", autoSelectSpecific);
+dateToInput.addEventListener("input", autoSelectSpecific);
+dateFromInput.addEventListener("change", autoSelectSpecific);
+dateToInput.addEventListener("change", autoSelectSpecific);
 updateDurationInputs();
+
+/* Zeichen-Zähler für die Beschreibung */
+const descriptionInput = document.getElementById("description");
+const descriptionCounter = document.getElementById("description-counter");
+if (descriptionInput && descriptionCounter) {
+    descriptionInput.addEventListener("input", function () {
+        const left = 500 - descriptionInput.value.length;
+        descriptionCounter.textContent = left <= 100
+            ? "noch " + left + " Zeichen"
+            : "max. 500 Zeichen";
+    });
+}
 
 /* ---------------------- */
 function showLoading(message = "Job wird veröffentlicht...") {
@@ -279,6 +320,13 @@ function getDurationDisplay(job) {
         };
     }
 
+    if (job.specific_or_not === "flexibel") {
+        return {
+            text: "Zeitraum flexibel",
+            className: "job-duration-item"
+        };
+    }
+
     if (job.specific_or_not === "Spezifisch" && job.date_from && job.date_to) {
         return {
             text: `${formatDate(job.date_from)} - ${formatDate(job.date_to)}`,
@@ -455,12 +503,73 @@ function renderJobs() {
         if (job.contact) {
             const footer = el("div", "job-card-footer");
             footer.appendChild(el("span", "job-contact-label", "Kontakt"));
-            footer.appendChild(el("span", "job-contact-value", job.contact));
+            footer.appendChild(buildContactValue(job));
             card.appendChild(footer);
         }
 
+        const reportLink = el("a", "job-report-link", "Inserat melden");
+        reportLink.href = "mailto:holidayjob.ch@gmail.com?subject="
+            + encodeURIComponent("Inserat melden: " + (job.title || "") + " (ID " + (job.id || "?") + ")");
+        card.appendChild(reportLink);
+
         jobList.appendChild(card);
     });
+
+    injectJobPostingSchema(visibleJobs);
+}
+
+/* Kontakt klickbar machen: E-Mail -> mailto, Telefonnummer -> tel */
+function buildContactValue(job) {
+    const contact = String(job.contact || "").trim();
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+    const phoneDigits = contact.replace(/[\s().\-\/]/g, "");
+    const isPhone = /^\+?\d{9,13}$/.test(phoneDigits);
+
+    if (!isEmail && !isPhone) {
+        return el("span", "job-contact-value", contact);
+    }
+
+    const link = el("a", "job-contact-value job-contact-link", contact);
+    link.href = isEmail
+        ? "mailto:" + contact + "?subject=" + encodeURIComponent("Bewerbung: " + (job.title || "Ferienjob") + " – via holidayjob.ch")
+        : "tel:" + phoneDigits;
+    link.addEventListener("click", function () {
+        trackEvent(isEmail ? "job_contact_email_click" : "job_contact_phone_click");
+    });
+    return link;
+}
+
+/* JobPosting-Schema für Google for Jobs (dynamisch nach dem Laden) */
+function injectJobPostingSchema(jobs) {
+    const old = document.getElementById("jobposting-schema");
+    if (old) old.remove();
+    if (!Array.isArray(jobs) || jobs.length === 0) return;
+
+    const postings = jobs.slice(0, 20).map(job => {
+        const posting = {
+            "@context": "https://schema.org",
+            "@type": "JobPosting",
+            "title": job.title || "",
+            "description": job.description || job.title || "",
+            "datePosted": job.createdAt ? String(job.createdAt).slice(0, 10) : undefined,
+            "employmentType": "TEMPORARY",
+            "hiringOrganization": { "@type": "Organization", "name": job.company || "" },
+            "jobLocation": {
+                "@type": "Place",
+                "address": { "@type": "PostalAddress", "addressLocality": job.location || "", "addressCountry": "CH" }
+            }
+        };
+        if (job.specific_or_not === "Spezifisch" && job.date_to) {
+            posting.validThrough = String(job.date_to).slice(0, 10);
+        }
+        return posting;
+    });
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "jobposting-schema";
+    script.textContent = JSON.stringify(postings);
+    document.head.appendChild(script);
 }
 
 /* =========================
@@ -598,7 +707,9 @@ function matchesCategory(job, selectedCategory) {
 function matchesDuration(job, searchDateFromValue, searchDateToValue) {
     if (!searchDateFromValue && !searchDateToValue) return true;
 
-    if (job.specific_or_not === "Dauerhaft") {
+    /* Dauerhaft & flexibel haben keinen festen Zeitraum und erscheinen
+       daher immer, wenn nach Daten gefiltert wird */
+    if (job.specific_or_not === "Dauerhaft" || job.specific_or_not === "flexibel") {
         return true;
     }
 
