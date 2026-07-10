@@ -226,6 +226,11 @@
           const result = await manageGetJob(jobId, token);
           if (!result.success || !result.job) { show(stateError); return; }
           fillForm(result.job);
+          /* Läuft bereits ein Änderungs-Vorschlag, dem Nutzer sagen,
+             dass öffentlich noch die bisherige Version steht. */
+          if (result.job.hasPendingEdit) {
+            showMessage("Eine frühere Änderung wird gerade geprüft – öffentlich ist noch die bisherige Version. Wenn du erneut speicherst, ersetzt das den offenen Vorschlag.", "success");
+          }
           show(stateContent);
         } catch (e) {
           console.error(e);
@@ -263,11 +268,9 @@
             showMessage(result.message || "Speichern fehlgeschlagen.", "error");
             return;
           }
-          setStatusPill("unverified");
-          document.getElementById("manage-job-title").textContent = data.title;
-          document.getElementById("manage-job-sub").textContent =
-              [data.company, data.location].filter(Boolean).join(" · ");
-          showMessage("Gespeichert. Dein Inserat wird kurz geprüft und erscheint dann wieder öffentlich.", "success");
+          /* Edit-Moderation: Vorschlag eingereicht, Live-Version und
+             Status bleiben unverändert, bis das Admin-Team freigibt. */
+          showMessage("Änderung eingereicht! Wir prüfen sie kurz – bis dahin bleibt dein Inserat in der bisherigen Version online.", "success");
         } catch (err) {
           console.error(err);
           showMessage("Beim Speichern ist ein Fehler aufgetreten.", "error");

@@ -222,3 +222,45 @@ async function manageEditJob(id, token, jobData) {
     if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
     return await response.json();
 }
+
+/* ═════════════════════════════════════════════════
+   EDIT-MODERATION (delete-jobs)
+   Bearbeitungen über den Verwaltungslink gehen nicht
+   direkt live, sondern warten als Vorschlag (Spalte P)
+   auf die Freigabe im Admin-Panel.
+═════════════════════════════════════════════════ */
+
+/* =========================
+   ADMIN: ALLE JOBS (inkl. gelöschte + Änderungs-Vorschläge)
+========================= */
+async function adminListJobs(adminKey) {
+    const response = await fetch(`${API_URL}?action=adminList&adminKey=${encodeURIComponent(adminKey)}`);
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
+
+/* =========================
+   ADMIN: ÄNDERUNG ÜBERNEHMEN
+========================= */
+async function approveJobEdit(id, adminKey) {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: "approveJobEdit", id: id, adminKey: adminKey })
+    });
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
+
+/* =========================
+   ADMIN: ÄNDERUNG ABLEHNEN
+========================= */
+async function rejectJobEdit(id, adminKey) {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ action: "rejectJobEdit", id: id, adminKey: adminKey })
+    });
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
