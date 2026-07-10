@@ -18,9 +18,6 @@ const jobMessage = document.getElementById("job-message");
 const dateFromInput = document.getElementById("date_from");
 const dateToInput = document.getElementById("date_to");
 const specificOrNotSelect = document.getElementById("specific_or_not");
-/* Disclaimer Logik */
-const disclaimerGate = document.getElementById("disclaimer-gate");
-const acceptDisclaimerBtn = document.getElementById("accept-disclaimer-btn");
 /* Cookie Banner constants */
 const cookieBanner = document.getElementById("cookie-banner");
 const acceptNecessaryCookiesButton = document.getElementById("accept-necessary-cookies");
@@ -33,6 +30,9 @@ let allJobs = [];
 let isSubmittingJob = false;
 let lastSubmitTime = 0;
 const SUBMIT_COOLDOWN_MS = 15000;
+const ANALYTICS_ID = "G-RDJXNN60R9";
+let analyticsEnabled = false;
+let analyticsScriptRequested = false;
 let activeFilters = {
     location: "",
     minSalary: "",
@@ -43,10 +43,43 @@ let activeFilters = {
 
 /* Hilfsfunktion Google Analytics */
 
-function trackEvent(eventName) {
-    if (typeof gtag === "function") {
-        gtag('event', eventName);
+function trackEvent(eventName, params = {}) {
+    if (analyticsEnabled && typeof window.gtag === "function") {
+        window.gtag("event", eventName, params);
     }
+}
+
+function loadAnalytics() {
+    analyticsEnabled = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () {
+        window.dataLayer.push(arguments);
+    };
+    window.gtag("consent", "update", { analytics_storage: "granted" });
+
+    if (analyticsScriptRequested) return;
+    analyticsScriptRequested = true;
+    window.gtag("js", new Date());
+    window.gtag("config", ANALYTICS_ID, {
+        anonymize_ip: true,
+        allow_google_signals: false
+    });
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(ANALYTICS_ID)}`;
+    document.head.appendChild(script);
+}
+
+function disableAnalytics() {
+    analyticsEnabled = false;
+    if (typeof window.gtag === "function") {
+        window.gtag("consent", "update", { analytics_storage: "denied" });
+    }
+
+    ["_ga", `_ga_${ANALYTICS_ID.replace("G-", "")}`].forEach(name => {
+        document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax`;
+    });
 }
 
 /* Datumsfelder */
@@ -72,6 +105,8 @@ function updateDurationInputs() {
 
     dateFromInput.disabled = disabled;
     dateToInput.disabled = disabled;
+    dateFromInput.required = mode === "Spezifisch";
+    dateToInput.required = mode === "Spezifisch";
 
     const fromField = dateFromInput.closest(".field");
     const toField = dateToInput.closest(".field");
@@ -96,6 +131,22 @@ dateFromInput.addEventListener("input", autoSelectSpecific);
 dateToInput.addEventListener("input", autoSelectSpecific);
 dateFromInput.addEventListener("change", autoSelectSpecific);
 dateToInput.addEventListener("change", autoSelectSpecific);
+
+const today = new Date();
+const todayLocal = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0")
+].join("-");
+dateFromInput.min = todayLocal;
+dateToInput.min = todayLocal;
+dateFromInput.addEventListener("change", function () {
+    dateToInput.min = dateFromInput.value || todayLocal;
+    if (dateToInput.value && dateToInput.value < dateToInput.min) {
+        dateToInput.value = "";
+        refreshDurationPlaceholders();
+    }
+});
 updateDurationInputs();
 
 /* Zeichen-Zähler für die Beschreibung */
@@ -147,53 +198,19 @@ function hideJobMessage() {
     jobMessage.className = "message-box hidden";
 }
 
-/* Hilfsfunktion Disclaimer */
-
-function initDisclaimerGate() {
-    const stored = localStorage.getItem("holidayjobDisclaimerAccepted");
-    const now = Date.now();
-
-    if (stored) {
-        const parsed = JSON.parse(stored);
-
-        // 24 Stunden = 86400000 ms
-        if (now - parsed.time < 86400000) {
-            disclaimerGate.classList.add("hidden");
-            return;
-        }
-    }
-
-    document.body.classList.add("disclaimer-open");
-
-    acceptDisclaimerBtn.addEventListener("click", function () {
-        localStorage.setItem("holidayjobDisclaimerAccepted", JSON.stringify({
-            time: Date.now()
-        }));
-
-        disclaimerGate.classList.add("hidden");
-        document.body.classList.remove("disclaimer-open");
-    });
-}
-
 /* Hilfsfunktion Cookie Banner */
 
 function initCookieBanner() {
     const cookieChoice = localStorage.getItem("holidayjobCookieChoice");
 
     if (cookieChoice === "analytics") {
-        gtag('consent', 'update', {
-            'analytics_storage': 'granted'
-        });
-
+        loadAnalytics();
         cookieBanner.classList.add("hidden");
         return;
     }
 
     if (cookieChoice === "necessary") {
-        gtag('consent', 'update', {
-            'analytics_storage': 'denied'
-        });
-
+        disableAnalytics();
         cookieBanner.classList.add("hidden");
         return;
     }
@@ -202,21 +219,13 @@ function initCookieBanner() {
 
     acceptNecessaryCookiesButton.addEventListener("click", function () {
         localStorage.setItem("holidayjobCookieChoice", "necessary");
-
-        gtag('consent', 'update', {
-            'analytics_storage': 'denied'
-        });
-
+        disableAnalytics();
         cookieBanner.classList.add("hidden");
     });
 
     acceptAnalyticsCookiesButton.addEventListener("click", function () {
         localStorage.setItem("holidayjobCookieChoice", "analytics");
-
-        gtag('consent', 'update', {
-            'analytics_storage': 'granted'
-        });
-
+        loadAnalytics();
         cookieBanner.classList.add("hidden");
     });
 }
@@ -227,7 +236,9 @@ if (changeCookieSettingsLink) {
     changeCookieSettingsLink.addEventListener("click", function (event) {
         event.preventDefault();
         localStorage.removeItem("holidayjobCookieChoice");
+        disableAnalytics();
         cookieBanner.classList.remove("hidden");
+        acceptNecessaryCookiesButton.focus();
     });
 }
 
@@ -271,7 +282,8 @@ function renderJobSkeletons(count = 6) {
 async function loadJobs() {
     renderJobSkeletons();
     try {
-        allJobs = await getJobs();
+        const jobs = await getJobs();
+        allJobs = Array.isArray(jobs) ? jobs : [];
     } catch (error) {
         console.error(error);
         allJobs = [];
@@ -282,7 +294,21 @@ async function loadJobs() {
         jobList.appendChild(box);
         return;
     }
+    updateHeroStats();
     renderJobs();
+}
+
+function updateHeroStats() {
+    const jobCount = document.getElementById("hero-job-count");
+    const companyCount = document.getElementById("hero-company-count");
+    const companies = new Set(
+        allJobs
+            .map(job => String(job.company || "").trim().toLowerCase())
+            .filter(Boolean)
+    );
+
+    if (jobCount) jobCount.textContent = String(allJobs.length);
+    if (companyCount) companyCount.textContent = String(companies.size);
 }
 
 /* Ist das Inserat jünger als 7 Tage? */
@@ -436,11 +462,15 @@ function renderJobs() {
         searchDateFromValue !== "" ||
         searchDateToValue !== "";
 
-    // Öffentliche Liste zeigt alle Jobs (~Defense-in-depth gegen Leaks vom Server)
-    let visibleJobs = allJobs;
+    // Alle Jobs werden unabhängig vom internen Status gleich dargestellt.
+    let visibleJobs = [...allJobs].sort((a, b) => {
+        const aTime = new Date(a.createdAt || 0).getTime() || 0;
+        const bTime = new Date(b.createdAt || 0).getTime() || 0;
+        return bTime - aTime;
+    });
 
     if (isSearching) {
-        visibleJobs = allJobs.filter(job => {
+        visibleJobs = visibleJobs.filter(job => {
             return (
                 matchesLocation(job, locationValue) &&
                 matchesMinSalary(job, minSalaryValue) &&
@@ -481,7 +511,11 @@ function renderJobs() {
         if (job.category) badgeRow.appendChild(el("span", "job-category-badge", job.category));
         if (isNewJob(job)) badgeRow.appendChild(el("span", "job-new-badge", "Neu"));
         if (badgeRow.childNodes.length > 0) top.appendChild(badgeRow);
-        top.appendChild(el("h3", "job-title", job.title));
+        const title = el("h3", "job-title");
+        const titleLink = el("a", null, job.title || "Ferienjob");
+        titleLink.href = getJobDetailHref(job);
+        title.appendChild(titleLink);
+        top.appendChild(title);
         top.appendChild(el("p", "job-company", job.company));
         card.appendChild(top);
 
@@ -504,7 +538,10 @@ function renderJobs() {
             const footer = el("div", "job-card-footer");
             footer.appendChild(el("span", "job-contact-label", "Kontakt"));
             footer.appendChild(buildContactValue(job));
+            footer.appendChild(buildJobActions(job));
             card.appendChild(footer);
+        } else {
+            card.appendChild(buildJobActions(job));
         }
 
         const reportLink = el("a", "job-report-link", "Inserat melden");
@@ -515,7 +552,56 @@ function renderJobs() {
         jobList.appendChild(card);
     });
 
-    injectJobPostingSchema(visibleJobs);
+}
+
+function getJobDetailHref(job) {
+    return `job.html?id=${encodeURIComponent(String(job.id || ""))}`;
+}
+
+function findEmail(job) {
+    const text = `${job.contact || ""} ${job.description || ""}`;
+    const match = text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+    return match ? match[0] : "";
+}
+
+function findPhone(job) {
+    const contact = String(job.contact || "");
+    const match = contact.match(/(?:\+41|0)(?:[\s/().-]*\d){9,}/);
+    return match ? match[0].trim() : "";
+}
+
+function normalizePhone(phone) {
+    const compact = phone.replace(/[^\d+]/g, "");
+    return compact.startsWith("0") ? `+41${compact.slice(1)}` : compact;
+}
+
+function buildJobActions(job) {
+    const actions = el("div", "job-card-actions");
+    const email = findEmail(job);
+    const phone = findPhone(job);
+
+    if (email) {
+        const emailLink = el("a", "job-contact-action", "E-Mail senden");
+        emailLink.href = `mailto:${email}?subject=${encodeURIComponent("Bewerbung: " + (job.title || "Ferienjob") + " – via holidayjob.ch")}`;
+        emailLink.addEventListener("click", function () {
+            trackEvent("job_contact_email_click", { job_id: String(job.id || "") });
+        });
+        actions.appendChild(emailLink);
+    }
+
+    if (phone) {
+        const phoneLink = el("a", "job-contact-action", "Anrufen");
+        phoneLink.href = `tel:${normalizePhone(phone)}`;
+        phoneLink.addEventListener("click", function () {
+            trackEvent("job_contact_phone_click", { job_id: String(job.id || "") });
+        });
+        actions.appendChild(phoneLink);
+    }
+
+    const detailLink = el("a", "job-details-link", "Details");
+    detailLink.href = getJobDetailHref(job);
+    actions.appendChild(detailLink);
+    return actions;
 }
 
 /* Kontakt klickbar machen: E-Mail -> mailto, Telefonnummer -> tel */
@@ -533,43 +619,7 @@ function buildContactValue(job) {
     link.href = isEmail
         ? "mailto:" + contact + "?subject=" + encodeURIComponent("Bewerbung: " + (job.title || "Ferienjob") + " – via holidayjob.ch")
         : "tel:" + phoneDigits;
-    link.addEventListener("click", function () {
-        trackEvent(isEmail ? "job_contact_email_click" : "job_contact_phone_click");
-    });
     return link;
-}
-
-/* JobPosting-Schema für Google for Jobs (dynamisch nach dem Laden) */
-function injectJobPostingSchema(jobs) {
-    const old = document.getElementById("jobposting-schema");
-    if (old) old.remove();
-    if (!Array.isArray(jobs) || jobs.length === 0) return;
-
-    const postings = jobs.slice(0, 20).map(job => {
-        const posting = {
-            "@context": "https://schema.org",
-            "@type": "JobPosting",
-            "title": job.title || "",
-            "description": job.description || job.title || "",
-            "datePosted": job.createdAt ? String(job.createdAt).slice(0, 10) : undefined,
-            "employmentType": "TEMPORARY",
-            "hiringOrganization": { "@type": "Organization", "name": job.company || "" },
-            "jobLocation": {
-                "@type": "Place",
-                "address": { "@type": "PostalAddress", "addressLocality": job.location || "", "addressCountry": "CH" }
-            }
-        };
-        if (job.specific_or_not === "Spezifisch" && job.date_to) {
-            posting.validThrough = String(job.date_to).slice(0, 10);
-        }
-        return posting;
-    });
-
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = "jobposting-schema";
-    script.textContent = JSON.stringify(postings);
-    document.head.appendChild(script);
 }
 
 /* =========================
@@ -626,10 +676,18 @@ jobForm.addEventListener("submit", async function(event) {
             return;
         }
 
+        if (newJob.specific_or_not === "Spezifisch" && newJob.date_from > newJob.date_to) {
+            showJobMessage("Das Bis-Datum muss am oder nach dem Von-Datum liegen.", "error");
+            hideLoading();
+            setFormDisabled(false);
+            isSubmittingJob = false;
+            return;
+        }
+
         const result = await createJob(newJob);
 
         if (!result.success) {
-            showJobMessage(result.message || "Job konnte nicht erstellt werden.");
+            showJobMessage(result.message || "Job konnte nicht erstellt werden.", "error");
             return;
         }
 
@@ -638,9 +696,10 @@ jobForm.addEventListener("submit", async function(event) {
         jobForm.reset();
         await loadJobs();
         updateDurationInputs();
-        showJobMessage("Job erfolgreich veröffentlicht.");
+        showJobMessage("Job erfolgreich veröffentlicht.", "success");
+        trackEvent("job_published", { category: newJob.category || "unknown" });
     } catch (error) {
-        showJobMessage("Beim Veröffentlichen ist ein Fehler aufgetreten.");
+        showJobMessage("Beim Veröffentlichen ist ein Fehler aufgetreten.", "error");
         console.error(error);
     } finally {
         hideLoading();
@@ -675,11 +734,15 @@ function matchesLocation(job, searchValue) {
 function extractSalaryNumber(salaryText) {
     if (!salaryText) return null;
 
-    const match = String(salaryText).match(/\d+/); // ← findet ERSTE Zahl
+    const normalized = String(salaryText).replace(",", ".");
+    const looksHourly = /(?:\/\s*h\b|pro\s+stunde|stundenlohn|je\s+stunde)/i.test(normalized);
+    if (!looksHourly) return null;
+
+    const match = normalized.match(/\d+(?:\.\d+)?/);
 
     if (!match) return null;
 
-    return parseInt(match[0], 10);
+    return parseFloat(match[0]);
 }
 
 function matchesMinSalary(job, minSalaryValue) {
@@ -742,15 +805,15 @@ function matchesDuration(job, searchDateFromValue, searchDateToValue) {
     }
 
     if (searchStart && searchEnd) {
-        return jobStart >= searchStart && jobEnd <= searchEnd;
+        return jobEnd >= searchStart && jobStart <= searchEnd;
     }
 
     if (searchStart && !searchEnd) {
-        return jobStart >= searchStart;
+        return jobEnd >= searchStart;
     }
 
     if (!searchStart && searchEnd) {
-        return jobEnd <= searchEnd;
+        return jobStart <= searchEnd;
     }
 
     return true;
@@ -792,19 +855,31 @@ resetFiltersButton.addEventListener("click", function () {
 });
 /* eventListener für Toggle Job posten Bar */
 
-jobFormToggle.addEventListener("click", function () {
-    trackEvent("job_form_opened")
-    const isOpen = jobFormWrapper.classList.contains("open");
+function setJobFormOpen(open, shouldFocus = false) {
+    jobFormWrapper.classList.toggle("open", open);
+    jobFormToggle.classList.toggle("active", open);
+    jobFormToggle.setAttribute("aria-expanded", String(open));
+    jobFormToggleIcon.textContent = "+";
 
-    if (isOpen) {
-        jobFormWrapper.classList.remove("open");
-        jobFormToggle.classList.remove("active");
-        jobFormToggleIcon.textContent = "+";
-    } else {
-        jobFormWrapper.classList.add("open");
-        jobFormToggle.classList.add("active");
-        jobFormToggleIcon.textContent = "+";
+    if (open && shouldFocus) {
+        const firstField = document.getElementById("company");
+        if (firstField) firstField.focus({ preventScroll: true });
     }
+}
+
+jobFormToggle.addEventListener("click", function () {
+    const willOpen = !jobFormWrapper.classList.contains("open");
+    setJobFormOpen(willOpen, willOpen);
+    if (willOpen) trackEvent("job_form_opened");
+});
+
+["header-insert-cta", "hero-insert-cta"].forEach(id => {
+    const link = document.getElementById(id);
+    if (!link) return;
+    link.addEventListener("click", function () {
+        setJobFormOpen(true);
+        trackEvent("job_form_opened", { source: id });
+    });
 });
 
 /* Filter Popup öffnen / schliessen */
@@ -812,11 +887,16 @@ jobFormToggle.addEventListener("click", function () {
 function openFilterPopup() {
     filterPopup.classList.add("open");
     filterToggle.setAttribute("aria-expanded", "true");
+    filterPopup.setAttribute("aria-hidden", "false");
+    filterPopup.inert = false;
+    searchLocationInput.focus();
 }
 
 function closeFilterPopup() {
     filterPopup.classList.remove("open");
     filterToggle.setAttribute("aria-expanded", "false");
+    filterPopup.setAttribute("aria-hidden", "true");
+    filterPopup.inert = true;
 }
 
 filterToggle.addEventListener("click", function (e) {
@@ -895,7 +975,6 @@ async function loadPublicSponsors() {
    START
 ========================= */
 
-initDisclaimerGate();
 initCookieBanner();
 /* =========================
    SCHNELLSUCHE + KATEGORIE-CHIPS
@@ -914,6 +993,7 @@ if (quickSearchInput) {
 }
 
 categoryChips.forEach(chip => {
+    chip.setAttribute("aria-pressed", String(chip.classList.contains("active")));
     chip.addEventListener("click", function () {
         const cat = chip.dataset.cat || "";
         activeFilters.category = cat;
@@ -926,7 +1006,9 @@ categoryChips.forEach(chip => {
 /* Chips folgen dem aktiven Kategorie-Filter (auch aus dem Popup) */
 function syncCategoryChips() {
     categoryChips.forEach(chip => {
-        chip.classList.toggle("active", (chip.dataset.cat || "") === (activeFilters.category || ""));
+        const active = (chip.dataset.cat || "") === (activeFilters.category || "");
+        chip.classList.toggle("active", active);
+        chip.setAttribute("aria-pressed", String(active));
     });
 }
 
@@ -934,6 +1016,10 @@ function updateJobsCount(n) {
     if (!jobsCountLabel) return;
     jobsCountLabel.textContent = n === 1 ? "1 Job online" : n + " Jobs online";
 }
+
+filterPopup.setAttribute("aria-hidden", "true");
+filterPopup.inert = true;
+setJobFormOpen(window.location.hash === "#post-job-section");
 
 renderTestimonials();
 loadJobs();

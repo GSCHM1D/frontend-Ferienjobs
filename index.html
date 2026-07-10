@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>holidayjob.ch – Ferienjobs in der Schweiz finden & inserieren</title>
     <meta name="description" content="Die Schweizer Plattform für Ferienjobs: Jugendliche finden Jobs in ihrer Nähe, Unternehmen inserieren kostenlos und ohne Login. Direkt, lokal, unkompliziert.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="stylesheet" href="styles.css">
     <!--Icons-->
     <link rel="icon" href="icons/favicon.ico">
@@ -22,6 +23,8 @@
     <meta property="og:url" content="https://holidayjob.ch/">
     <meta property="og:image" content="https://holidayjob.ch/icons/android-chrome-512x512.png">
     <meta property="og:locale" content="de_CH">
+    <meta property="og:site_name" content="holidayjob.ch">
+    <meta name="twitter:card" content="summary">
     <link rel="preload" href="fonts/syne-v24-latin-800.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="fonts/dm-sans-v17-latin-300.woff2" as="font" type="font/woff2" crossorigin>
     <script type="application/ld+json">
@@ -48,65 +51,10 @@
       ]
     }
     </script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RDJXNN60R9"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-RDJXNN60R9');
-    </script>
 </head>
 <body>
 
     <a href="#jobs" class="skip-link">Direkt zu den Jobs</a>
-
-    <div id="disclaimer-gate" class="disclaimer-gate">
-      <div class="disclaimer-gate-card">
-        <h2>Rechtlicher Hinweis</h2>
-          <p>
-            holidayjob.ch ist eine Online-Plattform zur Inserierung und Veröffentlichung
-            von Angeboten für temporäre Einsätze, insbesondere Ferienjobs, Aushilfejobs,
-            Tageseinsätze und vergleichbare kurzfristige Tätigkeiten in der Schweiz.
-          </p>
-          <p>
-            holidayjob.ch stellt ausschliesslich die technische Möglichkeit bereit, Inserate
-            zu erfassen, zu veröffentlichen und Kontaktangaben zugänglich zu machen.
-            holidayjob.ch vermittelt selbst keine Jobs, trifft keine Auswahlentscheidungen
-            und ist nicht Arbeitgeberin, nicht Arbeitnehmerin und nicht Vertragspartei
-            eines Arbeits-, Praktikums-, Auftrags-, Einsatz- oder sonstigen Vertragsverhältnisses
-            zwischen Inserierenden und Interessierten.
-          </p>
-          <p>
-            Die Kontaktaufnahme erfolgt direkt zwischen den im Inserat genannten Parteien.
-            Ab dem Zeitpunkt der direkten Kontaktaufnahme ist holidayjob.ch nicht mehr Teil
-            des weiteren Kommunikations-, Bewerbungs-, Vertrags- oder Einsatzprozesses.
-          </p>
-          <p>
-            holidayjob.ch prüft Inserate und Angaben nicht generell vorab oder fortlaufend
-            und übernimmt keine Gewähr für Richtigkeit, Vollständigkeit, Aktualität,
-            Rechtmässigkeit, Seriosität oder Eignung der veröffentlichten Inhalte und Angebote.
-          </p>
-          <p>
-            holidayjob.ch schuldet keinen Veröffentlichungserfolg, keinen Kontakterfolg,
-            keinen Bewerbungserfolg und kein Zustandekommen eines Vertrags oder Einsatzes.
-          </p>
-          <p>
-            Soweit gesetzlich zulässig, ist die Haftung von holidayjob.ch ausgeschlossen
-            oder beschränkt. Zwingende gesetzliche Ansprüche bleiben vorbehalten.
-          </p>
-          <p>
-            Weitere Informationen finden sich in den
-            <a href="/legal/agb.html">AGB</a>,
-            in der <a href="/legal/datenschutz.html">Datenschutzerklärung</a>
-            und im <a href="/legal/impressum.html">Impressum</a>.
-          </p>
-
-        <button type="button" id="accept-disclaimer-btn">
-          Ich habe alles gelesen und akzeptiere es
-        </button>
-      </div>
-    </div>
 
     <!-- ═══════════ TOPBAR ═══════════ -->
     <header class="topbar">
@@ -140,9 +88,9 @@
           </div>
         </div>
         <div class="hero-right">
-          <div class="hero-stat"><b>30+</b><span>Jobs ermöglicht</span></div>
+          <div class="hero-stat"><b id="hero-job-count">–</b><span>Jobs aktuell</span></div>
           <div class="hero-stat hero-stat-accent"><b>0.–</b><span>Kosten &amp; Provision</span></div>
-          <div class="hero-stat"><b>20+</b><span>Firmen an Bord</span></div>
+          <div class="hero-stat"><b id="hero-company-count">–</b><span>Inserierende aktuell</span></div>
         </div>
       </div>
 
@@ -162,16 +110,17 @@
     <section class="panel jobs-section anim-rise d1" id="jobs">
         <div class="section-head">
             <h2>Alle Ferienjobs</h2>
-            <span id="jobs-count" class="jobs-count"></span>
+            <span id="jobs-count" class="jobs-count" aria-live="polite"></span>
         </div>
 
         <div class="jobs-toolbar">
             <div class="jobs-quick-search">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="search" id="job-quick-search" placeholder="Jobtitel, Firma oder Ort suchen…" autocomplete="off">
+                <label for="job-quick-search" class="sr-only">Jobtitel, Firma oder Ort suchen</label>
+                <input type="search" id="job-quick-search" placeholder="Jobtitel, Firma oder Ort suchen…" autocomplete="off" enterkeyhint="search">
             </div>
             <div class="filter-popup-anchor">
-                <button type="button" id="filter-toggle" class="filter-popup-btn">
+                <button type="button" id="filter-toggle" class="filter-popup-btn" aria-expanded="false" aria-controls="filter-popup">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <line x1="4" y1="6" x2="20" y2="6"/>
                         <line x1="8" y1="12" x2="16" y2="12"/>
@@ -180,7 +129,7 @@
                     Mehr Filter
                 </button>
 
-                <div id="filter-popup" class="filter-popup">
+                <div id="filter-popup" class="filter-popup" aria-label="Ferienjobs filtern">
                     <div class="filter-popup-top">
                         <span class="filter-popup-title">Ferienjobs filtern</span>
                         <button type="button" id="filter-popup-close" class="filter-popup-close" aria-label="Schliessen">
@@ -192,9 +141,12 @@
                     </div>
 
                     <div class="search-filters">
+                        <label for="search-location" class="sr-only">Ort oder Postleitzahl</label>
                         <input type="text" id="search-location" placeholder="Ort / PLZ">
-                        <input type="number" id="search-min-salary" placeholder="Mindestlohn (CHF)">
+                        <label for="search-min-salary" class="sr-only">Mindeststundenlohn in Franken</label>
+                        <input type="number" id="search-min-salary" placeholder="Mindestlohn pro Stunde" min="0" step="0.5" inputmode="decimal">
 
+                        <label for="search-category" class="sr-only">Kategorie</label>
                         <select id="search-category">
                             <option value="">Alle Kategorien</option>
                             <option value="Gastronomie">Gastronomie</option>
@@ -207,7 +159,9 @@
                         </select>
 
                         <div class="date-row">
+                            <label for="search-date-from" class="sr-only">Verfügbar ab</label>
                             <input type="date" id="search-date-from">
+                            <label for="search-date-to" class="sr-only">Verfügbar bis</label>
                             <input type="date" id="search-date-to">
                         </div>
                     </div>
@@ -234,6 +188,7 @@
         <div id="job-list">
             <p class="jobs-loading-text">Ferienjobs werden geladen...</p>
         </div>
+        <p class="jobs-safety-note"><strong>Sicher bewerben:</strong> Zahle für einen Job nie Geld im Voraus und sende im Erstkontakt keine Ausweis- oder Bankdaten. <a href="wissen.html#sicher-bewerben">Mehr Sicherheitstipps</a></p>
     </section>
 
     <!-- ═══════════ SO FUNKTIONIERT'S ═══════════ -->
@@ -283,7 +238,7 @@
         <div class="employer-benefits">
             <div class="employer-benefit">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                <span><b>Geprüfte Veröffentlichung</b> – wir schauen jedes Inserat kurz an, bevor es live geht.</span>
+                <span><b>Direkt sichtbar</b> – alle Angaben stehen Interessierten ohne Login bereit.</span>
             </div>
             <div class="employer-benefit">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -294,26 +249,26 @@
                 <span><b>In 2 Minuten online</b> – kein Konto, keine Kosten, keine Provision.</span>
             </div>
         </div>
-        <button type="button" id="job-form-toggle" class="job-form-toggle">
+        <button type="button" id="job-form-toggle" class="job-form-toggle" aria-expanded="false" aria-controls="job-form-wrapper">
             <span>Ferienjob inserieren</span>
             <span id="job-form-toggle-icon" class="job-form-toggle-icon">+</span>
         </button>
 
         <div id="job-form-wrapper" class="job-form-wrapper">
-            <div id="job-message" class="message-box hidden"></div>
+            <div id="job-message" class="message-box hidden" role="status" aria-live="polite"></div>
             <form id="job-form">
                 <div class="field">
                     <label for="company">Firma / Name</label>
-                    <input type="text" id="company" placeholder="z. B. Gartenbau Muster AG" required>
+                    <input type="text" id="company" placeholder="z. B. Gartenbau Muster AG" required minlength="2" maxlength="100" autocomplete="organization">
                 </div>
                 <div class="field">
                     <label for="title">Jobtitel <span class="optional">(max. 30 Zeichen)</span></label>
-                    <input type="text" id="title" placeholder="z. B. Aushilfe Gartenarbeit" maxlength="30" required>
+                    <input type="text" id="title" placeholder="z. B. Aushilfe Gartenarbeit" minlength="4" maxlength="30" required autocomplete="off">
                 </div>
 
                 <div class="field">
                     <label for="category">Kategorie</label>
-                    <select id="category">
+                    <select id="category" required>
                         <option value="">Kategorie auswählen</option>
                         <option value="Gastronomie">Gastronomie</option>
                         <option value="Büro">Büro</option>
@@ -326,12 +281,13 @@
                 </div>
                 <div class="field">
                     <label for="location">Ort / PLZ</label>
-                    <input type="text" id="location" placeholder="z. B. 5000 Aarau" required>
+                    <input type="text" id="location" placeholder="z. B. 5000 Aarau" required minlength="2" maxlength="100" autocomplete="address-level2">
                 </div>
 
                 <div class="field">
                     <label for="contact">Kontakt <span class="optional">(E-Mail oder Telefon)</span></label>
-                    <input type="text" id="contact" placeholder="So melden sich Interessierte" required>
+                    <input type="text" id="contact" placeholder="E-Mail oder Telefonnummer" required minlength="5" maxlength="160" aria-describedby="contact-help">
+                    <small id="contact-help" class="field-help">Diese Angabe wird öffentlich angezeigt.</small>
                 </div>
                 <div class="field">
                     <label for="salary">Lohn</label>
@@ -340,7 +296,7 @@
 
                 <div class="field span2">
                     <label for="requirements">Anforderungen <span class="optional">(optional)</span></label>
-                    <input type="text" id="requirements" placeholder="z. B. Mindestalter 15, körperlich fit">
+                    <input type="text" id="requirements" placeholder="z. B. Mindestalter 15, körperlich fit" maxlength="250">
                 </div>
 
                 <div class="date-row">
@@ -354,7 +310,7 @@
                     </div>
                     <div class="field field--zeitraum">
                         <label for="specific_or_not">Zeitraum</label>
-                        <select id="specific_or_not">
+                        <select id="specific_or_not" required>
                             <option value="">Einmalig oder dauerhaft?</option>
                             <option value="Dauerhaft">Dauerhaft Aushilfe gesucht</option>
                             <option value="Spezifisch">Aushilfe in spezifischem Zeitraum gesucht</option>
@@ -365,10 +321,21 @@
 
                 <div class="field span2">
                     <label for="description">Beschreibung <span class="optional" id="description-counter">max. 500 Zeichen</span></label>
-                    <textarea id="description" placeholder="Was ist zu tun? Was sollte man mitbringen?" maxlength="500" required></textarea>
+                    <textarea id="description" placeholder="Was ist zu tun? Wie sind Arbeitszeiten und Ablauf? Was sollte man mitbringen?" minlength="40" maxlength="500" required></textarea>
                 </div>
 
-                <input type="text" id="website" class="honeypot-field" tabindex="-1" autocomplete="off">
+                <input type="text" id="website" class="honeypot-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+                <div class="form-compliance span2">
+                    <label class="check-row" for="reporting-duty-checked">
+                        <input type="checkbox" id="reporting-duty-checked" required>
+                        <span>Ich habe im offiziellen <a href="https://www.arbeit.swiss/de/arbeitgebende/stellenmeldepflicht-2026" target="_blank" rel="noopener noreferrer">Check-up 2026</a> geprüft, ob die Stelle meldepflichtig ist, und halte gegebenenfalls den gesetzlichen Publikationsvorsprung ein.</span>
+                    </label>
+                    <label class="check-row" for="terms-accepted">
+                        <input type="checkbox" id="terms-accepted" required>
+                        <span>Ich bestätige, dass das Angebot real, rechtmässig und altersgerecht ist, und akzeptiere die <a href="/legal/agb.html" target="_blank" rel="noopener noreferrer">AGB</a> sowie die <a href="/legal/datenschutz.html" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a>.</span>
+                    </label>
+                </div>
 
                 <button type="submit">Job veröffentlichen</button>
             </form>
@@ -398,7 +365,7 @@
             </details>
             <details class="faq-item">
                 <summary>Brauche ich ein Konto?</summary>
-                <div class="faq-body"><p>Nein. Jobs ansehen geht sofort, und auch ein Inserat erfassst du ohne Registrierung. Die Kontaktaufnahme läuft direkt zwischen dir und dem Unternehmen.</p></div>
+                <div class="faq-body"><p>Nein. Jobs ansehen geht sofort, und auch ein Inserat erfasst du ohne Registrierung. Die Kontaktaufnahme läuft direkt zwischen dir und dem Unternehmen.</p></div>
             </details>
             <details class="faq-item">
                 <summary>Ab welchem Alter darf ich einen Ferienjob machen?</summary>
@@ -470,12 +437,12 @@
 </div>
 
 <!-- Cookie-Banner -->
-<div id="cookie-banner" class="cookie-banner hidden">
+<div id="cookie-banner" class="cookie-banner hidden" role="dialog" aria-modal="false" aria-labelledby="cookie-banner-title">
   <div class="cookie-banner-text">
-    <strong>Cookies & Analyse</strong>
+    <strong id="cookie-banner-title">Datenschutz-Einstellungen</strong>
     <p>
-      Wir verwenden notwendige technische Funktionen sowie optional Google Analytics,
-      um die Nutzung der Website besser zu verstehen und Nutzerverkehr zu analysieren.
+      Die Website funktioniert ohne Analyse-Cookies. Google Analytics laden wir nur,
+      wenn du es erlaubst. Deine Auswahl kannst du jederzeit im Footer ändern.
     </p>
     <p>
       Mehr dazu in der
@@ -488,29 +455,13 @@
       Nur notwendige
     </button>
     <button type="button" id="accept-analytics-cookies">
-      Akzeptieren
+      Analyse erlauben
     </button>
   </div>
 </div>
 
 <script src="api.js"></script>
 <script src="app.js"></script>
-
-<script>
-  // "Job inserieren" (Topbar + Hero): Formular aufklappen (Scroll via #anchor)
-  function openJobForm() {
-    var toggle  = document.getElementById('job-form-toggle');
-    var wrapper = document.getElementById('job-form-wrapper');
-    if (wrapper && !wrapper.classList.contains('open')) {
-      wrapper.classList.add('open');
-      if (toggle) toggle.classList.add('active');
-    }
-  }
-  ['header-insert-cta', 'hero-insert-cta'].forEach(function(id) {
-    var btn = document.getElementById(id);
-    if (btn) btn.addEventListener('click', openJobForm);
-  });
-</script>
 
 </body>
 </html>
