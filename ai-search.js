@@ -18,10 +18,27 @@
 
     if (!openBtn || !drawer) return;
 
+    const gate       = document.getElementById("ai-gate");
+    const gateAccept = document.getElementById("ai-gate-accept");
+    const GATE_KEY   = "hjAiDisclaimerAccepted";
+
     /* Verlauf nur für die laufende Sitzung (wird nicht gespeichert) */
     let history = [];
     let isWaiting = false;
     let greeted = false;
+
+    function gateAccepted() {
+        try { return sessionStorage.getItem(GATE_KEY) === "1"; } catch { return false; }
+    }
+
+    function showGreeting() {
+        if (greeted) return;
+        greeted = true;
+        addMessage("assistant",
+            "Hi! Ich helfe dir, den passenden Ferienjob zu finden. " +
+            "Erzähl mir zum Beispiel, was du gerne machst, wo du ungefähr wohnst " +
+            "oder wann du Zeit hast – ich schaue, was gerade passt.");
+    }
 
     /* ── Öffnen / Schliessen ── */
     function openDrawer() {
@@ -34,16 +51,30 @@
         const popup = document.getElementById("filter-popup");
         if (popup) popup.classList.remove("open");
 
-        if (!greeted) {
-            greeted = true;
-            addMessage("assistant",
-                "Hi! Ich helfe dir, den passenden Ferienjob zu finden. " +
-                "Erzähl mir zum Beispiel, was du gerne machst, wo du ungefähr wohnst " +
-                "oder wann du Zeit hast – ich schaue, was gerade passt.");
+        if (gateAccepted()) {
+            gate.classList.add("hidden");
+            showGreeting();
+            setTimeout(() => input.focus(), 250);
+        } else {
+            /* Hinweis zuerst: Chat bleibt gesperrt, bis er bestätigt ist */
+            gate.classList.remove("hidden");
+            sugBox.classList.add("hidden");
+            input.disabled = true;
+            sendBtn.disabled = true;
         }
         if (typeof trackEvent === "function") trackEvent("ai_search_opened");
-        setTimeout(() => input.focus(), 250);
     }
+
+    gateAccept.addEventListener("click", function () {
+        try { sessionStorage.setItem(GATE_KEY, "1"); } catch {}
+        gate.classList.add("hidden");
+        input.disabled = false;
+        sendBtn.disabled = false;
+        if (history.length === 0) sugBox.classList.remove("hidden");
+        showGreeting();
+        input.focus();
+        if (typeof trackEvent === "function") trackEvent("ai_disclaimer_accepted");
+    });
 
     function closeDrawer() {
         drawer.classList.remove("open");

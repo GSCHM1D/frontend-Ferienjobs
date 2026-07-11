@@ -122,16 +122,38 @@ function aiChat(data) {
 }
 ```
 
-## 4. Deployen (wichtig!)
+## 4. Berechtigung freischalten (WICHTIG – gleiche Falle wie bei MailApp!)
+
+`UrlFetchApp` (der Aufruf nach aussen zu Groq) braucht eine neue OAuth-
+Berechtigung. Der Bewilligungsdialog erscheint **nur bei manueller Ausführung
+im Editor** – nie bei Web-App-Aufrufen von der Website. Ohne diesen Schritt
+schlägt jeder Groq-Aufruf still fehl.
+
+Diese Testfunktion zusätzlich ins Script kopieren:
+
+```javascript
+function testAiChat() {
+  var result = aiChat({ messages: [{ role: "user", content: "Hallo, ich suche einen Job in Aarau" }] });
+  console.log(JSON.stringify(result));
+}
+```
+
+Dann:
+1. Oben in der Werkzeugleiste im Funktions-Dropdown **`testAiChat`** auswählen
+2. **▶ Ausführen** klicken
+3. Es erscheint „Autorisierung erforderlich" → **Berechtigungen überprüfen** →
+   dein Konto wählen → bei der Warnung „Google hat diese App nicht überprüft":
+   **Erweitert → Zu (Projektname) wechseln (unsicher)** → **Zulassen**
+   (die neue Berechtigung heisst sinngemäss „Verbindung mit einem externen
+   Dienst herstellen")
+4. Im **Ausführungsprotokoll** unten sollte jetzt eine echte KI-Antwort stehen
+   (`{"success":true,"reply":"..."}`)
+
+## 5. Deployen (wichtig!)
 
 **Bereitstellen → Bereitstellungen verwalten → ✏️ → Version: „Neue Version" →
 Bereitstellen** — NICHT „Neue Bereitstellung" (das würde eine neue URL erzeugen,
 und `api.js` zeigt weiter auf die alte).
-
-Beim ersten Aufruf verlangt Apps Script eine neue Berechtigung
-(**„Verbindung mit externem Dienst"** wegen `UrlFetchApp`) — dazu im Editor
-einmal eine Funktion manuell ausführen und bewilligen, sonst schlägt der
-Groq-Aufruf bei Web-App-Anfragen still fehl (gleiche Falle wie bei MailApp).
 
 ## Wie es zusammenspielt
 

@@ -1764,3 +1764,48 @@ body.ai-drawer-open { overflow: hidden; }
     .ai-drawer { width: 100vw; border-left: none; }
     .ai-search-trigger-sub { display: none; }
 }
+
+/* Hinweis-Gate beim ersten Öffnen der KI-Suche */
+.ai-gate {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 28px 26px;
+    gap: 4px;
+}
+.ai-gate.hidden { display: none; }
+.ai-gate-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+    margin-bottom: 10px;
+}
+.ai-gate h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+}
+.ai-gate p {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-soft);
+    max-width: 300px;
+    margin: 0 0 10px;
+}
+.ai-gate button {
+    margin-top: 8px;
+    padding: 12px 26px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #7c3aed, var(--primary));
+    box-shadow: 0 10px 20px rgba(124, 58, 237, 0.22);
+}
+
+/* Wenn der Gate sichtbar ist, nimmt er den Nachrichtenbereich ein */
+.ai-gate:not(.hidden) ~ .ai-messages { display: none; }
