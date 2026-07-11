@@ -172,21 +172,106 @@ function svgIcon(path) {
 /* ==================
    JOBS
 ================== */
+let deletedJobs = [];   // vom Inserenten gelöschte Jobs (für Mitteilungen)
+
 async function loadJobs() {
+    let data = null;
     try {
-        const data = await getJobs();
-        allJobs = Array.isArray(data) ? data : [];
-    } catch { allJobs = []; }
+        /* Bevorzugt: adminList (inkl. gelöschte + Änderungs-Vorschläge).
+           Fallback auf die öffentliche Liste, solange das Backend die
+           Action noch nicht kennt. */
+        data = await adminListJobs(adminKey);
+        if (!Array.isArray(data)) data = null;
+    } catch { data = null; }
+
+    if (data === null) {
+        try {
+            const pub = await getJobs();
+            data = Array.isArray(pub) ? pub : [];
+        } catch { data = []; }
+    }
+
+    deletedJobs = data.filter(j => j.status === "deleted");
+    allJobs     = data.filter(j => j.status !== "deleted");
+
     renderJobs();
+    renderDeleteNotices();
     updatePendingBadge();
     updateStats();
 }
 
+function hasPendingEdit(job) {
+    return job && job.pendingEdit && typeof job.pendingEdit === "object";
+}
+
 function updatePendingBadge() {
     const badge = document.getElementById("pending-badge");
-    const n = allJobs.filter(j => j.status !== "verified").length;
+    /* Handlungsbedarf = unverifizierte Jobs + offene Änderungs-Vorschläge */
+    const n = allJobs.filter(j => j.status !== "verified").length
+            + allJobs.filter(hasPendingEdit).length;
     if (n > 0) { badge.textContent = n; badge.classList.remove("hidden"); }
     else badge.classList.add("hidden");
+}
+
+/* ==================
+   LÖSCH-MITTEILUNGEN
+   Vom Inserenten gelöschte Jobs (deletedAt gesetzt) erscheinen als
+   wegdrückbare Mitteilung; Wegdrücken merkt sich das Panel lokal.
+================== */
+const DISMISSED_KEY = "hjAdminDismissedDeletes";
+
+function getDismissedDeletes() {
+    try { return JSON.parse(localStorage.getItem(DISMISSED_KEY)) || []; }
+    catch { return []; }
+}
+function dismissDelete(id) {
+    const list = getDismissedDeletes();
+    if (list.indexOf(String(id)) === -1) list.push(String(id));
+    localStorage.setItem(DISMISSED_KEY, JSON.stringify(list));
+}
+
+function renderDeleteNotices() {
+    const box = document.getElementById("admin-notices");
+    if (!box) return;
+    box.innerHTML = "";
+
+    const dismissed = getDismissedDeletes();
+    /* Nur Nutzer-Löschungen (deletedAt gesetzt), nicht Admin-Löschungen */
+    const notices = deletedJobs.filter(j => j.deletedAt && dismissed.indexOf(String(j.id)) === -1);
+
+    notices.forEach(job => {
+        const note = document.createElement("div");
+        note.className = "admin-notice";
+
+        const icon = document.createElement("span");
+        icon.className = "admin-notice-icon";
+        icon.innerHTML = svgIcon('<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>');
+        note.appendChild(icon);
+
+        const text = document.createElement("div");
+        text.className = "admin-notice-text";
+        const strong = document.createElement("strong");
+        strong.textContent = job.title || "Inserat";
+        text.appendChild(strong);
+        const when = job.deletedAt ? new Date(job.deletedAt).toLocaleDateString("de-CH") : "";
+        text.appendChild(document.createTextNode(
+            " (" + (job.company || "unbekannt") + ") wurde vom Inserenten gelöscht" + (when ? " – " + when : "") + "."
+        ));
+        note.appendChild(text);
+
+        const close = document.createElement("button");
+        close.className = "admin-notice-close";
+        close.title = "Mitteilung entfernen";
+        close.setAttribute("aria-label", "Mitteilung entfernen");
+        close.innerHTML = svgIcon('<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>');
+        close.addEventListener("click", function () {
+            dismissDelete(job.id);
+            note.remove();
+        });
+        note.appendChild(close);
+
+        box.appendChild(note);
+    });
 }
 
 function updateStats() {
@@ -204,8 +289,9 @@ function renderJobs() {
     const subtitle = document.getElementById("jobs-panel-subtitle");
 
     let jobs = allJobs;
-    if (currentFilter === "verified")   jobs = jobs.filter(j => j.status === "verified");
-    if (currentFilter === "unverified") jobs = jobs.filter(j => j.status !== "verified");
+    if (currentFilter === "verified")     jobs = jobs.filter(j => j.status === "verified");
+    if (currentFilter === "unverified")   jobs = jobs.filter(j => j.status !== "verified");
+    if (currentFilter === "pending-edit") jobs = jobs.filter(hasPendingEdit);
     if (search) jobs = jobs.filter(j =>
         (j.title    || "").toLowerCase().includes(search) ||
         (j.company  || "").toLowerCase().includes(search) ||
@@ -283,18 +369,129 @@ function buildJobCard(job) {
     card.appendChild(main);
     card.appendChild(info);
     card.appendChild(rightCol);
+
+    /* Änderungs-Vorschlag des Inserenten (Edit-Moderation) */
+    if (hasPendingEdit(job)) {
+        card.classList.add("ajc--pending-edit");
+        card.appendChild(buildPendingEditBox(job));
+    }
+
     return card;
+}
+
+/* Vergleichsbox: zeigt nur Felder, die sich vom Live-Stand unterscheiden */
+function buildPendingEditBox(job) {
+    const box = document.createElement("div");
+    box.className = "pending-edit-box";
+
+    const head = document.createElement("div");
+    head.className = "pending-edit-head";
+    const badge = document.createElement("span");
+    badge.className = "pending-edit-badge";
+    badge.textContent = "Änderung ausstehend";
+    head.appendChild(badge);
+    const hint = document.createElement("span");
+    hint.className = "pending-edit-hint";
+    hint.textContent = "Öffentlich ist weiterhin die bisherige Version.";
+    head.appendChild(hint);
+    box.appendChild(head);
+
+    const FIELD_LABELS = {
+        company: "Firma", title: "Jobtitel", category: "Kategorie",
+        location: "Ort", contact: "Kontakt", salary: "Lohn",
+        requirements: "Anforderungen", date_from: "Von", date_to: "Bis",
+        specific_or_not: "Zeitraum", description: "Beschreibung"
+    };
+
+    const list = document.createElement("div");
+    list.className = "pending-edit-diff";
+    let changes = 0;
+    Object.keys(FIELD_LABELS).forEach(key => {
+        const newVal = job.pendingEdit[key];
+        if (newVal === undefined) return;
+        const oldVal = String(job[key] ?? "");
+        if (String(newVal) === oldVal) return;
+        changes++;
+        const row = document.createElement("div");
+        row.className = "pending-edit-row";
+        const label = document.createElement("span");
+        label.className = "pending-edit-label";
+        label.textContent = FIELD_LABELS[key];
+        const oldEl = document.createElement("del");
+        oldEl.textContent = oldVal || "–";
+        const newEl = document.createElement("ins");
+        newEl.textContent = String(newVal) || "–";
+        row.appendChild(label); row.appendChild(oldEl); row.appendChild(newEl);
+        list.appendChild(row);
+    });
+    if (changes === 0) {
+        const none = document.createElement("p");
+        none.className = "pending-edit-none";
+        none.textContent = "Keine inhaltlichen Unterschiede zur Live-Version.";
+        list.appendChild(none);
+    }
+    box.appendChild(list);
+
+    const actions = document.createElement("div");
+    actions.className = "pending-edit-actions";
+
+    const approve = document.createElement("button");
+    approve.className = "ajc-btn verify-btn edit-approve-btn";
+    approve.dataset.id = String(job.id ?? "");
+    approve.innerHTML = svgIcon('<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>') + " Änderung übernehmen";
+    actions.appendChild(approve);
+
+    const reject = document.createElement("button");
+    reject.className = "ajc-btn delete-btn edit-reject-btn";
+    reject.dataset.id = String(job.id ?? "");
+    reject.innerHTML = svgIcon('<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>') + " Ablehnen";
+    actions.appendChild(reject);
+
+    box.appendChild(actions);
+    return box;
 }
 
 document.getElementById("admin-job-grid").addEventListener("click", async function(e) {
     if (isActionRunning) return;
-    const vBtn = e.target.closest(".job-verify-btn");
-    const dBtn = e.target.closest(".job-delete-btn");
-    const eBtn = e.target.closest(".job-edit-btn");
+    const vBtn  = e.target.closest(".job-verify-btn");
+    const dBtn  = e.target.closest(".job-delete-btn");
+    const eBtn  = e.target.closest(".job-edit-btn");
+    const apBtn = e.target.closest(".edit-approve-btn");
+    const rjBtn = e.target.closest(".edit-reject-btn");
     if (vBtn) await handleVerifyJob(vBtn.dataset.id);
     else if (dBtn) await handleDeleteJob(dBtn.dataset.id);
     else if (eBtn) openEditModal(eBtn.dataset.id);
+    else if (apBtn) await handleApproveEdit(apBtn.dataset.id);
+    else if (rjBtn) await handleRejectEdit(rjBtn.dataset.id);
 });
+
+/* ==================
+   EDIT-MODERATION
+================== */
+async function handleApproveEdit(id) {
+    isActionRunning = true;
+    showLoading("Änderung wird übernommen…");
+    try {
+        const result = await approveJobEdit(id, adminKey);
+        if (!result.success) { toast(result.message || "Übernehmen fehlgeschlagen.", "error"); return; }
+        await loadJobs();
+        toast("Änderung übernommen – neue Version ist live.", "success");
+    } catch { toast("Fehler beim Übernehmen.", "error"); }
+    finally { hideLoading(); isActionRunning = false; }
+}
+
+async function handleRejectEdit(id) {
+    if (!confirm("Diesen Änderungs-Vorschlag ablehnen? Die bisherige Version bleibt online.")) return;
+    isActionRunning = true;
+    showLoading("Vorschlag wird abgelehnt…");
+    try {
+        const result = await rejectJobEdit(id, adminKey);
+        if (!result.success) { toast(result.message || "Ablehnen fehlgeschlagen.", "error"); return; }
+        await loadJobs();
+        toast("Vorschlag abgelehnt – bisherige Version bleibt online.", "success");
+    } catch { toast("Fehler beim Ablehnen.", "error"); }
+    finally { hideLoading(); isActionRunning = false; }
+}
 
 async function handleVerifyJob(id) {
     isActionRunning = true;

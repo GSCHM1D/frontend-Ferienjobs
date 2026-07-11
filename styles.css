@@ -1498,3 +1498,107 @@ a.sponsor-tile:hover .sponsor-tile-img {
     fill: currentColor;
     flex-shrink: 0;
 }
+
+/* ══════════════════════════════════════════
+   INSERAT-SELBSTVERWALTUNG (delete-jobs)
+══════════════════════════════════════════ */
+
+/* Panel mit Verwaltungslink nach dem Inserieren */
+.manage-link-panel { text-align: left; }
+.manage-link-title {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+.manage-link-text {
+    margin: 0 0 12px;
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+.manage-link-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.manage-link-input {
+    flex: 1;
+    min-width: 220px;
+    font-size: 13px;
+    padding: 10px 12px;
+    background: #ffffff;
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    color: #0f172a;
+}
+.manage-link-copy {
+    flex-shrink: 0;
+    padding: 10px 18px;
+    font-size: 13.5px;
+}
+
+/* Manage-Seite */
+.manage-wrap {
+    max-width: 720px;
+    margin-inline: auto;
+}
+.manage-state {
+    text-align: center;
+    padding: 46px 20px;
+}
+.manage-state h2 { margin-bottom: 8px; }
+.manage-state p { max-width: 440px; margin-inline: auto; }
+
+.manage-job-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+.manage-job-head h2 { margin-bottom: 2px; }
+.manage-job-sub {
+    color: var(--text-soft);
+    font-size: 14px;
+    margin: 0 0 18px;
+}
+.manage-status-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 13px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.manage-status-pill.verified   { background: rgba(16,185,129,0.12); color: #047857; }
+.manage-status-pill.unverified { background: rgba(245,158,11,0.14); color: #92400e; }
+
+.manage-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+.manage-actions button { flex: 1; min-width: 180px; }
+
+.manage-danger-zone {
+    margin-top: 26px;
+    padding: 18px 20px;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 14px;
+    background: rgba(239, 68, 68, 0.05);
+}
+.manage-danger-zone h3 { color: #b91c1c; margin-bottom: 6px; }
+.manage-danger-zone p { font-size: 13.5px; margin-bottom: 12px; }
+
+.manage-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 18px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.manage-back-link:hover { text-decoration: underline; }

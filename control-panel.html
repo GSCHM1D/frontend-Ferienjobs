@@ -104,6 +104,9 @@
 
     <main class="main-content">
 
+      <!-- Mitteilungen (z. B. vom Inserenten gelöschte Jobs) – wegdrückbar -->
+      <div id="admin-notices" class="admin-notices"></div>
+
       <!-- TAB: ÜBERSICHT -->
       <div id="tab-dashboard" class="tab-panel active">
 
@@ -267,6 +270,7 @@
             <button class="filter-tab active" data-filter="all">Alle</button>
             <button class="filter-tab" data-filter="unverified">Ausstehend</button>
             <button class="filter-tab" data-filter="verified">Verifiziert</button>
+            <button class="filter-tab" data-filter="pending-edit">Änderungen</button>
           </div>
         </div>
         <div id="admin-job-grid" class="admin-job-grid">
