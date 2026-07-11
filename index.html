@@ -143,6 +143,12 @@
                         <button type="button" id="apply-filters">Filter anwenden</button>
                         <button type="button" id="reset-filters" class="secondary-button">Zurücksetzen</button>
                     </div>
+
+                    <button type="button" id="ai-search-open" class="ai-search-trigger">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.7L19.6 10l-5.7 1.9L12 17.6l-1.9-5.7L4.4 10l5.7-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>
+                        KI-Suche
+                        <span class="ai-search-trigger-sub">Lass dir beim Finden helfen</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -294,8 +300,42 @@
   </div>
 </div>
 
+<!-- ═══════════ KI-SUCHE (Drawer rechts) ═══════════ -->
+<div id="ai-drawer-backdrop" class="ai-drawer-backdrop hidden"></div>
+<aside id="ai-drawer" class="ai-drawer" aria-label="KI-Jobsuche" aria-hidden="true">
+    <div class="ai-drawer-head">
+        <div class="ai-drawer-title">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.7L19.6 10l-5.7 1.9L12 17.6l-1.9-5.7L4.4 10l5.7-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>
+            <span>KI-Jobsuche</span>
+            <span class="ai-beta-tag">Beta</span>
+        </div>
+        <button type="button" id="ai-drawer-close" class="ai-drawer-close" aria-label="Schliessen">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+    </div>
+
+    <div id="ai-messages" class="ai-messages"></div>
+
+    <div id="ai-suggestions" class="ai-suggestions">
+        <button type="button" class="ai-suggestion">Ich arbeite gerne draussen</button>
+        <button type="button" class="ai-suggestion">Was gibt es in meiner Nähe?</button>
+        <button type="button" class="ai-suggestion">Ich habe nur im Juli Zeit</button>
+        <button type="button" class="ai-suggestion">Ich suche etwas im Service</button>
+    </div>
+
+    <form id="ai-form" class="ai-input-row">
+        <input type="text" id="ai-input" placeholder="Erzähl mir, was du suchst…" autocomplete="off" maxlength="400">
+        <button type="submit" id="ai-send" aria-label="Senden">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+    </form>
+
+    <p class="ai-disclaimer">KI kann Fehler machen – massgeblich sind die Angaben im Inserat. Deine Nachrichten werden zur Beantwortung an Groq (KI-Dienst) übermittelt; gib keine persönlichen Daten wie Adresse oder Handynummer ein.</p>
+</aside>
+
 <script src="api.js"></script>
 <script src="app.js"></script>
+<script src="ai-search.js"></script>
 
 </body>
 </html>

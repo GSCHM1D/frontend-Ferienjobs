@@ -169,3 +169,19 @@ async function editJob(id, adminKey, jobData) {
     return await response.json();
 }
 
+
+/* ═════════════════════════════════════════════════
+   KI-JOBSUCHE (ai-work)
+   Der Groq-API-Key liegt NIE im Frontend – das Apps
+   Script proxied die Anfrage (Key in Script Properties)
+   und baut den Job-Kontext direkt aus dem Sheet.
+═════════════════════════════════════════════════ */
+async function aiChat(messages) {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" }, // CORS-Workaround für Google Apps Script
+        body: JSON.stringify({ action: "aiChat", messages: messages })
+    });
+    if (!response.ok) throw new Error(`API-Fehler: ${response.status}`);
+    return await response.json();
+}
