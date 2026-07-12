@@ -1602,3 +1602,189 @@ a.sponsor-tile:hover .sponsor-tile-img {
     font-size: 14px;
 }
 .manage-back-link:hover { text-decoration: underline; }
+
+/* ══════════════════════════════════════════
+   FERIENJOB-KARTE (location-map)
+══════════════════════════════════════════ */
+
+/* Liste | Karte Umschalter */
+.jobs-section-header { flex-wrap: wrap; }
+.view-toggle {
+    display: inline-flex;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px;
+    margin-left: auto;
+    margin-right: 10px;
+}
+.view-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-soft);
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: none;
+    cursor: pointer;
+}
+.view-toggle-btn:hover { transform: none; box-shadow: none; filter: none; color: var(--text); }
+.view-toggle-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
+/* Karten-Ansicht */
+.job-map-view.hidden { display: none; }
+#job-list.hidden { display: none; }
+
+.map-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+.map-search-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.map-search-row input[type="text"] {
+    flex: 2;
+    min-width: 180px;
+}
+.map-search-row button { white-space: nowrap; }
+.map-search-row select {
+    flex: 1;
+    min-width: 150px;
+    max-width: 200px;
+}
+#map-geolocate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.map-filter-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.map-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    flex: 1;
+}
+.map-chip {
+    padding: 7px 13px;
+    border-radius: 999px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    color: #475569;
+    font-size: 12.5px;
+    font-weight: 700;
+    box-shadow: none;
+    cursor: pointer;
+}
+.map-chip:hover { transform: none; box-shadow: none; filter: none; border-color: var(--primary); color: var(--primary); }
+.map-chip.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-color: transparent;
+    color: #fff;
+}
+
+.map-period-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 190px;
+}
+.map-custom-period { display: flex; gap: 8px; }
+.map-custom-period.hidden { display: none; }
+.map-custom-period input { min-width: 0; }
+
+.map-meta-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+.map-count {
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
+}
+.map-status {
+    font-size: 12.5px;
+    color: var(--text-soft);
+}
+
+#job-map {
+    height: 560px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: #eef2f7;
+    z-index: 1; /* unter Popups/Bannern bleiben */
+}
+
+.map-note {
+    margin: 10px 0 0;
+    font-size: 12.5px;
+    color: var(--text-soft);
+}
+
+/* Suchzentrum-Punkt */
+.map-center-dot {
+    background: #2563eb;
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.45), 0 2px 6px rgba(15, 23, 42, 0.3);
+}
+
+/* Popup (Kurzvorschau) */
+.leaflet-popup-content { margin: 14px 16px; font-family: Arial, sans-serif; }
+.map-popup { display: flex; flex-direction: column; gap: 4px; min-width: 190px; }
+.map-popup-badge {
+    align-self: flex-start;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, 0.1);
+    color: #1d4ed8;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+.map-popup-title { font-size: 15px; color: #0f172a; line-height: 1.25; }
+.map-popup-company { font-size: 12.5px; color: #64748b; margin-bottom: 4px; }
+.map-popup-row { font-size: 12.5px; color: #475569; }
+.map-popup-row b { color: #334155; font-weight: 700; }
+.map-popup-btn {
+    margin-top: 9px;
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    width: 100%;
+}
+
+/* Aufblitzen der Job-Card nach "Inserat ansehen" */
+@keyframes jobCardFlash {
+    0%   { box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.55), var(--shadow); }
+    100% { box-shadow: var(--shadow); }
+}
+.job-card-flash { animation: jobCardFlash 1.6s ease; }
+
+@media (max-width: 720px) {
+    #job-map { height: 62vh; min-height: 380px; }
+    .view-toggle { margin-left: 0; order: 3; width: 100%; }
+    .view-toggle-btn { flex: 1; justify-content: center; }
+    .map-search-row select { max-width: none; }
+    .map-period-wrap { width: 100%; }
+}

@@ -247,6 +247,8 @@ const testimonials = [
 async function loadJobs() {
     allJobs = await getJobs();
     renderJobs();
+    /* Karte (map.js) über frische Daten informieren */
+    document.dispatchEvent(new CustomEvent("hj-jobs-loaded"));
 }
 
 /* =========================
@@ -416,6 +418,7 @@ function renderJobs() {
     visibleJobs.forEach(job => {
         const durationDisplay = getDurationDisplay(job);
         const card = el("div", "job-card public-job-card");
+        card.dataset.jobId = String(job.id ?? "");
 
         const top = el("div", "job-card-top");
         if (job.category) top.appendChild(el("span", "job-category-badge", job.category));

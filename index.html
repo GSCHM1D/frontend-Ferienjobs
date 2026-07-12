@@ -97,6 +97,16 @@
     <section class="jobs-section">
         <div class="jobs-section-header">
             <h2>Alle Ferienjobs</h2>
+            <div class="view-toggle" role="group" aria-label="Ansicht wechseln">
+                <button type="button" id="view-list-btn" class="view-toggle-btn active">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                    Liste
+                </button>
+                <button type="button" id="view-map-btn" class="view-toggle-btn">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="1 6 8 3 16 6 23 3 23 18 16 21 8 18 1 21"/><line x1="8" y1="3" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="21"/></svg>
+                    Karte
+                </button>
+            </div>
             <div class="filter-popup-anchor">
                 <button type="button" id="filter-toggle" class="filter-popup-btn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -149,6 +159,71 @@
 
         <div id="job-list">
             <p class="jobs-loading-text">Ferienjobs werden geladen...</p>
+        </div>
+
+        <!-- ═══════════ KARTEN-ANSICHT ═══════════ -->
+        <div id="job-map-view" class="job-map-view hidden">
+
+            <div class="map-toolbar">
+                <div class="map-search-row">
+                    <input type="text" id="map-search-input" placeholder="Ort oder PLZ eingeben…" autocomplete="off">
+                    <button type="button" id="map-search-btn">Suchen</button>
+                    <button type="button" id="map-geolocate-btn" class="secondary-button">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>
+                        Jobs in meiner Nähe
+                    </button>
+                    <select id="map-radius" title="Umkreis">
+                        <option value="all">Umkreis: alle</option>
+                        <option value="2">Umkreis: 2 km</option>
+                        <option value="5">Umkreis: 5 km</option>
+                        <option value="10" selected>Umkreis: 10 km</option>
+                        <option value="20">Umkreis: 20 km</option>
+                        <option value="30">Umkreis: 30 km</option>
+                        <option value="50">Umkreis: 50 km</option>
+                    </select>
+                </div>
+
+                <div class="map-filter-row">
+                    <div id="map-category-chips" class="map-chip-row" aria-label="Kategorien filtern">
+                        <button type="button" class="map-chip active" data-cat="">Alle</button>
+                        <button type="button" class="map-chip" data-cat="Gastronomie">Gastronomie</button>
+                        <button type="button" class="map-chip" data-cat="Büro">Büro</button>
+                        <button type="button" class="map-chip" data-cat="Bau">Bau</button>
+                        <button type="button" class="map-chip" data-cat="Verkauf">Verkauf</button>
+                        <button type="button" class="map-chip" data-cat="Gartenarbeit">Gartenarbeit</button>
+                        <button type="button" class="map-chip" data-cat="Landwirtschaft">Landwirtschaft</button>
+                        <button type="button" class="map-chip" data-cat="Sonstiges">Sonstiges</button>
+                    </div>
+                    <div class="map-period-wrap">
+                        <select id="map-period" title="Zeitraum">
+                            <option value="all">Zeitraum: alle</option>
+                            <option value="today">Heute</option>
+                            <option value="week">Diese Woche</option>
+                            <option value="weekend">Dieses Wochenende</option>
+                            <option value="summer">Sommerferien</option>
+                            <option value="autumn">Herbstferien</option>
+                            <option value="christmas">Weihnachtsferien</option>
+                            <option value="custom">Eigener Zeitraum…</option>
+                        </select>
+                        <div id="map-custom-period" class="map-custom-period hidden">
+                            <input type="date" id="map-period-from" title="Von">
+                            <input type="date" id="map-period-to" title="Bis">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="map-meta-row">
+                    <span id="map-count" class="map-count"></span>
+                    <span id="map-status" class="map-status" role="status"></span>
+                </div>
+            </div>
+
+            <div id="job-map" aria-label="Karte mit Ferienjobs"></div>
+
+            <p class="map-note">
+                Standorte werden auf Ortsebene und teils ungefähr angezeigt – nie als exakte Privatadresse.
+                Bitte prüfe vor einer Kontaktaufnahme die Anforderungen des Inserats.
+            </p>
         </div>
     </section>
 
@@ -296,6 +371,7 @@
 
 <script src="api.js"></script>
 <script src="app.js"></script>
+<script src="map.js"></script>
 
 </body>
 </html>
