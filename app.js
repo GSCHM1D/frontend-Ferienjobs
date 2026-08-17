@@ -238,6 +238,14 @@ const testimonials = [
         role: "Teamleiter Vertrieb",
         quote: "Die Plattform leistet uns grosse Unterstützung, um unsere Kunden in der Ferienzeit zu bedienen, da diese Ferienjobs eine echte Hilfe sind.",
         url: "https://www.azvertrieb.ch"
+    },
+    {
+        company: "Privatperson aus dem Aargau",
+        logo: "logos_firmen/Standard-Profilbild.jpg",
+        person: "",
+        role: "",
+        quote: "Aus dem Holiday-Job ist ein lockerer Langzeit-Job geworden!",
+        url: ""
     }
 ];
 
@@ -339,7 +347,11 @@ function renderTestimonials() {
 
         const info = el("div", "testimonial-info");
         info.appendChild(el("h3", null, item.company));
-        info.appendChild(el("p", null, `${item.person} · ${item.role}`));
+        if (item.role && item.person) {
+            info.appendChild(el("p", null, `${item.person}`));
+        }
+
+        
 
         top.appendChild(img);
         top.appendChild(info);

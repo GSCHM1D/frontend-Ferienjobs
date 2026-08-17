@@ -20,6 +20,14 @@ const testimonials = [
       role: "Teamleiter Vertrieb",
       quote: "Die Plattform leistet uns grosse Unterstützung, um unsere Kunden in der Ferienzeit zu bedienen, da diese Ferienjobs eine echte Hilfe sind.",
       url: "https://www.azvertrieb.ch"
+  },
+  {
+      company: "Privatperson aus dem Aargau",
+      logo: "logos_firmen/Standard-Profilbild.jpg",
+      person: "",
+      role: "",
+      quote: "Aus dem Holiday-Job ist ein lockerer Langzeit-Job geworden!",
+      url: ""
   }
 ];
 
@@ -70,10 +78,17 @@ function buildCarousel() {
     nameSpan.textContent = t.person;
     personDiv.appendChild(nameSpan);
 
-    const roleSpan = document.createElement('span');
-    roleSpan.className = 'testimonial-role';
-    roleSpan.textContent = `${t.role} · ${t.company}`;
-    personDiv.appendChild(roleSpan);
+    if (t.role && t.person) {
+      const roleSpan = document.createElement('span');
+      roleSpan.className = 'testimonial-role';
+      roleSpan.textContent = `${t.role} · ${t.company}`;
+      personDiv.appendChild(roleSpan);
+    } else {
+      const roleSpan = document.createElement("span");
+      roleSpan.className = "testimonial-role";
+      roleSpan.textContent = `${t.company}`;
+      personDiv.appendChild(roleSpan);
+    }
 
     const link = document.createElement('a');
     link.href = t.url;
