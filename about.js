@@ -28,7 +28,15 @@ const testimonials = [
       role: "",
       quote: "Aus dem Holiday-Job ist ein lockerer Langzeit-Job geworden!",
       url: ""
-  }
+  },
+   {
+        company: "Privatperson aus Muhen",
+        logo: "logos_firmen/Standard-Profilbild.jpg",
+        person: "",
+        role: "",
+        quote: "holidayjob.ch hat es uns ermöglicht sehr schnell die richtige Zielgruppe zu erreichen. Innerhalb von wenigen Stunden hatten wir zahlreiche Rückmeldungen auf unser Inserat.",
+        url: ""
+    }
 ];
 
 
