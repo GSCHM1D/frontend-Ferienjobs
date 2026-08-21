@@ -311,8 +311,8 @@
     <form id="edit-form">
       <input type="hidden" id="edit-job-id">
       <div class="edit-form-body">
-        <div class="form-field"><label>Firma</label><input type="text" id="edit-company" class="edit-input"></div>
-        <div class="form-field"><label>Jobtitel</label><input type="text" id="edit-title" class="edit-input"></div>
+        <div class="form-field"><label>Firma</label><input type="text" id="edit-company" class="edit-input"><input type="text" class="info-input" data-info="company" placeholder="ⓘ Info-Text (optional)"></div>
+        <div class="form-field"><label>Jobtitel</label><input type="text" id="edit-title" class="edit-input"><input type="text" class="info-input" data-info="title" placeholder="ⓘ Info-Text (optional)"></div>
         <div class="form-field"><label>Kategorie</label>
           <select id="edit-category" class="edit-input">
             <option value="">–</option>
@@ -324,11 +324,12 @@
             <option value="Landwirtschaft">Landwirtschaft</option>
             <option value="Sonstiges">Sonstiges</option>
           </select>
+          <input type="text" class="info-input" data-info="category" placeholder="ⓘ Info-Text (optional)">
         </div>
-        <div class="form-field"><label>Ort / PLZ</label><input type="text" id="edit-location" class="edit-input"></div>
-        <div class="form-field"><label>Kontakt</label><input type="text" id="edit-contact" class="edit-input"></div>
-        <div class="form-field"><label>Lohn</label><input type="text" id="edit-salary" class="edit-input"></div>
-        <div class="form-field span2"><label>Anforderungen</label><input type="text" id="edit-requirements" class="edit-input"></div>
+        <div class="form-field"><label>Ort / PLZ</label><input type="text" id="edit-location" class="edit-input"><input type="text" class="info-input" data-info="location" placeholder="ⓘ Info-Text (optional)"></div>
+        <div class="form-field"><label>Kontakt</label><input type="text" id="edit-contact" class="edit-input"><input type="text" class="info-input" data-info="contact" placeholder="ⓘ Info-Text (optional)"></div>
+        <div class="form-field"><label>Lohn</label><input type="text" id="edit-salary" class="edit-input"><input type="text" class="info-input" data-info="salary" placeholder="ⓘ Info-Text (optional)"></div>
+        <div class="form-field span2"><label>Anforderungen</label><input type="text" id="edit-requirements" class="edit-input"><input type="text" class="info-input" data-info="requirements" placeholder="ⓘ Info-Text (optional)"></div>
         <div class="form-field"><label>Von</label><input type="date" id="edit-date-from" class="edit-input"></div>
         <div class="form-field"><label>Bis</label><input type="date" id="edit-date-to" class="edit-input"></div>
         <div class="form-field span2">
@@ -338,8 +339,9 @@
             <option value="Dauerhaft">Dauerhaft</option>
             <option value="Spezifisch">Spezifisch</option>
           </select>
+          <input type="text" class="info-input" data-info="duration" placeholder="ⓘ Info-Text zum Zeitraum (optional)">
         </div>
-        <div class="form-field span2"><label>Beschreibung</label><textarea id="edit-description" class="edit-input" rows="4"></textarea></div>
+        <div class="form-field span2"><label>Beschreibung</label><textarea id="edit-description" class="edit-input" rows="4"></textarea><input type="text" class="info-input" data-info="description" placeholder="ⓘ Info-Text (optional)"></div>
       </div>
       <div class="modal-footer">
         <button type="button" id="edit-cancel-btn" class="btn-ghost">Abbrechen</button>

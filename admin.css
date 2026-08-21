@@ -695,3 +695,32 @@ body { font-family: var(--ff); background: var(--bg); color: var(--text); font-w
 @media (max-width: 700px) {
   .pending-edit-row { grid-template-columns: 1fr; gap: 2px; }
 }
+
+/* ══════════════════════════════════════════
+   INFO-LABEL-EINGABE im Bearbeiten-Modal
+══════════════════════════════════════════ */
+.info-input {
+  margin-top: 6px;
+  padding: 7px 10px;
+  font-size: 12.5px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text-2);
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.info-input::placeholder { color: var(--text-muted); }
+.info-input:focus {
+  border-style: solid;
+  border-color: var(--primary);
+  background: var(--surface);
+}
+/* Ausgefülltes Info-Feld hervorheben */
+.info-input:not(:placeholder-shown) {
+  border-style: solid;
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--text);
+}

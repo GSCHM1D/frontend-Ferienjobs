@@ -567,7 +567,35 @@ function openEditModal(id) {
     document.getElementById("edit-date-to").value         = job.date_to         || "";
     document.getElementById("edit-specific-or-not").value = job.specific_or_not || "";
     document.getElementById("edit-description").value     = job.description     || "";
+
+    /* Info-Labels: JSON-Objekt {feld: "Text"} in die Info-Felder verteilen */
+    const labels = parseInfoLabels(job.infoLabels);
+    document.querySelectorAll(".info-input").forEach(inp => {
+        inp.value = labels[inp.dataset.info] || "";
+    });
+
     document.getElementById("edit-modal").classList.remove("hidden");
+}
+
+/* Info-Labels sicher aus dem gespeicherten JSON-String lesen */
+function parseInfoLabels(raw) {
+    if (!raw) return {};
+    if (typeof raw === "object") return raw;
+    try {
+        const parsed = JSON.parse(raw);
+        return (parsed && typeof parsed === "object") ? parsed : {};
+    } catch { return {}; }
+}
+
+/* Alle ausgefüllten Info-Felder zu einem JSON-String zusammenfassen.
+   Leere Felder werden weggelassen -> kein Icon im Inserat. */
+function collectInfoLabels() {
+    const out = {};
+    document.querySelectorAll(".info-input").forEach(inp => {
+        const text = inp.value.trim();
+        if (text) out[inp.dataset.info] = text.slice(0, 300);
+    });
+    return Object.keys(out).length ? JSON.stringify(out) : "";
 }
 
 document.getElementById("edit-modal-close").addEventListener("click", () => document.getElementById("edit-modal").classList.add("hidden"));
@@ -590,6 +618,7 @@ document.getElementById("edit-form").addEventListener("submit", async function(e
         date_to:         document.getElementById("edit-date-to").value,
         specific_or_not: document.getElementById("edit-specific-or-not").value,
         description:     document.getElementById("edit-description").value.trim(),
+        infoLabels:      collectInfoLabels(),
     };
     try {
         const result = await editJob(id, adminKey, data);

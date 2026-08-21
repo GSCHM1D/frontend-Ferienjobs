@@ -390,13 +390,61 @@ function el(tag, className, text) {
     return element;
 }
 
-function metaItem(label, value, extraClass) {
+function metaItem(label, value, extraClass, infoText) {
     const item = el("div", "job-meta-item");
     if (extraClass) item.classList.add(extraClass);
-    item.appendChild(el("span", "job-meta-label", label));
+
+    const labelRow = el("span", "job-meta-label", label);
+    if (infoText) labelRow.appendChild(buildInfoIcon(infoText));
+    item.appendChild(labelRow);
+
     item.appendChild(el("span", "job-meta-value", value == null ? "" : String(value)));
     return item;
 }
+
+/* =========================
+   INFO-LABEL (kleines ⓘ mit Textblase)
+========================= */
+
+/* Gespeicherte Info-Texte eines Jobs lesen: {feld: "Text"} */
+function getInfoLabels(job) {
+    const raw = job && job.infoLabels;
+    if (!raw) return {};
+    if (typeof raw === "object") return raw;
+    try {
+        const parsed = JSON.parse(raw);
+        return (parsed && typeof parsed === "object") ? parsed : {};
+    } catch { return {}; }
+}
+
+/* Baut das graue ⓘ mit Klick-Textblase.
+   Text immer per textContent -> kein HTML aus dem Admin-Panel. */
+function buildInfoIcon(text) {
+    const wrap = el("span", "info-label");
+
+    const btn = el("button", "info-label-icon", "i");
+    btn.type = "button";
+    btn.setAttribute("aria-label", "Mehr Informationen");
+
+    const bubble = el("span", "info-label-bubble", text);
+
+    btn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        const wasOpen = wrap.classList.contains("open");
+        /* immer nur eine Blase offen */
+        document.querySelectorAll(".info-label.open").forEach(el => el.classList.remove("open"));
+        if (!wasOpen) wrap.classList.add("open");
+    });
+
+    wrap.appendChild(btn);
+    wrap.appendChild(bubble);
+    return wrap;
+}
+
+/* Klick irgendwo sonst schliesst offene Blasen */
+document.addEventListener("click", function () {
+    document.querySelectorAll(".info-label.open").forEach(el => el.classList.remove("open"));
+});
 
 function renderJobs() {
     const locationValue = activeFilters.location;
@@ -437,30 +485,45 @@ function renderJobs() {
         const durationDisplay = getDurationDisplay(job);
         const card = el("div", "job-card public-job-card");
 
+        const info = getInfoLabels(job);
+
         const top = el("div", "job-card-top");
-        if (job.category) top.appendChild(el("span", "job-category-badge", job.category));
-        top.appendChild(el("h3", "job-title", job.title));
-        top.appendChild(el("p", "job-company", job.company));
+        if (job.category) {
+            const badgeRow = el("span", "job-badge-row");
+            badgeRow.appendChild(el("span", "job-category-badge", job.category));
+            if (info.category) badgeRow.appendChild(buildInfoIcon(info.category));
+            top.appendChild(badgeRow);
+        }
+        const titleEl = el("h3", "job-title", job.title);
+        if (info.title) titleEl.appendChild(buildInfoIcon(info.title));
+        top.appendChild(titleEl);
+        const companyEl = el("p", "job-company", job.company);
+        if (info.company) companyEl.appendChild(buildInfoIcon(info.company));
+        top.appendChild(companyEl);
         card.appendChild(top);
 
         const body = el("div", "job-card-body");
         const list = el("div", "job-meta-list");
-        list.appendChild(metaItem("Ort", job.location, null));
-        if (job.salary) list.appendChild(metaItem("Lohn", job.salary, "job-meta-highlight"));
-        if (job.requirements) list.appendChild(metaItem("Voraussetzungen", job.requirements, null));
-        if (durationDisplay) list.appendChild(metaItem("Zeitdauer", durationDisplay.text, durationDisplay.className));
+        list.appendChild(metaItem("Ort", job.location, null, info.location));
+        if (job.salary) list.appendChild(metaItem("Lohn", job.salary, "job-meta-highlight", info.salary));
+        if (job.requirements) list.appendChild(metaItem("Voraussetzungen", job.requirements, null, info.requirements));
+        if (durationDisplay) list.appendChild(metaItem("Zeitdauer", durationDisplay.text, durationDisplay.className, info.duration));
         body.appendChild(list);
 
         if (job.description) {
             const block = el("div", "job-description-block");
-            block.appendChild(el("p", "job-description", job.description));
+            const descEl = el("p", "job-description", job.description);
+            if (info.description) descEl.appendChild(buildInfoIcon(info.description));
+            block.appendChild(descEl);
             body.appendChild(block);
         }
         card.appendChild(body);
 
         if (job.contact) {
             const footer = el("div", "job-card-footer");
-            footer.appendChild(el("span", "job-contact-label", "Kontakt"));
+            const contactLabel = el("span", "job-contact-label", "Kontakt");
+            if (info.contact) contactLabel.appendChild(buildInfoIcon(info.contact));
+            footer.appendChild(contactLabel);
             footer.appendChild(el("span", "job-contact-value", job.contact));
             card.appendChild(footer);
         }
