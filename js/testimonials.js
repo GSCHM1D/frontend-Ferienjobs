@@ -38,5 +38,13 @@ const testimonials = [
         role: "",
         quote: "holidayjob.ch hat es uns ermöglicht sehr schnell die richtige Zielgruppe zu erreichen. Innerhalb von wenigen Stunden hatten wir zahlreiche Rückmeldungen auf unser Inserat.",
         url: ""
+    },
+    {
+        company: "Musig ide Altstadt Aarau",
+        logo: "logos_firmen/MusigideAltstadt_logo.png",
+        person: "Yannik Schmitter",
+        role: "Leitung Staff",
+        quote: "Über holidayjob konnten wir für unser Festival Musig i de Altstadt Aarau unkompliziert engagierte Leute für Bareinsätze finden. Das Erstellen des Inserats gestaltete sich sehr einfach und unkompliziert. Und auch der Austausch mit den Gründern Gabriel und Lucas war jederzeit angenehm und zielführend. Wir sind Fans!",
+        url: "https://www.mida-aarau.ch"
     }
 ];
